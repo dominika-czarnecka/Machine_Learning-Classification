@@ -11,6 +11,8 @@ Machine learning program, which classify using neural networks, SVM and word2vec
 
 ## Useful informations:
 * [Basic writing and formatting syntax](https://help.github.com/articles/basic-writing-and-formatting-syntax/)
+* [RST formatting](http://www.kdnuggets.com/2015/06/top-20-python-machine-learning-open-source-projects.html)
+* [Example project](https://github.com/dudenzz/Test)
 
 ## Required:
 * python 3.4.3
