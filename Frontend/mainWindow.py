@@ -6,7 +6,7 @@ class mainWindow:
         self.tk.title("Machine Learning - Classification")
 
         self.init_classifierChooser()
-        self.init_classifierOption()
+        self.init_classifierOptions()
 
         self.tk.mainloop()
 
