@@ -1,0 +1,19 @@
+SVM
+1) co 37 dokument
+60
+101
+0,5941
+
+2) wszystkie ze starym preprocessingiem
+2459
+3744
+0,6569
+
+3) co 10 stary pre
+0.62234
+
+4) co 20 stry pre
+0.588235
+
+5) co 10
+0.635638
