@@ -9,11 +9,13 @@ SVM
 3744
 0,6569
 
-3) co 10 stary pre
+Neural network train_step=0.5, step_number=1000, 
+
+1) co 10 stary pre
 0.62234
 
-4) co 20 stry pre
+2) co 20 stry pre
 0.588235
 
-5) co 10
+3) co 10
 0.635638
