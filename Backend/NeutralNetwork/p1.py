@@ -6,8 +6,15 @@ import re
 import math
 import numpy as np
 from operator import itemgetter
+
 cachedStopWords = stopwords.words("english")
 min_lenght = 3
+target = "entrophy"
+ShouldCreateNew = False
+
+# UP target,
+    # frequency - slownik najczesciej występujących slow w dokumentach
+    # entrophy - slownik slow majacych najwieksza entropie
 
 class corpus:
     def __init__(self):
@@ -15,21 +22,27 @@ class corpus:
         self.categories = reuters.categories()
         self.cat_dict = {}
         iterator = 0
+
         for category in self.categories:
-            iterator = iterator + 1
+            iterator += 1
             self.cat_dict[iterator] = category
-            for docid in reuters.fileids(category):
-                doc_class = iterator
-                if docid.startswith("train"):
-                    train = 1
-                elif docid.startswith("test"):
-                    train = 0
-                else:
-                    raise
-                text = reuters.raw(docid)
-                doc = document(text, doc_class, train)
-                self.add_document(doc)
-        self.initialize_vocabulary()
+        for docid in reuters.fileids():
+            doc_cat = [0 for i in range(0, 90)]
+            for i in range(90):
+                if self.categories[i] in reuters.categories(docid):
+                    doc_cat[i] = 1
+            if docid.startswith("train"):
+                train = 1
+            elif docid.startswith("test"):
+                train = 0
+            else:
+                raise
+            text = reuters.raw(docid)
+            doc = document(text, doc_cat, train)
+            self.add_document(doc)
+
+        self.vocabulary_entrophy = {}
+        self.initialize_vocabulary(target, new=ShouldCreateNew)
 
     def add_document(self, document):
         self.documents.append(document)
@@ -41,96 +54,160 @@ class corpus:
                 train.append(doc.text)
         return train
 
-    def initialize_vocabulary(self):
+    def initialize_vocabulary(self, type, new=False):
         self.vocabulary = {}
         self.inverse_vocabulary = {}
 
-        for line in open('vocabulary.txt'):
-            tokens = line.split()
-            self.vocabulary[int(tokens[0])] = tokens[1]
-            self.inverse_vocabulary[self.vocabulary[int(tokens[0])]] = tokens[0]
+        if type == "frequency":
+            if new == False:
+                for line in open('vocabulary.txt'):
+                    tokens = line.split()
+                    self.vocabulary[int(tokens[0])] = tokens[1]
+                    self.inverse_vocabulary[self.vocabulary[int(tokens[0])]] = tokens[0]
+            else:
+                vocabulary = {}
+                inverse_vocabulary = {}
 
-            # vocabulary = {}
-            # inverse_vocabulary = {}
+                vocabulary_sizes = {}
+                iterator = 0
+                for i, doc in enumerate(self.documents):
+                    if i % 1000 == 0:
+                        print(i)
+                    for word in doc.get_unique_words():
 
-            # vocabulary_sizes = {}
-            # iterator = 0
-            # for i,doc in enumerate(self.documents):
-            #     if i % 1000 == 0:
-            #         print(i)
-            #     for word in doc.get_unique_words():
-            #
-            #         if word not in vocabulary.values():
-            #             vocabulary_sizes[iterator] = 0
-            #             vocabulary[iterator] = word
-            #             inverse_vocabulary[word] = iterator
-            #             iterator = iterator + 1
-            #         else:
-            #             vocabulary_sizes[inverse_vocabulary[word]] += 1
-            # #print("Vocabulary: ")
-            # #print(vocabulary)
-            #
-            # sorted_sizes = sorted(vocabulary_sizes.items(), key=operator.itemgetter(1), reverse=True)
-            #
-            # #print("Sorted Sizes: ")
-            # #print(sorted_sizes)
-            #
-            # keys_sorted = sorted_sizes[:300]
-            # #print("Keys Sorted: ")
-            # #print(keys_sorted)
-            #
-            # for i in range(len(vocabulary)):
-            #     for value in keys_sorted:
-            #         if i == value[0]:
-            #             self.vocabulary[i] = vocabulary[i]
-            #             self.inverse_vocabulary[vocabulary[i]] = i
-            #
-            # plik = open('vocabulary.txt', 'w')
-            # for v in self.vocabulary.values():
-            #     plik.write(str(self.inverse_vocabulary[v]) + "\t" + v + "\t" + str(
-            #         vocabulary_sizes[self.inverse_vocabulary[v]]) + "\n")
-            #
-            # print("Zapisano do pliku")
-            # plik.close()
+                        if word not in vocabulary.values():
+                            vocabulary_sizes[iterator] = 0
+                            vocabulary[iterator] = word
+                            inverse_vocabulary[word] = iterator
+                            iterator = iterator + 1
+                        else:
+                            vocabulary_sizes[inverse_vocabulary[word]] += 1
+                # print("Vocabulary: ")
+                # print(vocabulary)
+                plik = open('vocabulary_all.txt', 'w')
+                for v in vocabulary.values():
+                    plik.write(str(inverse_vocabulary[v]) + "\t" + v + "\t" + str(
+                        vocabulary_sizes[inverse_vocabulary[v]]) + "\n")
 
-    def get_svm_vectors(self,Train = 0, Test = 0):
+                print("Zapisano do pliku caly slownik")
+                plik.close()
+
+                sorted_sizes = sorted(vocabulary_sizes.items(), key=itemgetter(1), reverse=True)
+
+                # print("Sorted Sizes: ")
+                # print(sorted_sizes)
+
+                keys_sorted = sorted_sizes[:300]
+                # print("Keys Sorted: ")
+                # print(keys_sorted)
+
+                for i in range(len(vocabulary)):
+                    for value in keys_sorted:
+                        if i == value[0]:
+                            self.vocabulary[i] = vocabulary[i]
+                            self.inverse_vocabulary[vocabulary[i]] = i
+
+                plik = open('vocabulary.txt', 'w')
+                for v in self.vocabulary.values():
+                    plik.write(str(self.inverse_vocabulary[v]) + "\t" + v + "\t" + str(
+                        vocabulary_sizes[self.inverse_vocabulary[v]]) + "\n")
+
+                print("Zapisano do pliku slownik 300 slow")
+                plik.close()
+
+        if type == "entrophy":
+            self.vocabulary_entrophy = {}
+
+            if new == False:
+                for line in open('vocabularyEntrophy.txt'):
+                    tokens = line.split()
+                    self.vocabulary[int(tokens[0])] = tokens[1]
+                    self.vocabulary_entrophy[int(tokens[0])] = tokens[2]
+                    self.inverse_vocabulary[self.vocabulary[int(tokens[0])]] = tokens[0]
+            else:
+                vocabulary = {}
+                inverse_vocabulary = {}
+
+                vocabulary_entrophy = {}
+                iterator = 0
+                for i, doc in enumerate(self.documents):
+                    if i % 1000 == 0:
+                        print(i)
+                    for word in doc.get_unique_words():
+                        probability = doc.get_probability_of_word(word)
+                        if word not in vocabulary.values():
+                            vocabulary_entrophy[iterator] = -probability * math.log2(probability)
+                            vocabulary[iterator] = word
+                            inverse_vocabulary[word] = iterator
+                            iterator += 1
+                        else:
+                            vocabulary_entrophy[inverse_vocabulary[word]] -= probability * math.log2(probability)
+                # print("Vocabulary: ")
+                # print(vocabulary)
+
+                sorted_sizes = sorted(vocabulary_entrophy.items(), key=itemgetter(1), reverse=True)
+
+                # print("Sorted Sizes: ")
+                # print(sorted_sizes)
+
+                keys_sorted = sorted_sizes[:300]
+                # print("Keys Sorted: ")
+                # print(keys_sorted)
+
+                for i in range(len(vocabulary)):
+                    for value in keys_sorted:
+                        if i == value[0]:
+                            self.vocabulary[i] = vocabulary[i]
+                            self.vocabulary_entrophy[i] = vocabulary_entrophy[i]
+                            self.inverse_vocabulary[vocabulary[i]] = i
+
+                plik = open('vocabularyEntrophy.txt', 'w')
+                for v in self.vocabulary.values():
+                    plik.write(str(self.inverse_vocabulary[v]) + "\t" + v + "\t" + str(
+                        self.vocabulary_entrophy[self.inverse_vocabulary[v]]) + "\n")
+
+                print("Zapisano do pliku slownik 300 (entropia)")
+                plik.close()
+
+    def get_svm_vectors(self, Train=0, Test=0):
         Xs = []
         ys = []
-        itt=0
-        step=20
+        itt = 0
+        step = 1
+        doc_number = len(self.documents)
         for doc in self.documents:
-            itt +=1
-            if itt%20 == 0:
-                print(itt)
+            itt += 1
+            if itt % 20 == 0:
+                print(itt, '|', doc_number)
             if Train == 1 and doc.train == 0:
                 continue
             if Test == 1 and doc.train == 1:
                 continue
-            if(itt % step != 0):
+            if (itt % step != 0):
                 continue
-            x = doc.get_vector(self.inverse_vocabulary)
-            cat_vec = [0 for i in range(1, 91)]
-            cat_vec[doc.doc_class-1] = 1
-            y = cat_vec
-            #print(y)
+            x = doc.get_vector("frequency", self.inverse_vocabulary, self.vocabulary_entrophy)
+            y = doc.doc_class
+            # print(y)
             Xs.append(x)
             ys.append(y)
         print("Saving...")
         if Train == 1:
-            np.save(str(step)+"_train_Xs.npy", Xs)
-            np.save(str(step)+"_train_ys.npy", ys)
+            np.save(str(step) + "_train_Xs.npy", Xs)
+            np.save(str(step) + "_train_ys.npy", ys)
             print("Saved to .npy")
         if Test == 1:
-            np.save(str(step)+"_test_Xs.npy", Xs)
-            np.save(str(step)+"_test_ys.npy", ys)
+            np.save(str(step) + "_test_Xs.npy", Xs)
+            np.save(str(step) + "_test_ys.npy", ys)
             print("Saved to .npy")
-        return (Xs,ys)
+        return (Xs, ys)
+
 
 class document:
-    def __init__(self, text, doc_class = 1, train = 1):
+    def __init__(self, text, doc_class, train=1):
         self.doc_class = doc_class
         self.train = train
         self.text = text
+        self.preprocessed_text = self.preprocessing(self.text.split())
 
     def preprocessing(self, raw_tokens):
         no_stopwords = [token for token in raw_tokens if token not in cachedStopWords]
@@ -152,26 +229,50 @@ class document:
         return pattern_checked
 
     def get_unique_words(self):
-        word_list = []
-
-        for word in self.preprocessing(self.text.split()):
-            if word not in word_list:
-                word_list.append(word)
-        return word_list
-
-    def get_vector(self,inverse_vocabulary):
-        lng = len(inverse_vocabulary)
-        vector = [0 for i in range(300)]
+        self.inverse_vocabuary = {}
+        self.vocabulary_sizes= {}
+        inverse_vocabulary = {}
+        vocabulary_sizes = {}
+        vocabulary = {}
         iterator = 0
-        for i in inverse_vocabulary.keys():
-            if i in self.preprocessing(self.text.split()):
-                vector[iterator] = 1
-            iterator += 1
-        return vector
 
+        for word in self.preprocessed_text:
+            if word not in vocabulary.values():
+                vocabulary_sizes[iterator] = 1
+                vocabulary[iterator] = word
+                inverse_vocabulary[word] = iterator
+                iterator += 1
+            else:
+                vocabulary_sizes[inverse_vocabulary[word]] += 1
+        self.inverse_vocabuary = inverse_vocabulary
+        self.vocabulary_sizes = vocabulary_sizes
+        return vocabulary.values()
+
+    def get_probability_of_word(self, word):
+        propability = self.vocabulary_sizes[self.inverse_vocabuary[word]] / len(self.preprocessed_text)
+        return propability
+
+    def get_vector(self, type, inverse_vocabulary, vocabulary_entrophy = {}):
+        if type == "frequency":
+            vector = [0 for i in range(300)]
+            iterator = 0
+            preprocessed_text = self.preprocessed_text
+            for i in inverse_vocabulary.keys():
+                if i in preprocessed_text:
+                    vector[iterator] = 1
+                iterator += 1
+            return vector
+        if type == "entrophy":
+            vector = [0 for i in range(300)]
+            iterator = 0
+            preprocessed_text = self.preprocessed_text
+            for i in inverse_vocabulary.keys():
+                if i in preprocessed_text:
+                    vector[iterator] = vocabulary_entrophy[inverse_vocabulary[i]]
+                iterator += 1
+            return vector
 
 class tf_idf:
-
     def __init__(self):
         self.D = 0.0
         self.df = {}
@@ -181,28 +282,34 @@ class tf_idf:
         for token in set(document):
             self.df[token] += 1.0
 
-    def idf(self,token):
-        return math.log(self.D/self.df[token])
+    def idf(self, token):
+        return math.log(self.D / self.df[token])
 
-    def tf(self,token,document):
+    def tf(self, token, document):
         liczba_wystapien_tokenu = 0.0
         liczba_tokenow = 0.0
         for t in document:
             liczba_tokenow += 1.0
             if t == token:
                 liczba_wystapien_tokenu += 1.0
-        return liczba_wystapien_tokenu/liczba_tokenow
+        return liczba_wystapien_tokenu / liczba_tokenow
 
-    def tfidf(self,token, document):
-        return self.tf(token,document) * self.idf(token)
+    def tfidf(self, token, document):
+        return self.tf(token, document) * self.idf(token)
 
-
-# klasyfikator = svm.SVC(kernel="linear")
+# # klasyfikator = svm.SVC(kernel="linear")
+# print("Creating corpus...")
 # crp = corpus()
+# print("Corpus created!")
+# print("Creating train vectors")
 # (X,y) = crp.get_svm_vectors(Train = 1)
-# print("starting fitting procedure")
-# klasyfikator.fit(X,y)
+# print("Train vectors created!")
+# # print("starting fitting procedure")
+# # klasyfikator.fit(X,y)
+# print("Creating test vectors")
 # (XT,yt) = crp.get_svm_vectors(Test = 1)
+# print("Test vectors created!")
+
 # pozytywne = 0
 # wszystkie = 0
 # for i,x in enumerate(XT):
