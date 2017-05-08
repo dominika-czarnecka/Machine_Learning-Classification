@@ -19,7 +19,7 @@ class ReutersW2VModel:
         else:
             #trenujemy model
             self.getTrainSentences()
-            print(self.sentences[5])
+            #print(self.sentences[5])
             self.model = gensim.models.Word2Vec(self.sentences, min_count=1)
             #print(self.model.wv.vocab)
             self.model.save(fname)
