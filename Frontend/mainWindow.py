@@ -1,9 +1,13 @@
 from tkinter import *
+import Frontend.errorWindow as error
+import Frontend.progressWindow as progress
+
 
 class mainWindow:
     def __init__(self):
         self.tk = Tk()
         self.tk.title("Machine Learning - Classification")
+
 
         self.initComponents()
 
@@ -17,6 +21,7 @@ class mainWindow:
         self.labelFrame_1 = LabelFrame(self.mainFrame,text="Select a classifier:",width=10)
 
         self.selectedClassifier = IntVar()
+        self.selectedClassifier.set(1)
         R1 = Radiobutton(self.labelFrame_1, text="SVM", variable=self.selectedClassifier, value=1, command=self.onChoseClassifier)
         R1.grid(row=0,column=0)
 
@@ -29,12 +34,8 @@ class mainWindow:
         self.labelFrame_1.pack(anchor=W,fill=X)
 
         #classifierOptions
-        self.labelFrame_2 = LabelFrame(self.mainFrame,text="Classifier options:")
-
-        self.label_1 = Label(self.labelFrame_2)
-        self.label_1.pack(anchor=W)
-
-        self.labelFrame_2.pack(anchor=W,fill=X)
+        self.classifierOptionsFrame = LabelFrame(self.mainFrame,text="Classifier options:")
+        self.classifierOptionsFrame.pack(anchor=W,fill=X)
 
         #document for classification
         self.labelFrame_3 = LabelFrame(self.mainFrame,text="Document for classification:",padx=5,pady=5)
@@ -42,34 +43,122 @@ class mainWindow:
         self.textField_1.pack(anchor=W,fill=X)
         self.labelFrame_3.pack(anchor=W,fill=X)
 
-        self.classifyButton = Button(self.mainFrame,text='Classify')
+        self.classifyButton = Button(self.mainFrame,text='Classify',command=self.onClickClassify)
         self.classifyButton.pack(anchor=SE)
 
-        #svm parameters
-        self.svmParametersFrame = Frame(self.labelFrame_2)
-
-        self.svmCountOfLayersLabel = Label(self.svmParametersFrame,text="Count of features")
-        self.svmCountOfLayersLabel.grid(row=0,column=0)
-        self.svmCountOfLayers = Spinbox(self.svmParametersFrame,width=5,from_=1,to=10)
-        self.svmCountOfLayers.grid(row=0,column=1)
-
-        self.svmCountOfLayersLabel = Label(self.svmParametersFrame,text="Count of layers")
-        self.svmCountOfLayersLabel.grid(row=0,column=2)
-        self.svmCountOfLayers = Spinbox(self.svmParametersFrame,width=5,from_=1,to=10)
-        self.svmCountOfLayers.grid(row=0,column=3)
+        #classifiers objects
+        self.nn_classifier = NeuralNetworksClassifier(self.classifierOptionsFrame)
+        self.w2v_classifier = Word2VecClassifier(self.classifierOptionsFrame)
+        self.svm_classifier = SVMClassifier(self.classifierOptionsFrame)
 
 
     def onChoseClassifier(self):
-        selection = "Radiobutton value: " + str(self.selectedClassifier.get())
-        if self.selectedClassifier.get() is 1:
-            self.svmParametersFrame.pack(anchor=W)
+        if self.selectedClassifier.get() is 3:
+            self.nn_classifier.showParameters()
         else:
-            self.svmParametersFrame.pack_forget()
-        self.label_1.config(text = selection)
+            self.nn_classifier.hideParameters()
+
+        if self.selectedClassifier.get() is 2:
+            self.w2v_classifier.showParameters()
+        else:
+            self.w2v_classifier.hideParameters()
+
+        if self.selectedClassifier.get() is 1:
+            self.svm_classifier.showParameters()
+        else:
+            self.svm_classifier.hideParameters()
+
+    def onClickClassify(self):
+        p = progress.progressWindow()
 
 
 
+class NeuralNetworksClassifier:
+    def __init__(self,frame):
+        self.parametersFrame = Frame(frame)
+
+        parameter1Frame = Frame(self.parametersFrame)
+        self.CountOfFeaturesLabel = Label(parameter1Frame,text="Count of features: ")
+        self.CountOfFeaturesLabel.pack(side=LEFT)
+        self.CountOfFeatures = Spinbox(parameter1Frame,width=5,from_=1,to=5000)
+        self.CountOfFeatures.pack(side=LEFT)
+        parameter1Frame.pack(anchor=W)
+
+        parameter2Frame = Frame(self.parametersFrame)
+        self.varParameter2 = StringVar()
+        self.varParameter2.set("entrophy")
+        self.Parameter2Label = Label(parameter2Frame ,text="Vocabulary:")
+        self.Parameter2Label.pack(side=LEFT)
+        self.Parameter2R1 = Radiobutton(parameter2Frame ,text="Entrophy", variable=self.varParameter2, value="entrophy")
+        self.Parameter2R1.pack(side=LEFT)
+        self.Parameter2R2 = Radiobutton(parameter2Frame ,text="Frequency", variable=self.varParameter2, value="frequency")
+        self.Parameter2R2.pack(side=LEFT)
+        self.Parameter2R3 = Radiobutton(parameter2Frame ,text="TF-IDF", variable=self.varParameter2, value="tf_idf")
+        self.Parameter2R3.pack(side=LEFT)
+        parameter2Frame.pack(anchor=W)
+
+        parameter3Frame = Frame(self.parametersFrame)
+        self.CountOfFeaturesLabel = Label(parameter3Frame,text="Neural network step: ")
+        self.CountOfFeaturesLabel.pack(side=LEFT)
+        self.CountOfFeatures = Spinbox(parameter3Frame,width=5,from_=1,to=5000)
+        self.CountOfFeatures.pack(side=LEFT)
+        parameter3Frame.pack(anchor=W)
+
+        parameter4Frame = Frame(self.parametersFrame)
+        self.CountOfFeaturesLabel = Label(parameter4Frame,text="Train step: ")
+        self.CountOfFeaturesLabel.pack(side=LEFT)
+        self.CountOfFeatures = Spinbox(parameter4Frame,width=5,from_=1,to=5000)
+        self.CountOfFeatures.pack(side=LEFT)
+        parameter4Frame.pack(anchor=W)
+
+    def showParameters(self):
+        self.parametersFrame.pack(anchor=W)
+
+    def hideParameters(self):
+        self.parametersFrame.pack_forget()
+
+    def execute(self):
+        return
+
+class SVMClassifier:
+    def __init__(self,frame):
+        self.parametersFrame = Frame(frame)
+        l = Label(self.parametersFrame,text="")
+        l.pack()
+
+    def showParameters(self):
+        self.parametersFrame.pack(anchor=W)
+
+    def hideParameters(self):
+        self.parametersFrame.pack_forget()
+
+    def execute(self):
+        return
+
+class Word2VecClassifier:
+    def __init__(self,frame):
+        self.parametersFrame = Frame(frame)
+        l = Label(self.parametersFrame,text="")
+        l.pack()
+
+    def showParameters(self):
+        self.parametersFrame.pack(anchor=W)
+
+    def hideParameters(self):
+        self.parametersFrame.pack_forget()
+
+    def execute(self):
+        return
 
 
 if __name__ == '__main__':
+
     mw = mainWindow()
+    error.errorWindow("Error !")
+
+
+
+
+
+
+
