@@ -9,8 +9,9 @@ from operator import itemgetter
 
 cachedStopWords = stopwords.words("english")
 min_lenght = 3
-target = "entrophy"
-ShouldCreateNew = False
+vocabulary_len = 1500
+target = "tfidf"
+ShouldCreateNew = True
 
 # UP target,
     # frequency - slownik najczesciej występujących slow w dokumentach
@@ -21,12 +22,15 @@ class corpus:
         self.documents = []
         self.categories = reuters.categories()
         self.cat_dict = {}
+        self.tfidf = tf_idf()
         iterator = 0
 
         for category in self.categories:
             iterator += 1
             self.cat_dict[iterator] = category
         for docid in reuters.fileids():
+            if len(reuters.categories(docid)) > 1:
+                continue
             doc_cat = [0 for i in range(0, 90)]
             for i in range(90):
                 if self.categories[i] in reuters.categories(docid):
@@ -39,6 +43,7 @@ class corpus:
                 raise
             text = reuters.raw(docid)
             doc = document(text, doc_cat, train)
+            self.tfidf.add_document(doc)
             self.add_document(doc)
 
         self.vocabulary_entrophy = {}
@@ -97,7 +102,7 @@ class corpus:
                 # print("Sorted Sizes: ")
                 # print(sorted_sizes)
 
-                keys_sorted = sorted_sizes[:300]
+                keys_sorted = sorted_sizes[:vocabulary_len]
                 # print("Keys Sorted: ")
                 # print(keys_sorted)
 
@@ -150,7 +155,7 @@ class corpus:
                 # print("Sorted Sizes: ")
                 # print(sorted_sizes)
 
-                keys_sorted = sorted_sizes[:300]
+                keys_sorted = sorted_sizes[:vocabulary_len]
                 # print("Keys Sorted: ")
                 # print(keys_sorted)
 
@@ -166,7 +171,53 @@ class corpus:
                     plik.write(str(self.inverse_vocabulary[v]) + "\t" + v + "\t" + str(
                         self.vocabulary_entrophy[self.inverse_vocabulary[v]]) + "\n")
 
-                print("Zapisano do pliku slownik 300 (entropia)")
+                print("Zapisano do pliku slownik {} (entropia)".format(vocabulary_len))
+                plik.close()
+
+        if type == "tfidf":
+            self.vocabulary_tfidf = {}
+
+            if new == False:
+                for line in open('vocabularyTfidf.txt'):
+                    tokens = line.split()
+                    self.vocabulary[int(tokens[0])] = tokens[1]
+                    self.vocabulary_tfidf[int(tokens[0])] = tokens[2]
+                    self.inverse_vocabulary[self.vocabulary[int(tokens[0])]] = tokens[0]
+            else:
+                vocabulary = {}
+                inverse_vocabulary = {}
+                vocabulary_tfidf = {}
+
+                iterator = 0
+                for i, doc in enumerate(self.documents):
+                    if i % 1000 == 0:
+                        print(i)
+                    for word in doc.get_unique_words():
+                        probability = doc.get_probability_of_word(word)
+                        if word not in vocabulary.values():
+                            vocabulary_tfidf[iterator] = self.tfidf.tfidf(word, doc)
+                            vocabulary[iterator] = word
+                            inverse_vocabulary[word] = iterator
+                            iterator += 1
+                        else:
+                            vocabulary_tfidf[inverse_vocabulary[word]] += self.tfidf.tfidf(word, doc)
+
+                sorted_sizes = sorted(vocabulary_tfidf.items(), key=itemgetter(1), reverse=True)
+                keys_sorted = sorted_sizes[:vocabulary_len]
+
+                for i in range(len(vocabulary)):
+                    for value in keys_sorted:
+                        if i == value[0]:
+                            self.vocabulary[i] = vocabulary[i]
+                            self.vocabulary_tfidf[i] = vocabulary_tfidf[i]
+                            self.inverse_vocabulary[vocabulary[i]] = i
+
+                plik = open('vocabularyTfidf.txt', 'w')
+                for v in self.vocabulary.values():
+                    plik.write(str(self.inverse_vocabulary[v]) + "\t" + v + "\t" + str(
+                        self.vocabulary_tfidf[self.inverse_vocabulary[v]]) + "\n")
+
+                print("Zapisano do pliku slownik {} (tfidf)".format(vocabulary_len))
                 plik.close()
 
     def get_svm_vectors(self, Train=0, Test=0):
@@ -210,14 +261,10 @@ class document:
         self.preprocessed_text = self.preprocessing(self.text.split())
 
     def preprocessing(self, raw_tokens):
-        no_stopwords = [token for token in raw_tokens if token not in cachedStopWords]
-        stemmed_tokens = []
-        stemmer = PorterStemmer()
-        for token in no_stopwords:
-            stemmed_tokens.append(stemmer.stem(token))
+
         p = re.compile('[a-zA-Z]+')
         pattern_checked = []
-        for stem in stemmed_tokens:
+        for stem in raw_tokens:
             result = stem.replace('.', '')
             result = result.replace(',', '')
             result = result.replace(chr(39), '')
@@ -226,7 +273,13 @@ class document:
             if p.match(result) and len(result) >= min_lenght:
                 pattern_checked.append(result)
 
-        return pattern_checked
+        stemmed_tokens = []
+        stemmer = PorterStemmer()
+        for token in pattern_checked:
+            stemmed_tokens.append(stemmer.stem(token))
+
+        no_stopwords = [token for token in stemmed_tokens if token not in cachedStopWords]
+        return no_stopwords
 
     def get_unique_words(self):
         self.inverse_vocabuary = {}
@@ -254,7 +307,7 @@ class document:
 
     def get_vector(self, type, inverse_vocabulary, vocabulary_entrophy = {}):
         if type == "frequency":
-            vector = [0 for i in range(300)]
+            vector = [0 for i in range(vocabulary_len)]
             iterator = 0
             preprocessed_text = self.preprocessed_text
             for i in inverse_vocabulary.keys():
@@ -263,7 +316,7 @@ class document:
                 iterator += 1
             return vector
         if type == "entrophy":
-            vector = [0 for i in range(300)]
+            vector = [0 for i in range(vocabulary_len)]
             iterator = 0
             preprocessed_text = self.preprocessed_text
             for i in inverse_vocabulary.keys():
@@ -279,8 +332,11 @@ class tf_idf:
 
     def add_document(self, document):
         self.D += 1.0
-        for token in set(document):
-            self.df[token] += 1.0
+        for token in document.get_unique_words():
+            if token not in self.df.keys():
+                self.df[token] = 1.0
+            else:
+                self.df[token] += 1.0
 
     def idf(self, token):
         return math.log(self.D / self.df[token])
@@ -288,7 +344,7 @@ class tf_idf:
     def tf(self, token, document):
         liczba_wystapien_tokenu = 0.0
         liczba_tokenow = 0.0
-        for t in document:
+        for t in document.preprocessed_text:
             liczba_tokenow += 1.0
             if t == token:
                 liczba_wystapien_tokenu += 1.0
@@ -297,18 +353,18 @@ class tf_idf:
     def tfidf(self, token, document):
         return self.tf(token, document) * self.idf(token)
 
-# # klasyfikator = svm.SVC(kernel="linear")
-# print("Creating corpus...")
-# crp = corpus()
-# print("Corpus created!")
-# print("Creating train vectors")
-# (X,y) = crp.get_svm_vectors(Train = 1)
-# print("Train vectors created!")
-# # print("starting fitting procedure")
-# # klasyfikator.fit(X,y)
-# print("Creating test vectors")
-# (XT,yt) = crp.get_svm_vectors(Test = 1)
-# print("Test vectors created!")
+# klasyfikator = svm.SVC(kernel="linear")
+print("Creating corpus...")
+crp = corpus()
+print("Corpus created!")
+print("Creating train vectors")
+(X,y) = crp.get_svm_vectors(Train = 1)
+print("Train vectors created!")
+# print("starting fitting procedure")
+# klasyfikator.fit(X,y)
+print("Creating test vectors")
+(XT,yt) = crp.get_svm_vectors(Test = 1)
+print("Test vectors created!")
 
 # pozytywne = 0
 # wszystkie = 0

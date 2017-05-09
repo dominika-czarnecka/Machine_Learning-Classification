@@ -17,8 +17,8 @@ def main(_):
     (Xp, yp) = crp.get_svm_vectors(Train=1)
 
   tf.device("/gpu:0")
-  x = tf.placeholder(tf.float32, [None, 300])
-  W = tf.Variable(tf.zeros([300, 90]))
+  x = tf.placeholder(tf.float32, [None, p1.vocabulary_len])
+  W = tf.Variable(tf.zeros([p1.vocabulary_len, 90]))
   b = tf.Variable(tf.zeros([90]))
   y = tf.matmul(x, W) + b
 
@@ -26,7 +26,7 @@ def main(_):
 
   cross_entropy = tf.reduce_mean(
       tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y))
-  train_step = tf.train.GradientDescentOptimizer(0.5).minimize(cross_entropy)
+  train_step = tf.train.GradientDescentOptimizer(1).minimize(cross_entropy)
 
   #sess = tf.InteractiveSession()
   init = tf.global_variables_initializer()
