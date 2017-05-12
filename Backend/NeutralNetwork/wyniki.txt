@@ -1,0 +1,32 @@
+SVM
+1) co 37 dokument
+60
+101
+0,5941
+
+2) wszystkie ze starym preProcessing’iem
+2459
+3744
+0,6569
+
+3) pierwsze 10 tys. z nowym preProcessing
+2481
+3744
+0,66266
+
+Neural network train_step=0.5, step_number=1000, 
+
+1) co 10 stary preProcessing
+0.62234
+
+2) co 20 stary preProcessing
+0.588235
+
+3) co 10 nowy preProcessing
+0.635638
+
+4) wszystkie nowy preProcessing
+0.666934
+
+5) wszystkie nowy preProcessing, 1500 iter, 1 optymalizer
+0.67254
