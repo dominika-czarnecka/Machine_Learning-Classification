@@ -8,7 +8,6 @@ class mainWindow:
         self.tk = Tk()
         self.tk.title("Machine Learning - Classification")
 
-
         self.initComponents()
 
         self.tk.mainloop()
