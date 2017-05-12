@@ -1,42 +1,70 @@
-from sklearn import svm
+from sklearn.svm import SVC
+from sklearn.multiclass import OneVsRestClassifier
+from DataTransformer import DataTransformer
+from ReutersCorpus import ReutersCorpus
+from ResultDataTransformer import ResultDataTransformer
 
-class ClassificatorInterface(object):
 
-    def __init__(self, corpus):
-        self.corpus = corpus
-        self._dict = {}
-        self._dict_rev = []
-        self.kernel_type = 'linear'
+class SVM:
+    def __init__(self):
+        self.is_classifier_trained = False
 
-    def train(self, args, count):
-        self.create_dictionary()
+        # Trained classifier
+        self.clf = any
 
-        xs = []
-        ys = []
-        for doc in corpus.docs():
-            xs.append(self.doc2vec(doc))
-            ys.append(doc.category)
+        self.reutersCorpus = ReutersCorpus()
+        self.dataTransformer = DataTransformer()
 
-        self.clf = svm.SVC(self.kernel)
-        self.clf.fit(xs, ys)
+        # Vectorized documents
+        self.v_train_docs = any
+        self.v_test_docs = any
 
-    def create_dictionary(self):
-        i = 0
-        for word in corpus.get_unique_words():
-            self._dict[word] = i
-            self._dict_rev[i] = word
-            i += 1
+        # Binarized labels
+        self.b_train_labels = any
+        self.b_test_labels = any
 
-    def classify(self, document):
-        vec = self.doc2vec(document)
-        return self.clf.predict(vec)
+    # Method creates and return classifier. Using OneVsRestClassifier
+    def classify(self, c, kernel, degree, gamma, coef0, shrinking, probability, tol, cache_size, verbose, max_iter,
+                 decision_function_shape, random_state):
+        return OneVsRestClassifier(SVC(C=c, kernel=kernel, degree=degree, gamma=gamma, coef0=coef0,
+                                       shrinking=shrinking, probability=probability, tol=tol, cache_size=cache_size,
+                                       verbose=verbose, max_iter=max_iter,
+                                       decision_function_shape=decision_function_shape, random_state=random_state))\
+            .fit(self.v_train_docs, self.b_train_labels)
 
-    def doc2vec(self, document):
-        vect = []
+    # Method train created classifier with all train documents from corpus reuters
+    def train_svm(self, c=1.0, kernel='rbf', degree=3, gamma='auto', coef0=0.0, shrinking=True, probability=False,
+                  tol=1e-3, cache_size=200.0, verbose=False, max_iter=-1, decision_function_shape=None,
+                  random_state=None):
+        self.reutersCorpus.get_documents()
+        self.v_train_docs, self.v_test_docs = self.dataTransformer.transform_documents(self.reutersCorpus.train_docs,
+                                                                                          self.reutersCorpus.
+                                                                                          test_docs)
+        self.b_train_labels, self.b_test_labels = self.dataTransformer.transform_labels(self.reutersCorpus.
+                                                                                           train_labels,
+                                                                                           self.reutersCorpus.
+                                                                                           test_labels)
 
-        for word in document:
-            if self._dict.has_key(word):
-                i = self[word]
-                vect[i] = 1
+        self.clf = self.classify(c, kernel, degree, gamma, coef0, shrinking, probability, tol, cache_size, verbose,
+                                 max_iter, decision_function_shape, random_state)
 
-        return vect
+        if self.clf:
+            self.is_classifier_trained = True
+
+    # Method for test trained classifier with all test documents from corpus reuters.
+    def test_svm(self):
+        if not self.is_classifier_trained:
+            return ['Classifier is not trained']
+
+        prediction = self.clf.predict(self.v_test_docs)
+
+        return ResultDataTransformer.transform_result_data(b_test_labels=self.b_test_labels, prediction=prediction)
+
+    def classify_single_document(self, document):
+        if not self.is_classifier_trained:
+            return ['Classifier is not trained']
+
+        v_document = self.dataTransformer.vectorizer.transform([document])
+        prediction = self.clf.predict(v_document)
+
+        return self.dataTransformer.mlb.inverse_transform(prediction)
