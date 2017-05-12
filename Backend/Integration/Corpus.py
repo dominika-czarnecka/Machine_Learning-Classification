@@ -1,8 +1,8 @@
-from Backend.Integration.CorpusInterface import CorpusInteface
+from Backend.Integration.CorpusInterface import ICorpus
 from nltk.corpus import reuters
 
 
-class Corpus(CorpusInteface):
+class Corpus(ICorpus):
 
     train_docs = []
     test_docs = []
@@ -14,8 +14,8 @@ class Corpus(CorpusInteface):
             else:
                 self.test_docs.append(reuters.raw(doc_id))
 
-    def getTestDocuments(self):
+    def get_test_documents(self):
         return self.test_docs
 
-    def getTrainDocuments(self):
+    def get_train_documents(self):
         return self.train_docs
