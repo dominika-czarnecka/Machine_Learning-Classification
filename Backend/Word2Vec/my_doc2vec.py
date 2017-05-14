@@ -7,6 +7,7 @@ from nltk.stem.porter import PorterStemmer
 import os.path
 import math
 import operator
+import numpy as np
 
 cachedStopWords = stopwords.words("english")
 
@@ -74,10 +75,14 @@ class ReutersDoc2VecModel:
 
     def get_tags_for_text(self, text):
         tags = {}
-        vector = self.model.infer_vector(self.preprocessing_function(text))
+        vectors = []
+        for i in range(20):
+            vector = self.model.infer_vector(self.preprocessing_function(text))
+            vectors.append(vector)
+        average_infered_vector = np.array(np.mean([v for v in vectors], axis=0))
         for c in reuters.categories():
             cvec = self.model.docvecs[c]
-            tags[c] = self.cosine_similarity(vector, cvec)
+            tags[c] = self.cosine_similarity(average_infered_vector, cvec)
         sorted_tags = sorted(tags.items(), key=operator.itemgetter(1), reverse=True)
         return sorted_tags
 
