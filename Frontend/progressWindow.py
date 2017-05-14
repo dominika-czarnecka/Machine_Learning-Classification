@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk
 
 class progressWindow:
-    def __init__(self):
+    def __init__(self, title, desc=""):
         self.tk = Tk()
         self.tk.title("Machine Learning - Classification Progress")
 
