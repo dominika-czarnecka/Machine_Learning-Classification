@@ -2,13 +2,15 @@ from tkinter import *
 import Frontend.errorWindow as error
 import Frontend.progressWindow as progress
 import Frontend.resultWindow as result
+import Frontend.mainView as mv
 
 class mainWindow:
     def __init__(self):
         self.tk = Tk()
         self.tk.title("Machine Learning - Classification")
-
-        self.initComponents()
+        mV = mv.mainView(self.tk)
+        mV.show()
+        # self.initComponents()
 
         self.tk.mainloop()
 
