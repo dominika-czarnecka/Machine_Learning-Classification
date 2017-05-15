@@ -9,7 +9,7 @@ from operator import itemgetter
 
 cachedStopWords = stopwords.words("english")
 min_lenght = 3
-vocabulary_len = 1500
+vocabulary_len = 300
 target = "tfidf"
 ShouldCreateNew = True
 
@@ -353,26 +353,3 @@ class tf_idf:
     def tfidf(self, token, document):
         return self.tf(token, document) * self.idf(token)
 
-# klasyfikator = svm.SVC(kernel="linear")
-print("Creating corpus...")
-crp = corpus()
-print("Corpus created!")
-print("Creating train vectors")
-(X,y) = crp.get_svm_vectors(Train = 1)
-print("Train vectors created!")
-# print("starting fitting procedure")
-# klasyfikator.fit(X,y)
-print("Creating test vectors")
-(XT,yt) = crp.get_svm_vectors(Test = 1)
-print("Test vectors created!")
-
-# pozytywne = 0
-# wszystkie = 0
-# for i,x in enumerate(XT):
-#     wszystkie += 1
-#     klasa = klasyfikator.predict(x)
-#     if klasa == yt[i]:
-#         pozytywne = pozytywne + 1
-#
-# print(pozytywne)
-# print(wszystkie)
