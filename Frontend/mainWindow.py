@@ -20,8 +20,8 @@ class mainWindow:
 
 if __name__ == '__main__':
     # result.resultWindow("Result\n abc")
-    error.errorWindow("Error !")
-    progress.progressWindow("Progress:","description")
+    # error.errorWindow("Error !")
+    # progress.progressWindow("Progress:","description")
     mw = mainWindow()
     # error.errorWindow("Error !")
 
