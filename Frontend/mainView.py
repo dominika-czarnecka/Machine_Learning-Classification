@@ -1,5 +1,6 @@
 from tkinter import *
 import Frontend.newClassifierView as ncv
+import Frontend.manageClassifiersView as mcv
 
 class mainView:
     def __init__(self, tk):
@@ -32,6 +33,8 @@ class mainView:
         return
 
     def onClickManageClassifierButton(self):
-        return
+        self.hide()
+        mcV = mcv.manageClassifiersView()
+        mcV.show()
 
 
