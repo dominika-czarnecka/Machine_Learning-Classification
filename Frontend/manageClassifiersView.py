@@ -1,15 +1,16 @@
 from tkinter import *
 
 class manageClassifiersView:
-    def __init__(self):
-        self.tk = Tk(width=250)
-        self.tk.title("Manage Classifiers")
+    def __init__(self, tk, mv):
+        self.tk = tk
+        self.mv = mv
+        # self.tk.title("Manage Classifiers")
         self.initComponents()
-        self.tk.mainloop()
+        # self.tk.mainloop()
 
     def initComponents(self):
         self.mainFrame = Frame(self.tk, padx=5, pady=5)
-        self.mainFrame.grid()
+        # self.mainFrame.grid()
 
         self.labelFrame_1 = LabelFrame(self.mainFrame)
         self.labelFrame_1.grid(sticky=W)
@@ -19,7 +20,7 @@ class manageClassifiersView:
         self.labelFrame_3 = LabelFrame(self.mainFrame, height=70, width=100)
         self.labelFrame_3.grid(sticky=SE)
 
-        self.backButton = Button(self.labelFrame_1, text="Back")
+        self.backButton = Button(self.labelFrame_1, text="Back", command=self.onClickBackButton)
         self.backButton.grid(row=0, column=0, sticky=W)
 
         self.classifierTypeText = Label(self.labelFrame_2, text="Classifiers")
@@ -47,6 +48,16 @@ class manageClassifiersView:
         self.labelFrame_2.grid()
         self.labelFrame_3.grid()
 
-if __name__ == '__main__':
-    mw = manageClassifiersView()
+    def hide(self):
+        self.mainFrame.pack_forget()
+
+    def show(self):
+        self.mainFrame.pack()
+
+    def onClickBackButton(self):
+        self.hide()
+        self.mv.show()
+
+# if __name__ == '__main__':
+#     mw = manageClassifiersView()
 
