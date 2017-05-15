@@ -11,7 +11,7 @@ class mainView:
         testClassifierButton.pack(anchor=CENTER)
         classifyDocumentButton = Button(self.mainFrame, width="50", height="2", text='Classify document',command=self.onClickClassifyDocumentButton)
         classifyDocumentButton.pack(anchor=CENTER)
-        manageClassifierButton = Button(self.mainFrame, width="50", height="2", text='New classifier',command=self.onClickManageClassifierButton)
+        manageClassifierButton = Button(self.mainFrame, width="50", height="2", text='Manage classifiers',command=self.onClickManageClassifierButton)
         manageClassifierButton.pack(anchor=CENTER)
 
     def show(self):

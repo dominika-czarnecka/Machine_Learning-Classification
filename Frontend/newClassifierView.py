@@ -26,6 +26,15 @@ class newClassifierView:
 
         # self.mainFrame.pack(fill=Y)
 
+        #classifiername
+        classifierNameFrame = Frame(self.mainFrame)
+        self.classifierNameLabel = Label(classifierNameFrame, text="Classifier name")
+        self.classifierNameLabel.pack(side=LEFT)
+        self.classifierNameEntry = Entry(classifierNameFrame)
+        classifierNameFrame.pack(anchor=W)
+
+        self.classifierNameEntry.pack(side = RIGHT)
+
         #classifierChooser
         self.labelFrame_1 = LabelFrame(self.mainFrame,text="Select a classifier:",width=10)
 
