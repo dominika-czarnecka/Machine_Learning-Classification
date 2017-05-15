@@ -1,7 +1,7 @@
 from tkinter import *
 import Frontend.errorWindow as error
 import Frontend.progressWindow as progress
-
+import Frontend.resultWindow as result
 
 class mainWindow:
     def __init__(self):
@@ -151,9 +151,9 @@ class Word2VecClassifier:
 
 
 if __name__ == '__main__':
-
+    # result.resultWindow("Result")
     mw = mainWindow()
-    error.errorWindow("Error !")
+    # error.errorWindow("Error !")
 
 
 
