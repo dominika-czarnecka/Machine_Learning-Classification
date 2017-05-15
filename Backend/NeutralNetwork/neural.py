@@ -2,19 +2,19 @@ import p1
 import numpy as np
 import tensorflow as tf
 import random
-FLAGS = None
-FromFile = True
 
-def main():
+def NeuralNetworkTraining(gradient=0.5, steps=1500, target="tfidf", vocabulary_len=300, FromFile=False):
     if FromFile == True:
         Xp = np.load("1_train_Xs.npy").tolist()
         yp = np.load("1_train_ys.npy").tolist()
     else:
+        p1.target = target
+        p1.vocabulary_len = vocabulary_len
         crp = p1.corpus()
         (Xp, yp) = crp.get_svm_vectors(Train=1)
 
-    x = tf.placeholder(tf.float32, [None, p1.vocabulary_len])
-    W = tf.Variable(tf.zeros([p1.vocabulary_len, 90]))
+    x = tf.placeholder(tf.float32, [None, vocabulary_len])
+    W = tf.Variable(tf.zeros([vocabulary_len, 90]))
     b = tf.Variable(tf.zeros([90]))
     y = tf.matmul(x, W) + b
 
@@ -22,12 +22,13 @@ def main():
 
     cross_entropy = tf.reduce_mean(
       tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y))
-    train_step = tf.train.GradientDescentOptimizer(1).minimize(cross_entropy)
+    train_step = tf.train.GradientDescentOptimizer(gradient).minimize(cross_entropy)
 
     #sess = tf.InteractiveSession()
     init = tf.global_variables_initializer()
     correct_prediction = tf.equal(tf.argmax(y, 1), tf.argmax(y_, 1))
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+    saver = tf.train.Saver()
 
     if FromFile == True:
         XT = np.load("1_test_Xs.npy").tolist()
@@ -37,7 +38,7 @@ def main():
 
     with tf.Session() as sess:
         sess.run(init)
-        for i in range(5000):
+        for i in range(steps):
             batch_x = []
             batch_y = []
             for r in range(100):
@@ -52,6 +53,12 @@ def main():
         print("Train Done")
         result = sess.run(accuracy, feed_dict={x: XT, y_: yt})
         print(result)
-        print("test done")
+        save_path = saver.save(sess, "./models/model_gradient-" + str(gradient)
+                               + "_steps-" + str(steps)
+                               + "_target-" + target
+                               + "_vocabulary_len" + str(vocabulary_len)
+                               + ".ckpt")
+        print("Zapisano model sieci neuronowych do: %s" % save_path)
+        print("Test done")
 
-main()
+NeuralNetworkTraining(1,300,"tfidf", 300,True)
