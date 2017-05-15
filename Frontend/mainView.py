@@ -7,7 +7,7 @@ class mainView:
     def __init__(self, tk):
         self.tk = tk
         self.mainFrame = Frame(tk)
-        newClassifierButton = Button(self.mainFrame, width="50", height="2", text='New classifier',command=self.onClickNewClassifierButton)
+        newClassifierButton = Button(self.mainFrame, width="50", height="2",  text='New classifier',command=self.onClickNewClassifierButton)
         newClassifierButton.pack(anchor=CENTER)
         testClassifierButton = Button(self.mainFrame, width="50", height="2", text='Test classifier',command=self.onClickTestClassifierButton)
         testClassifierButton.pack(anchor=CENTER)

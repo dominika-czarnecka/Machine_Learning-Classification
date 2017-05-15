@@ -9,6 +9,7 @@ import Frontend.newClassifierView as ncv
 class mainWindow:
     def __init__(self):
         self.tk = Tk()
+        self.tk.minsize(width=600,height=100)
         self.tk.title("Machine Learning - Classification")
         # ncV = ncv.newClassifierView(self.tk)
         mV = mv.mainView(self.tk)

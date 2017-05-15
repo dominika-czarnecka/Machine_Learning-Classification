@@ -3,7 +3,7 @@ from tkinter import *
 class newClassifierView:
     def __init__(self, tk, mv):
         self.mv = mv
-        self.mainFrame = Frame(tk)
+        # self.mainFrame = Frame(tk)
         self.mainFrame = Frame(tk,padx=5,pady=5)
 
         #backButton
@@ -13,7 +13,7 @@ class newClassifierView:
         self.initComponents()
 
     def show(self):
-        self.mainFrame.pack()
+        self.mainFrame.pack(fill=X)
 
     def hide(self):
         self.mainFrame.pack_forget()
@@ -36,7 +36,7 @@ class newClassifierView:
         self.classifierNameEntry.pack(side = RIGHT)
 
         #classifierChooser
-        self.labelFrame_1 = LabelFrame(self.mainFrame,text="Select a classifier:",width=10)
+        self.labelFrame_1 = LabelFrame(self.mainFrame,text="Select a classifier:",width=200)
 
         self.selectedClassifier = IntVar()
         self.selectedClassifier.set(1)
@@ -78,9 +78,11 @@ class newClassifierView:
             self.nn_classifier.hideParameters()
 
         if self.selectedClassifier.get() is 2:
-            self.w2v_classifier.showParameters()
+            self.classifierOptionsFrame.pack_forget()
+            # self.w2v_classifier.showParameters()
         else:
-            self.w2v_classifier.hideParameters()
+            self.classifierOptionsFrame.pack(anchor=W,fill=X)
+            # self.w2v_classifier.hideParameters()
 
         if self.selectedClassifier.get() is 1:
             self.svm_classifier.showParameters()
@@ -145,110 +147,95 @@ class SVMClassifier:
         self.parametersFrame = Frame(frame)
 
         parameter1Frame = Frame(self.parametersFrame)
-        self.CountOfFeaturesLabel = Label(parameter1Frame,text="C: ")
-        self.CountOfFeaturesLabel.pack(side=LEFT)
-        self.CountOfFeatures = Spinbox(parameter1Frame,width=5,from_=1,to=5000)
-        self.CountOfFeatures.pack(side=LEFT)
+        self.cLabel = Label(parameter1Frame,text="C: ")
+        self.cLabel.pack(side=LEFT)
+        self.c = Spinbox(parameter1Frame,width=5,from_=0,to=5000)
+        self.c.pack(side=LEFT)
         parameter1Frame.pack(anchor=W)
 
         parameter2Frame = Frame(self.parametersFrame)
-        self.varParameter2 = StringVar()
-        self.varParameter2.set("entrophy")
-        self.Parameter2Label = Label(parameter2Frame ,text="kernel:")
-        self.Parameter2Label.pack(side=LEFT)
-        self.Parameter2R1 = Radiobutton(parameter2Frame ,text="Entrophy", variable=self.varParameter2, value="entrophy")
-        self.Parameter2R1.pack(side=LEFT)
-        self.Parameter2R2 = Radiobutton(parameter2Frame ,text="Frequency", variable=self.varParameter2, value="frequency")
-        self.Parameter2R2.pack(side=LEFT)
-        self.Parameter2R3 = Radiobutton(parameter2Frame ,text="TF-IDF", variable=self.varParameter2, value="tf_idf")
-        self.Parameter2R3.pack(side=LEFT)
+        self.varKernel = StringVar()
+        self.varKernel.set("rbf")
+        self.kernelLabel = Label(parameter2Frame ,text="kernel:")
+        self.kernelLabel.pack(side=LEFT)
+        self.kernelR1 = Radiobutton(parameter2Frame ,text="rbf", variable=self.varKernel, value="rbf", command=self.parametersForRbf)
+        self.kernelR1.pack(side=LEFT)
+        self.kernelR2 = Radiobutton(parameter2Frame ,text="sigmoid", variable=self.varKernel, value="sigmoid", command=self.parametersForSigmoid)
+        self.kernelR2.pack(side=LEFT)
+        self.kernelR3 = Radiobutton(parameter2Frame ,text="linear", variable=self.varKernel, value="linear", command=self.parametersForLinear)
+        self.kernelR3.pack(side=LEFT)
+        self.kernelR3 = Radiobutton(parameter2Frame ,text="poly", variable=self.varKernel, value="poly", command=self.parametersForPoly)
+        self.kernelR3.pack(side=LEFT)
         parameter2Frame.pack(anchor=W)
 
-        parameter3Frame = Frame(self.parametersFrame)
-        self.CountOfFeaturesLabel = Label(parameter3Frame,text="degree: ")
-        self.CountOfFeaturesLabel.pack(side=LEFT)
-        self.CountOfFeatures = Spinbox(parameter3Frame,width=5,from_=1,to=5000)
-        self.CountOfFeatures.pack(side=LEFT)
-        parameter3Frame.pack(anchor=W)
+        self.parameter3Frame = Frame(self.parametersFrame)
+        self.degreeLabel = Label(self.parameter3Frame,text="degree: ")
+        self.degreeLabel.pack(side=LEFT)
+        self.degree = Spinbox(self.parameter3Frame,width=5,from_=0,to=5000)
+        self.degree.pack(side=LEFT)
+        # parameter3Frame.pack(anchor=W)
 
-        parameter4Frame = Frame(self.parametersFrame)
-        self.CountOfFeaturesLabel = Label(parameter4Frame,text="gamma: ")
-        self.CountOfFeaturesLabel.pack(side=LEFT)
-        self.CountOfFeatures = Spinbox(parameter4Frame,width=5,from_=1,to=5000)
-        self.CountOfFeatures.pack(side=LEFT)
-        parameter4Frame.pack(anchor=W)
+        self.parameter4Frame = Frame(self.parametersFrame)
+        self.gammaLabel = Label(self.parameter4Frame,text="gamma: ")
+        self.gammaLabel.pack(side=LEFT)
+        self.gamma = Spinbox(self.parameter4Frame,width=5,from_=0,to=5000)
+        self.gamma.insert("end","auto")
+        self.gamma.pack(side=LEFT)
+        self.parameter4Frame.pack(anchor=W)
 
-        parameter5Frame = Frame(self.parametersFrame)
-        self.CountOfFeaturesLabel = Label(parameter5Frame,text="coef0: ")
-        self.CountOfFeaturesLabel.pack(side=LEFT)
-        self.CountOfFeatures = Spinbox(parameter5Frame,width=5,from_=1,to=5000)
-        self.CountOfFeatures.pack(side=LEFT)
-        parameter5Frame.pack(anchor=W)
+        self.parameter5Frame = Frame(self.parametersFrame)
+        self.coef0Label = Label(self.parameter5Frame,text="coef0: ")
+        self.coef0Label.pack(side=LEFT)
+        self.coef0 = Spinbox(self.parameter5Frame,width=5,from_=0,to=5000)
+        self.coef0.pack(side=LEFT)
+        # parameter5Frame.pack(anchor=W)
 
         parameter6Frame = Frame(self.parametersFrame)
-        self.CountOfFeaturesLabel = Label(parameter6Frame,text="shrinking: ")
-        self.CountOfFeaturesLabel.pack(side=LEFT)
-        self.CountOfFeatures = Spinbox(parameter6Frame,width=5,from_=1,to=5000)
-        self.CountOfFeatures.pack(side=LEFT)
+        self.shrinkingLabel = Label(parameter6Frame,text="shrinking: ")
+        self.shrinkingLabel.pack(side=LEFT)
+        self.shrinking = Spinbox(parameter6Frame,width=5,values=("true","false"))
+        self.shrinking.pack(side=LEFT)
         parameter6Frame.pack(anchor=W)
 
         parameter7Frame = Frame(self.parametersFrame)
-        self.CountOfFeaturesLabel = Label(parameter7Frame,text="probability: ")
-        self.CountOfFeaturesLabel.pack(side=LEFT)
-        self.CountOfFeatures = Spinbox(parameter7Frame,width=5,from_=1,to=5000)
-        self.CountOfFeatures.pack(side=LEFT)
+        self.tolLabel = Label(parameter7Frame,text="tol: ")
+        self.tolLabel.pack(side=LEFT)
+        self.tol = Spinbox(parameter7Frame,width=5,from_=0,to=5000)
+        self.tol.pack(side=LEFT)
         parameter7Frame.pack(anchor=W)
 
         parameter8Frame = Frame(self.parametersFrame)
-        self.CountOfFeaturesLabel = Label(parameter8Frame,text="tol: ")
-        self.CountOfFeaturesLabel.pack(side=LEFT)
-        self.CountOfFeatures = Spinbox(parameter8Frame,width=5,from_=1,to=5000)
-        self.CountOfFeatures.pack(side=LEFT)
+        self.max_iterLabel = Label(parameter8Frame,text="max_iter: ")
+        self.max_iterLabel.pack(side=LEFT)
+        self.max_iter = Spinbox(parameter8Frame,width=5,from_=-1,to=5000)
+        self.max_iter.pack(side=LEFT)
         parameter8Frame.pack(anchor=W)
 
-        parameter9Frame = Frame(self.parametersFrame)
-        self.CountOfFeaturesLabel = Label(parameter9Frame,text="cache_size: ")
-        self.CountOfFeaturesLabel.pack(side=LEFT)
-        self.CountOfFeatures = Spinbox(parameter9Frame,width=5,from_=1,to=5000)
-        self.CountOfFeatures.pack(side=LEFT)
-        parameter9Frame.pack(anchor=W)
+    def hideKernelParameters(self):
+        self.parameter3Frame.pack_forget()
+        self.parameter4Frame.pack_forget()
+        self.parameter5Frame.pack_forget()
 
-        parameter10Frame = Frame(self.parametersFrame)
-        self.CountOfFeaturesLabel = Label(parameter10Frame,text="class_weight: ")
-        self.CountOfFeaturesLabel.pack(side=LEFT)
-        self.CountOfFeatures = Spinbox(parameter10Frame,width=5,from_=1,to=5000)
-        self.CountOfFeatures.pack(side=LEFT)
-        parameter10Frame.pack(anchor=W)
+    def parametersForRbf(self):
+        self.hideKernelParameters()
+        self.parameter4Frame.pack(anchor=W)
 
-        parameter11Frame = Frame(self.parametersFrame)
-        self.CountOfFeaturesLabel = Label(parameter11Frame,text="verbose: ")
-        self.CountOfFeaturesLabel.pack(side=LEFT)
-        self.CountOfFeatures = Spinbox(parameter11Frame,width=5,from_=1,to=5000)
-        self.CountOfFeatures.pack(side=LEFT)
-        parameter11Frame.pack(anchor=W)
+    def parametersForSigmoid(self):
+        self.hideKernelParameters()
+        self.parameter4Frame.pack(anchor=W)
+        self.parameter5Frame.pack(anchor=W)
 
-        parameter12Frame = Frame(self.parametersFrame)
-        self.CountOfFeaturesLabel = Label(parameter12Frame,text="max_iter: ")
-        self.CountOfFeaturesLabel.pack(side=LEFT)
-        self.CountOfFeatures = Spinbox(parameter12Frame,width=5,from_=1,to=5000)
-        self.CountOfFeatures.pack(side=LEFT)
-        parameter12Frame.pack(anchor=W)
+    def parametersForLinear(self):
+        self.hideKernelParameters()
 
-        parameter13Frame = Frame(self.parametersFrame)
-        self.CountOfFeaturesLabel = Label(parameter13Frame,text="decision_function_shape: ")
-        self.CountOfFeaturesLabel.pack(side=LEFT)
-        self.CountOfFeatures = Spinbox(parameter13Frame,width=5,from_=1,to=5000)
-        self.CountOfFeatures.pack(side=LEFT)
-        parameter13Frame.pack(anchor=W)
-
-        parameter14Frame = Frame(self.parametersFrame)
-        self.CountOfFeaturesLabel = Label(parameter14Frame,text="random_state: ")
-        self.CountOfFeaturesLabel.pack(side=LEFT)
-        self.CountOfFeatures = Spinbox(parameter14Frame,width=5,from_=1,to=5000)
-        self.CountOfFeatures.pack(side=LEFT)
-        parameter14Frame.pack(anchor=W)
+    def parametersForPoly(self):
+        self.hideKernelParameters()
+        self.parameter3Frame.pack(anchor=W)
+        self.parameter4Frame.pack(anchor=W)
+        self.parameter5Frame.pack(anchor=W)
 
     def showParameters(self):
+        self.hideParameters()
         self.parametersFrame.pack(anchor=W)
 
     def hideParameters(self):
