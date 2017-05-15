@@ -2,7 +2,7 @@ from tkinter import *
 
 class manageClassifiersView:
     def __init__(self):
-        self.tk = Tk()
+        self.tk = Tk(width=250)
         self.tk.title("Manage Classifiers")
         self.initComponents()
         self.tk.mainloop()

@@ -1,16 +1,13 @@
-from Tkinter import *
+from tkinter import *
 # import Frontend.errorWindow as error
 # import Frontend.progressWindow as progress
 
 
-class mainWindow:
-    def __init__(self):
-        self.tk = Tk()
-        self.tk.title("Machine Learning - Classification")
-
+class documentClassificationView:
+    def __init__(self, tk, mv):
+        self.mv = mv
+        self.tk = tk
         self.initComponents()
-
-        self.tk.mainloop()
 
     def initComponents(self):
         self.mainFrame = Frame(self.tk, padx=5, pady=5)
@@ -41,9 +38,18 @@ class mainWindow:
         self.classifyButton.pack(anchor=SE)
 
     def onClickBack(self):
-        p = progress.progressWindow()
+        self.hide()
+        self.mv.show()
+
     def onClickClassify(self):
-        p = progress.progressWindow()
+        # p = progress.progressWindow()
+        return
+
+    def hide(self):
+        self.mainFrame.pack_forget()
+
+    def show(self):
+        self.mainFrame.pack()
 
 
 

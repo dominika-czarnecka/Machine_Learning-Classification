@@ -1,6 +1,7 @@
 from tkinter import *
 import Frontend.newClassifierView as ncv
 import Frontend.manageClassifiersView as mcv
+import Frontend.documentClassificationView as dcv
 
 class mainView:
     def __init__(self, tk):
@@ -30,11 +31,14 @@ class mainView:
         return
 
     def onClickClassifyDocumentButton(self):
+        self.hide()
+        dcV = dcv.documentClassificationView(self.tk,self)
+        dcV.show()
         return
 
     def onClickManageClassifierButton(self):
         self.hide()
-        mcV = mcv.manageClassifiersView()
+        mcV = mcv.manageClassifiersView(self.tk,self)
         mcV.show()
 
 
