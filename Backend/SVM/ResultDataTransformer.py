@@ -1,4 +1,4 @@
-from sklearn.metrics import f1_score, recall_score
+from sklearn.metrics import f1_score
 
 
 class ResultDataTransformer:
