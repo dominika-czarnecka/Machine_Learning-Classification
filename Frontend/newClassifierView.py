@@ -149,7 +149,9 @@ class SVMClassifier:
         parameter1Frame = Frame(self.parametersFrame)
         self.cLabel = Label(parameter1Frame,text="C: ")
         self.cLabel.pack(side=LEFT)
-        self.c = Spinbox(parameter1Frame,width=5,from_=0,to=5000)
+        varC = DoubleVar()
+        varC.set(1.0)
+        self.c = Spinbox(parameter1Frame,width=5,from_=0,to=5000,increment=0.1, format="%.1f", textvariable=varC)
         self.c.pack(side=LEFT)
         parameter1Frame.pack(anchor=W)
 
@@ -178,15 +180,18 @@ class SVMClassifier:
         self.parameter4Frame = Frame(self.parametersFrame)
         self.gammaLabel = Label(self.parameter4Frame,text="gamma: ")
         self.gammaLabel.pack(side=LEFT)
-        self.gamma = Spinbox(self.parameter4Frame,width=5,from_=0,to=5000)
-        self.gamma.insert("end","auto")
-        self.gamma.pack(side=LEFT)
+        self.varGamma = StringVar()
+        self.gamma = Spinbox(self.parameter4Frame,width=5,from_=0,to=5000, increment=0.1, format="%.1f", textvariable=self.varGamma)
+        # self.gamma.pack(side=LEFT)
+        self.varGamma.set("true")
+        self.gammaAuto = Checkbutton(self.parameter4Frame ,text="auto", variable=self.varGamma, onvalue="true", offvalue="false", command=self.onCheckGammaAuto)
+        self.gammaAuto.pack(side=LEFT)
         self.parameter4Frame.pack(anchor=W)
 
         self.parameter5Frame = Frame(self.parametersFrame)
         self.coef0Label = Label(self.parameter5Frame,text="coef0: ")
         self.coef0Label.pack(side=LEFT)
-        self.coef0 = Spinbox(self.parameter5Frame,width=5,from_=0,to=5000)
+        self.coef0 = Spinbox(self.parameter5Frame,width=5,from_=0.0,to=5000.0, increment=0.1, format="%.1f")
         self.coef0.pack(side=LEFT)
         # parameter5Frame.pack(anchor=W)
 
@@ -200,7 +205,9 @@ class SVMClassifier:
         parameter7Frame = Frame(self.parametersFrame)
         self.tolLabel = Label(parameter7Frame,text="tol: ")
         self.tolLabel.pack(side=LEFT)
-        self.tol = Spinbox(parameter7Frame,width=5,from_=0,to=5000)
+        varTol = DoubleVar()
+        varTol.set(1.0)
+        self.tol = Spinbox(parameter7Frame,width=5, increment=0.1, format="%.1f", textvariable=varTol)
         self.tol.pack(side=LEFT)
         parameter7Frame.pack(anchor=W)
 
@@ -241,8 +248,12 @@ class SVMClassifier:
     def hideParameters(self):
         self.parametersFrame.pack_forget()
 
-    def execute(self):
-        return
+    def onCheckGammaAuto(self):
+        if(self.varGamma.get() == "true"):
+            self.gamma.pack_forget()
+        else:
+            self.varGamma.set(0.0)
+            self.gamma.pack(side=LEFT)
 
 class Word2VecClassifier:
     def __init__(self,frame):
