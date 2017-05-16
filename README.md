@@ -15,4 +15,4 @@ Machine learning program, which classify using neural networks, SVM and word2vec
 * [Example project](https://github.com/dudenzz/Test)
 
 ## Required:
-* python 3.4.3
+* python 3.4.3 
