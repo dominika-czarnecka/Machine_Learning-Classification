@@ -26,8 +26,10 @@ class newClassifierView:
 
         # self.mainFrame.pack(fill=Y)
 
+        self.topFrame = Frame(self.mainFrame)
+        self.topFrame.pack(fill=X)
         #classifiername
-        classifierNameFrame = Frame(self.mainFrame)
+        classifierNameFrame = Frame(self.topFrame)
         self.classifierNameLabel = Label(classifierNameFrame, text="Classifier name")
         self.classifierNameLabel.pack(side=LEFT)
         self.classifierNameEntry = Entry(classifierNameFrame)
@@ -36,7 +38,7 @@ class newClassifierView:
         self.classifierNameEntry.pack(side = RIGHT)
 
         #classifierChooser
-        self.labelFrame_1 = LabelFrame(self.mainFrame,text="Select a classifier:",width=200)
+        self.labelFrame_1 = LabelFrame(self.topFrame,text="Select a classifier:",width=200)
 
         self.selectedClassifier = IntVar()
         self.selectedClassifier.set(1)
@@ -52,14 +54,16 @@ class newClassifierView:
         self.labelFrame_1.pack(anchor=W,fill=X)
 
         #classifierOptions
-        self.classifierOptionsFrame = LabelFrame(self.mainFrame,text="Classifier options:")
+        self.classifierOptionsFrame = LabelFrame(self.topFrame,text="Classifier options:")
         self.classifierOptionsFrame.pack(anchor=W,fill=X)
 
-        #document for classification
-        # self.labelFrame_3 = LabelFrame(self.mainFrame,text="Document for classification:",padx=5,pady=5)
-        # self.textField_1 = Text(self.labelFrame_3,width=70,height=30)
-        # self.textField_1.pack(anchor=W,fill=X)
-        # self.labelFrame_3.pack(anchor=W,fill=X)
+        #documents for training
+        self.labelFrame_3 = LabelFrame(self.topFrame,text="Documents for training:",padx=5,pady=5)
+        self.checkboxDocumentsForTraining = Checkbutton(self.labelFrame_3, text="from file")
+        self.checkboxDocumentsForTraining.pack(side=LEFT)
+        self.entryDocumentsForTraining = Entry(self.labelFrame_3, width=30)
+        self.entryDocumentsForTraining.pack(side=LEFT)
+        self.labelFrame_3.pack(anchor=W,fill=X)
 
         self.classifyButton = Button(self.mainFrame,text='Train classifier',command=self.onClickClassify)
         self.classifyButton.pack(anchor=SE)
