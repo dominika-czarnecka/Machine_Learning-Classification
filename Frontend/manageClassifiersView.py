@@ -10,53 +10,60 @@ class manageClassifiersView:
 
     def initComponents(self):
         self.mainFrame = Frame(self.tk, padx=5, pady=5)
-        # self.mainFrame.grid()
 
-        self.labelFrame_1 = LabelFrame(self.mainFrame)
-        self.labelFrame_1.grid(sticky=W)
-        self.labelFrame_2 = LabelFrame(self.mainFrame, height=70, width=100)
-        self.labelFrame_2.grid(sticky=E)
+        self.backButton = Button(self.mainFrame, text="Back", command=self.onClickBackButton)
+        self.backButton.pack(anchor=NW)
 
-        self.labelFrame_3 = LabelFrame(self.mainFrame, height=70, width=100)
-        self.labelFrame_3.grid(sticky=SE)
+        self.labelFrame_1 = LabelFrame(self.mainFrame, height=70, width=100, text="Classifiers")
+        self.labelFrame_1.pack(side=LEFT)
+        self.labelFrame_2 = LabelFrame(self.mainFrame, height=70, width=100, text="Information about Classifier")
+        self.labelFrame_2.pack(side=LEFT)
 
-        self.backButton = Button(self.labelFrame_1, text="Back", command=self.onClickBackButton)
-        self.backButton.grid(row=0, column=0, sticky=W)
+        self.selectClassifier = Listbox(self.labelFrame_1, height=25, width=40)
+        self.selectClassifier.pack(anchor=N)
+        self.initClassifierList()
+#        self.selectClassifier.bind("<Button-1>", self.click)
 
-        self.classifierTypeText = Label(self.labelFrame_2, text="Classifiers")
-        self.classifierTypeText.grid(row=1, column=0, sticky=N)
+        self.classifierInformation = Text(self.labelFrame_2, height=25, width=40)
+        self.classifierInformation.pack(anchor=N)
 
-        self.selectClassifier = Listbox(self.labelFrame_2)
-        self.selectClassifier.grid(row=2, column=0, sticky=N)
+        self.labelFrame_3 = LabelFrame(self.labelFrame_2, height=10, width=40)
+        self.labelFrame_3.pack(anchor=SE)
 
-        self.classifierTypeText = Label(self.labelFrame_2, text="Information about Classifier")
-        self.classifierTypeText.grid(row=1, column=1, sticky=N)
-
-        self.classifierInformation = Text(self.labelFrame_2, width=40)
-        self.classifierInformation.grid(row=2, column=1, sticky=E)
-
-        self.selectAction = Listbox(self.labelFrame_3, height=1, width=20)
-        self.selectAction.grid(row=0, column=0)
+        self.selectAction = Listbox(self.labelFrame_3, height=1, width=40)
+        self.selectAction.grid(column=0, row=0)
 
         self.selectAction.insert(END, "Remove")
-        self.selectAction.insert(END, "Add")
 
-        self.executeButton = Button(self.labelFrame_3, text="Execute")
-        self.executeButton.grid(row=0, column=1)
+        self.executeButton = Button(self.labelFrame_3, text="Execute", width=10, command=self.onClickExecuteButton)
+        self.executeButton.grid(column=1, row=0)
 
-        self.labelFrame_1.grid()
-        self.labelFrame_2.grid()
-        self.labelFrame_3.grid()
-
+        self.labelFrame_1.pack(fill=Y)
+        self.labelFrame_2.pack(fill=X)
     def hide(self):
         self.mainFrame.pack_forget()
 
     def show(self):
-        self.mainFrame.pack()
+        self.mainFrame.pack(fill=X)
 
     def onClickBackButton(self):
         self.hide()
         self.mv.show()
+
+    def initClassifierList(self):
+        self.selectClassifier.insert(END, "Klasyfikator 1")
+        self.selectClassifier.insert(END, "Klasyfikator 2")
+
+    def onClickExecuteButton(self):
+        selected = self.selectClassifier.curselection()
+        self.selectClassifier.delete(selected)
+
+   # def click(self, event):
+#        widget = event.widget
+ #       selected = widget.curselection()
+        #value = widget.get(selected[0])
+  #      self.classifierInformation.insert("0.0", widget.get(selected[0]))
+
 
 # if __name__ == '__main__':
 #     mw = manageClassifiersView()
