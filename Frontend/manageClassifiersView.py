@@ -64,7 +64,3 @@ class manageClassifiersView:
         #value = widget.get(selected[0])
   #      self.classifierInformation.insert("0.0", widget.get(selected[0]))
 
-
-# if __name__ == '__main__':
-#     mw = manageClassifiersView()
-
