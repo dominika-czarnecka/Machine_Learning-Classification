@@ -2,6 +2,7 @@ from tkinter import *
 import Frontend.newClassifierView as ncv
 import Frontend.manageClassifiersView as mcv
 import Frontend.documentClassificationView as dcv
+import Frontend.testClassifierView as tcv
 
 class mainView:
     def __init__(self, tk):
@@ -29,6 +30,9 @@ class mainView:
         ncV.show()
 
     def onClickTestClassifierButton(self):
+        self.hide()
+        tcV = tcv.testClassifierView(self.tk,self)
+        tcV.show()
         return
 
     def onClickClassifyDocumentButton(self):
