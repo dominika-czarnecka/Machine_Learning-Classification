@@ -18,6 +18,7 @@ target = "tfidf"
 
 class corpus:
     def __init__(self):
+        print("Initialize corpus...")
         self.documents = []
         self.categories = reuters.categories()
         self.cat_dict = {}
@@ -152,17 +153,15 @@ class corpus:
         Xs = []
         ys = []
         itt = 0
-        step = 1
+
         doc_number = len(self.documents)
         for doc in self.documents:
             itt += 1
-            if itt % 20 == 0:
+            if itt % 100 == 0:
                 print(itt, '|', doc_number)
             if Train == 1 and doc.train == 0:
                 continue
             if Test == 1 and doc.train == 1:
-                continue
-            if (itt % step != 0):
                 continue
             x = doc.get_vector("frequency", self.inverse_vocabulary, self.vocabulary_entrophy)
             y = doc.doc_class

@@ -120,10 +120,10 @@ class NeuralNetwork:
         steps = args['steps']
         target = args['target']
         vocabulary_len = args['vocabulary_len']
-
+        tf.reset_default_graph()
         x = tf.placeholder(tf.float32, [None, vocabulary_len])
-        W = tf.Variable(tf.zeros([vocabulary_len, 90]))
-        b = tf.Variable(tf.zeros([90]))
+        W = tf.Variable(tf.zeros([vocabulary_len, 90]), name='W')
+        b = tf.Variable(tf.zeros([90]), name='b')
         y = tf.matmul(x, W) + b
         y_ = tf.placeholder(tf.float32, [None, 90])
 
@@ -155,8 +155,7 @@ class NeuralNetwork:
                     batch_x.append(Xp[ranInt])
                     batch_y.append(yp[ranInt])
                 if i % 100 == 0:
-                    yy, yy2 = sess.run([y, y_], feed_dict={x: XT, y_: yt})
-                    print("#{}, Tst acc={}".format(i, self.correctPrediction_partial(yy, yy2)))
+                    print("#{} / {}".format(i,steps))
 
                 sess.run(train_step, feed_dict={x: batch_x, y_: batch_y})
             print("Train Done")
@@ -172,10 +171,10 @@ class NeuralNetwork:
         # classifier - sciezka do klasyfikatora
         target = args['target']
         vocabulary_len = args['vocabulary_len']
-
+        tf.reset_default_graph()
         x = tf.placeholder(tf.float32, [None, vocabulary_len])
-        W = tf.Variable(tf.zeros([vocabulary_len, 90]))
-        b = tf.Variable(tf.zeros([90]))
+        W = tf.Variable(tf.zeros([vocabulary_len, 90]), name='W')
+        b = tf.Variable(tf.zeros([90]), name='b')
         y = tf.matmul(x, W) + b
         y_ = tf.placeholder(tf.float32, [None, 90])
 
@@ -187,7 +186,7 @@ class NeuralNetwork:
             # XT = np.load("1_test_Xs.npy").tolist()  # input
             # yt = np.load("1_test_ys.npy").tolist()  # input
         else:
-          #input - nazwa korpusu kotry wczytujemy
+          #input - nazwa korpusu ktory wczytujemy
           NeuralCorpus.target = target
           NeuralCorpus.vocabulary_len = vocabulary_len
           crp = NeuralCorpus.corpus()
@@ -209,8 +208,8 @@ class NeuralNetwork:
 
 
 
-args = {"gradient": 1, "steps": 10000, "target": "tfidf", "vocabulary_len": 1500}
-
-neural = NeuralNetwork()
-neural.Train(False,"input",args,"Model2")
+# args = {"gradient": 1, "steps": 2000, "target": "entrophy", "vocabulary_len": 300}
+#
+# neural = NeuralNetwork()
+# neural.Train(False,"input",args,"Model2")
 # neural.Test(False, "input", args, "Model2")
