@@ -1,5 +1,6 @@
-from Backend.Integration.CorpusInterface import ICorpus
 from nltk.corpus import reuters
+
+from Backend.Integration.Interfaces.CorpusInterface import ICorpus
 
 
 class Corpus(ICorpus):
