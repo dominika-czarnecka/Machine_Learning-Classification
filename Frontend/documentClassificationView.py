@@ -36,7 +36,8 @@ class documentClassificationView:
         self.mv.show()
 
     def onClickClassify(self):
-        return
+        text = self.textField_1.get("1.0",END)
+        # mv.classifierManager.Single(text,classifier)
 
     def hide(self):
         self.mainFrame.pack_forget()

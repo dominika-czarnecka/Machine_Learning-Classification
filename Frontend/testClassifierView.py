@@ -55,8 +55,16 @@ class testClassifierView:
         self.mv.show()
 
     def onClickTest(self):
-        # p = progress.progressWindow()
-        return
+        fromfile = False
+        input = "input"
+        args = self.getArgs()
+
+        # self.mv.classifierManager.Test(fromfile,input,args)
+
+    def getArgs(self):
+        args = {"classifier":"",
+                "...":"..."}
+        return args
 
     def hide(self):
         self.mainFrame.pack_forget()
