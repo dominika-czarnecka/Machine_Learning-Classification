@@ -59,7 +59,8 @@ class newClassifierView:
 
         #documents for training
         self.labelFrame_3 = LabelFrame(self.topFrame,text="Documents for training:",padx=5,pady=5)
-        self.checkboxDocumentsForTraining = Checkbutton(self.labelFrame_3, text="from file")
+        self.from_file = BooleanVar()
+        self.checkboxDocumentsForTraining = Checkbutton(self.labelFrame_3, offvalue=False, onvalue=True, text="from file", var=self.from_file)
         self.checkboxDocumentsForTraining.pack(side=LEFT)
         self.entryDocumentsForTraining = Entry(self.labelFrame_3, width=30)
         self.entryDocumentsForTraining.pack(side=LEFT)
@@ -94,8 +95,12 @@ class newClassifierView:
             self.svm_classifier.hideParameters()
 
     def onClickClassify(self):
-        # p = progress.progressWindow()
+        from_file = self.from_file.get()
+        args = self.getArgs();
+        print(from_file)
         return
+
+
 
 
 
@@ -124,17 +129,17 @@ class NeuralNetworksClassifier:
         parameter2Frame.pack(anchor=W)
 
         parameter3Frame = Frame(self.parametersFrame)
-        self.CountOfFeaturesLabel = Label(parameter3Frame,text="Neural network step: ")
-        self.CountOfFeaturesLabel.pack(side=LEFT)
-        self.CountOfFeatures = Spinbox(parameter3Frame,width=5,from_=1,to=5000)
-        self.CountOfFeatures.pack(side=LEFT)
+        self.NeuralNetworkStepLabel = Label(parameter3Frame,text="Neural network step: ")
+        self.NeuralNetworkStepLabel.pack(side=LEFT)
+        self.NeuralNetworkStep= Spinbox(parameter3Frame,width=5,from_=1,to=5000)
+        self.NeuralNetworkStep.pack(side=LEFT)
         parameter3Frame.pack(anchor=W)
 
         parameter4Frame = Frame(self.parametersFrame)
-        self.CountOfFeaturesLabel = Label(parameter4Frame,text="Train step: ")
-        self.CountOfFeaturesLabel.pack(side=LEFT)
-        self.CountOfFeatures = Spinbox(parameter4Frame,width=5,from_=1,to=5000)
-        self.CountOfFeatures.pack(side=LEFT)
+        self.TrainStepLabel = Label(parameter4Frame,text="Train step: ")
+        self.TrainStepLabel.pack(side=LEFT)
+        self.TrainStep = Spinbox(parameter4Frame,width=5,from_=1,to=5000)
+        self.TrainStep.pack(side=LEFT)
         parameter4Frame.pack(anchor=W)
 
     def showParameters(self):
@@ -143,8 +148,11 @@ class NeuralNetworksClassifier:
     def hideParameters(self):
         self.parametersFrame.pack_forget()
 
-    def execute(self):
-        return
+    def getArgs(self):
+        args = {"Count_of_features": self.CountOfFeatures.get(),
+                "Vocabulary": self.varParameter2.get(),
+                "Neural_network_step":self.NeuralNetworkStep.get(),
+                "Train_step":self.TrainStep.get()}
 
 class SVMClassifier:
     def __init__(self,frame):

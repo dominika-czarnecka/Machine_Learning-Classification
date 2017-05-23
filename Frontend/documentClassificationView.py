@@ -14,14 +14,14 @@ class documentClassificationView:
         self.mainFrame.pack(fill=X)
 
         self.backButton = Button(self.mainFrame, text='Back', command=self.onClickBack)
-        self.backButton.pack(anchor=NW, side=LEFT)
+        self.backButton.pack(anchor=NW)
 
         self.selectedClassifier = StringVar(self.tk)
         self.selectedClassifier.set("Choose Classifier")
 
         self.dropDown = OptionMenu(self.mainFrame, self.selectedClassifier, "SVM", "Word2Vec", "Neuron")
         self.dropDown.config(width=15)
-        self.dropDown.pack(anchor=SE)
+        self.dropDown.pack(anchor=W, fill=X)
 
         self.labelFrame_3 = LabelFrame(self.mainFrame, text="Document:", padx=5, pady=5)
         self.textField_1 = Text(self.labelFrame_3, width=70, height=30)
