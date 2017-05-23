@@ -256,10 +256,10 @@ class NeuralNetwork:
 
 
 
-args = {"gradient": 1, "steps": 5000, "target": "entrophy", "vocabulary_len": 1500}
-
-neural = NeuralNetwork()
-neural.Train(False,"input",args,"Model2")
-#neural.Test(False, "input", args, "Model2")
-neural.Single(False, NeuralCorpus.reuters.raw(NeuralCorpus.reuters.fileids()[4]), args, "Model2")
-print(NeuralCorpus.reuters.categories(NeuralCorpus.reuters.fileids()[4]))
+# args = {"gradient": 1, "steps": 5000, "target": "tfidf", "vocabulary_len": 1500}
+#
+# neural = NeuralNetwork()
+# neural.Train(False,"input",args,"Model2")
+# #neural.Test(False, "input", args, "Model2")
+# neural.Single(False, NeuralCorpus.reuters.raw(NeuralCorpus.reuters.fileids()[4]), args, "Model2")
+# print(NeuralCorpus.reuters.categories(NeuralCorpus.reuters.fileids()[4]))
