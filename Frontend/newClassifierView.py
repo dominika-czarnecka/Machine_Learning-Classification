@@ -1,11 +1,11 @@
 from tkinter import *
-
+from Backend.Integration.ClassifierManager import ClassifierManager
 class newClassifierView:
     def __init__(self, tk, mv):
         self.mv = mv
         # self.mainFrame = Frame(tk)
         self.mainFrame = Frame(tk,padx=5,pady=5)
-
+        self.classMng = ClassifierManager()
         #backButton
         backButton = Button(self.mainFrame, text="Back", width=5, command=self.onClickBackButton)
         backButton.pack(anchor=NW)
@@ -94,12 +94,20 @@ class newClassifierView:
             self.svm_classifier.hideParameters()
 
     def onClickClassify(self):
-        # p = progress.progressWindow()
+        if self.selectedClassifier.get() == "Neural networks":
+            args = self.nn_classifier.get_args()
+            fromfile =
+            self.classMng.Train(fromfile, input, args, output, "NN")
+        if self.selectedClassifier.get() == "SVM":
+            (fromfile, input, args, output) = self.svm_classifier.get
         return
 
 
-
 class NeuralNetworksClassifier:
+    def get_args(self):
+        #fromfile, input, args{}, output
+        tmp = {}
+        return tmp
     def __init__(self,frame):
         self.parametersFrame = Frame(frame)
 
@@ -147,6 +155,10 @@ class NeuralNetworksClassifier:
         return
 
 class SVMClassifier:
+    def get_args(self):
+        #fromfile, input, args{}, output
+        tmp = {}
+        return tmp
     def __init__(self,frame):
         self.parametersFrame = Frame(frame)
 
