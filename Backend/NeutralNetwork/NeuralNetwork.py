@@ -159,7 +159,9 @@ class NeuralNetwork:
 
                 sess.run(train_step, feed_dict={x: batch_x, y_: batch_y})
             print("Train Done")
-
+            yy, yy2 = sess.run([y, y_], feed_dict={x: XT, y_: yt})
+            res = self.correctPrediction_partial(yy, yy2)
+            print(res)
             # Zapis klasyfikatora
             if not os.path.exists(path):
                 os.makedirs(path)
@@ -201,15 +203,63 @@ class NeuralNetwork:
                 print("Klasyfikator nie istnieje")
 
             yy, yy2 = sess.run([y, y_], feed_dict={x: XT, y_: yt})
-            print(self.correctPrediction_partial(yy, yy2))
+            res = self.correctPrediction_partial(yy, yy2)
+            print(res)
+            return res
 
-    def Single(self, Text, classifier, args):
-        return
+    def Single(self,FromFile, Text, args, classifier):
+        path = "./models/" + str(classifier)
+        # classifier - sciezka do klasyfikatora
+        target = args['target']
+        vocabulary_len = args['vocabulary_len']
+        tf.reset_default_graph()
+        x = tf.placeholder(tf.float32, [None, vocabulary_len])
+        W = tf.Variable(tf.zeros([vocabulary_len, 90]), name='W')
+        b = tf.Variable(tf.zeros([90]), name='b')
+        y = tf.matmul(x, W) + b
+
+
+        saver = tf.train.Saver()
+
+        if FromFile == True:
+            # input - nazwa pliku z ktorego wczytujemy
+            print("FromFile == True")
+            # XT = np.load("1_test_Xs.npy").tolist()  # input
+            # yt = np.load("1_test_ys.npy").tolist()  # input
+        else:
+            # input - nazwa korpusu ktory wczytujemy
+            NeuralCorpus.target = target
+            NeuralCorpus.vocabulary_len = vocabulary_len
+            crp = NeuralCorpus.corpus()
+            doc = NeuralCorpus.document(Text,0,0)
+            doc.get_unique_words()
+            XT = []
+            XT.append(doc.get_vector("frequency", crp.inverse_vocabulary, crp.vocabulary_entrophy))
+
+        with tf.Session() as sess:
+            sess.run(tf.global_variables_initializer())
+            ckpt = tf.train.get_checkpoint_state(path)
+            if ckpt and ckpt.model_checkpoint_path:
+                saver.restore(sess, ckpt.model_checkpoint_path)
+            else:
+                print("Klasyfikator nie istnieje")
+
+            yy = sess.run(y, feed_dict={x: XT})
+            res = self.normalization(yy[0])
+            cat = []
+            categories = NeuralCorpus.reuters.categories()
+            print(res)
+            for i in range(90):
+                if res[i] == 1:
+                    cat.append(categories[i])
+            print(cat)
 
 
 
-# args = {"gradient": 1, "steps": 2000, "target": "entrophy", "vocabulary_len": 300}
-#
-# neural = NeuralNetwork()
-# neural.Train(False,"input",args,"Model2")
-# neural.Test(False, "input", args, "Model2")
+args = {"gradient": 1, "steps": 5000, "target": "entrophy", "vocabulary_len": 1500}
+
+neural = NeuralNetwork()
+neural.Train(False,"input",args,"Model2")
+#neural.Test(False, "input", args, "Model2")
+neural.Single(False, NeuralCorpus.reuters.raw(NeuralCorpus.reuters.fileids()[4]), args, "Model2")
+print(NeuralCorpus.reuters.categories(NeuralCorpus.reuters.fileids()[4]))
