@@ -12,20 +12,6 @@ from Backend.Integration.ClassificatiorInterface import ClassificatorInterface
 cachedStopWords = stopwords.words("english")
 #from scipy.spatial.distance import cosine
 
-class Classificator(ClassificatorInterface):
-
-    def __init__(self):
-        self.Model = ReutersDoc2VecModel()
-
-
-    def train(self, args, count):
-        print("Not needed")
-
-
-    def classify(self, document):
-        categories = self.Model.classify(document)
-        return categories
-
 def cosine2(v1, v2):
     v1v2 = 0
     for i in range(100):
