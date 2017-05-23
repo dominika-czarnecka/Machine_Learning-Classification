@@ -248,11 +248,12 @@ class NeuralNetwork:
             res = self.normalization(yy[0])
             cat = []
             categories = NeuralCorpus.reuters.categories()
-            print(res)
+            #print(res)
             for i in range(90):
                 if res[i] == 1:
                     cat.append(categories[i])
-            print(cat)
+            #print(cat)
+            return cat
 
 
 
