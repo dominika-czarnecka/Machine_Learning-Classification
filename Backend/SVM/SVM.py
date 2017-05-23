@@ -4,10 +4,7 @@ from DataTransformer import DataTransformer
 from Corpus import Corpus
 from ResultDataTransformer import ResultDataTransformer
 from ParametersParser import ParametersParser
-from nltk.corpus import reuters
 from SavedClassifiersManager import SavedClassifiersManager
-import pickle
-
 
 class SVM:
     def __init__(self):
@@ -30,8 +27,8 @@ class SVM:
 
         svm = SVM()
 
-        v_train_docs, v_test_docs = svm.dataTransformer.transform_documents(corpus.train_docs, corpus.test_docs)
-        b_train_labels, b_test_labels = svm.dataTransformer.transform_labels(corpus.train_labels, corpus.test_labels)
+        v_train_docs = svm.dataTransformer.vectorizer.fit_transform(corpus.train_docs)
+        b_train_labels = svm.dataTransformer.mlb.fit_transform(corpus.train_labels)
 
         svm.clf = SVM.get_trained_classifier(args['c'], args['kernel'], args['degree'], args['gamma'], args['coef0'],
                                              args['shrinking'], args['tol'], args['max_iter'],
