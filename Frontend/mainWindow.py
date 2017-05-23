@@ -3,8 +3,6 @@ import Frontend.errorWindow as error
 import Frontend.progressWindow as progress
 import Frontend.resultWindow as result
 import Frontend.mainView as mv
-import Frontend.newClassifierView as ncv
-
 
 class mainWindow:
     def __init__(self):

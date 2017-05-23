@@ -1,7 +1,7 @@
 from tkinter import *
 
 class newClassifierView:
-    def __init__(self, tk, mv, ):
+    def __init__(self, tk, mv):
         self.mv = mv
         # self.mainFrame = Frame(tk)
         self.mainFrame = Frame(tk,padx=5,pady=5)
@@ -102,14 +102,15 @@ class newClassifierView:
             args = self.w2v_classifier.getArgs()
         elif self.selectedClassifier.get() == "Neural networks":
             args = self.nn_classifier.getArgs()
-        from_file = self.from_file.get()
+
+        fromfile = self.from_file.get()
         input = self.entryDocumentsForTraining.get()
-        args = self.getArgs();
         output = self.classifierNameEntry.get()
 
+        self.mv.classifierManager.Train(fromfile, input, args, output)
 
 
-
+# clsses for display classifiers parameters
 class NeuralNetworksClassifier:
     def __init__(self,frame):
         self.parametersFrame = Frame(frame)
