@@ -1,7 +1,7 @@
 from tkinter import *
 
 class newClassifierView:
-    def __init__(self, tk, mv):
+    def __init__(self, tk, mv, ):
         self.mv = mv
         # self.mainFrame = Frame(tk)
         self.mainFrame = Frame(tk,padx=5,pady=5)
@@ -95,11 +95,17 @@ class newClassifierView:
             self.svm_classifier.hideParameters()
 
     def onClickClassify(self):
+        args = {}
+        if self.selectedClassifier.get() == "SVM":
+            args = self.svm_classifier.getArgs()
+        elif self.selectedClassifier.get() == "Word2vec":
+            args = self.w2v_classifier.getArgs()
+        elif self.selectedClassifier.get() == "Neural networks":
+            args = self.nn_classifier.getArgs()
         from_file = self.from_file.get()
+        input = self.entryDocumentsForTraining.get()
         args = self.getArgs();
-        print(from_file)
-        return
-
+        output = self.classifierNameEntry.get()
 
 
 
@@ -153,6 +159,7 @@ class NeuralNetworksClassifier:
                 "Vocabulary": self.varParameter2.get(),
                 "Neural_network_step":self.NeuralNetworkStep.get(),
                 "Train_step":self.TrainStep.get()}
+        return args
 
 class SVMClassifier:
     def __init__(self,frame):
@@ -267,6 +274,16 @@ class SVMClassifier:
             self.varGamma.set(0.0)
             self.gamma.pack(side=LEFT)
 
+    def getArgs(self):
+        args = {"C": self.c.get(),
+                "kernel": self.varKernel.get(),
+                "gamma":self.gamma.get(),
+                "shrinking":self.shrinking.get(),
+                "tol":self.tol.get(),
+                "max_iter":self.max_iter.get(),
+                "coef0":self.coef0.get()}
+        return args
+
 class Word2VecClassifier:
     def __init__(self,frame):
         self.parametersFrame = Frame(frame)
@@ -279,6 +296,6 @@ class Word2VecClassifier:
     def hideParameters(self):
         self.parametersFrame.pack_forget()
 
-    def execute(self):
-        return
+    def getArgs(self):
+        return {}
 
