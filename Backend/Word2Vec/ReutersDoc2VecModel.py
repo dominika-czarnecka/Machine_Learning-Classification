@@ -37,7 +37,7 @@ def tokenize(text):
 
 
 class ReutersDoc2VecModel:
-    def __init__(self, fname = 'd2vModel', preprocessing_function = gensim.utils.simple_preprocess):
+    def __init__(self, args, fname = 'd2vModel', preprocessing_function = gensim.utils.simple_preprocess):
         self.documents = list()
         self.preprocessing_function = preprocessing_function
         if(os.path.isfile(fname)):
@@ -45,7 +45,10 @@ class ReutersDoc2VecModel:
         else:
             #trenujemy model
             self.documents = self.getTeggedDocuments()
-            self.model = gensim.models.Doc2Vec(self.documents, size=100, min_count=2, iter=55)
+            size = args['size']
+            min_count = args['min-count']
+            iter = args['iter']
+            self.model = gensim.models.Doc2Vec(self.documents,size=size,min_count=min_count,iter=iter)
             self.model.save(fname)
 
     def getTeggedDocuments(self):
@@ -104,12 +107,13 @@ class ReutersDoc2VecModel:
 """
 Przykładowe użycie:
 """
-MyModel = ReutersDoc2VecModel(preprocessing_function= tokenize)
-raw_text = reuters.raw('test/14828')
+#MyModel = ReutersDoc2VecModel(preprocessing_function= tokenize)
+#raw_text = reuters.raw('test/14828')
+#print(raw_text)
 #Jeżeli chcemy otrzymać dwie najbardziej prawdopodobne kategorie dla danego tekstu, to number_of_categories=2:
-infered_categories = MyModel.classify(raw_text, number_of_categories= 3)
-print("Kategorie z klasyfikacji dla \'test/14828\':")
-print(infered_categories)
+#infered_categories = MyModel.classify(raw_text, number_of_categories= 3)
+#print("Kategorie z klasyfikacji dla \'test/14828\':")
+#print(infered_categories)
 #print(MyModel.classify(raw_text, number_of_categories= 3, get_similarity=True))
-print("Kategorie z korpusu dla \'test/14828\':")
-print(reuters.categories('test/14828'))
+#print("Kategorie z korpusu dla \'test/14828\':")
+#print(reuters.categories('test/14828'))
