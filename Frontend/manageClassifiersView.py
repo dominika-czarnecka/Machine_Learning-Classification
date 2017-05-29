@@ -1,12 +1,13 @@
 from tkinter import *
+import os, os.path
 
 class manageClassifiersView:
     def __init__(self, tk, mv):
         self.tk = tk
         self.mv = mv
-        # self.tk.title("Manage Classifiers")
+        self.pathWithClassifiers = "test/"
+        self.listOfFiles = [name for name in os.listdir(self.pathWithClassifiers) if os.path.isfile(os.path.join(self.pathWithClassifiers, name))]
         self.initComponents()
-        # self.tk.mainloop()
 
     def initComponents(self):
         self.mainFrame = Frame(self.tk, padx=5, pady=5)
@@ -21,8 +22,7 @@ class manageClassifiersView:
 
         self.selectClassifier = Listbox(self.labelFrame_1, height=25, width=40)
         self.selectClassifier.pack(anchor=N)
-        self.initClassifierList()
-#        self.selectClassifier.bind("<Button-1>", self.click)
+        self.selectClassifier.bind("<Double-Button-1>", self.onClickClassifier)
 
         self.classifierInformation = Text(self.labelFrame_2, height=25, width=40)
         self.classifierInformation.pack(anchor=N)
@@ -40,6 +40,9 @@ class manageClassifiersView:
 
         self.labelFrame_1.pack(fill=Y)
         self.labelFrame_2.pack(fill=X)
+
+        self.initClassifierList()
+
     def hide(self):
         self.mainFrame.pack_forget()
 
@@ -51,16 +54,24 @@ class manageClassifiersView:
         self.mv.show()
 
     def initClassifierList(self):
-        self.selectClassifier.insert(END, "Klasyfikator 1")
-        self.selectClassifier.insert(END, "Klasyfikator 2")
+        for i in self.listOfFiles:
+            file_name = i
+            self.selectClassifier.insert(END, file_name)
+
+    def onClickClassifier(self, event):
+        self.classifierInformation.delete("1.0", END)
+        widget = event.widget
+        selection = widget.curselection()
+        file_name = widget.get(selection[0])
+        file = open(self.pathWithClassifiers + file_name, "r")
+        self.classifierInformation.insert(INSERT, file.read())
 
     def onClickExecuteButton(self):
-        selected = self.selectClassifier.curselection()
-        self.selectClassifier.delete(selected)
+        selection = self.selectClassifier.curselection()
+        file_name = self.selectClassifier.get(selection[0])
+        os.remove(self.pathWithClassifiers + file_name)
+        self.classifierInformation.delete("1.0", END)
+        self.selectClassifier.delete(selection)
 
-   # def click(self, event):
-#        widget = event.widget
- #       selected = widget.curselection()
-        #value = widget.get(selected[0])
-  #      self.classifierInformation.insert("0.0", widget.get(selected[0]))
+
 
