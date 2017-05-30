@@ -24,7 +24,7 @@ class Doc2Vec:
     def single(self, text, args, name):
         if name:
             #Klasyfikacja dokumentu ze wskazanego pliku
-            return self.model.classify(fileName=name, args=args)
+            return self.model.classify(text = "", fileName=name, args=args)
         else:
             #Klasyfikacja dokumentu przekazanego jako tekst
             return self.model.classify(text=text, args=args)
