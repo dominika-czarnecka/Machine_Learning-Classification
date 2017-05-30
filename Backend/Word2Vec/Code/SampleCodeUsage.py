@@ -18,3 +18,8 @@ doc2Vec.train(False, "", {"size": 100, "iter": 55, "min-count": 2, "window": 2},
 #Klasyfikacja dokumentu z tekstu
 categories = doc2Vec.single(sampleDocument, {"number-of-categories": 5, "get-similarity": True}, name='')
 print(categories)
+print(doc2Vec.test(fromFile=False, input="", args={}, name=""))
+"""
+Wynik testu 1: 0.5147399801258695
+Wynik testu 2: 0.4660483603842332
+"""
