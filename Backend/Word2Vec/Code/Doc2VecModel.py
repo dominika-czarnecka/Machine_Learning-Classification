@@ -1,13 +1,31 @@
 import gensim
 from nltk.corpus import stopwords, reuters
+from nltk import word_tokenize
+from nltk.stem.porter import PorterStemmer
 import os.path
 import math
 import operator
+import re
 import numpy as np
+cachedStopWords = stopwords.words("english")
 
+def tokenize(text):
+    """
+    Input:  text - raw text.
+    Output: A list of tokens.
+        This function is used for tokenizing raw text. It includes Stemming and deleting Stop Words.
+    It was copied from the first PZ laboratories.
+    """
+    min_length = 3
+    words = map(lambda word: word.lower(), word_tokenize(text));
+    words = [word for word in words if word not in cachedStopWords]
+    tokens = (list(map(lambda token: PorterStemmer().stem(token), words)));
+    p = re.compile('[a-zA-Z]+');
+    filtered_tokens = list(filter(lambda token: p.match(token) and len(token) >= min_length, tokens));
+    return filtered_tokens
 
 class Doc2VecModel:
-    def __init__(self, args, modelFileName, input='', preprocessing_function=gensim.utils.simple_preprocess):
+    def __init__(self, args, modelFileName, input='', preprocessing_function=tokenize):
         #Inicjalizacja modułu
         self.documents = list()
         self.preprocessing_function = preprocessing_function
@@ -43,14 +61,14 @@ class Doc2VecModel:
     #Ocena podobieństwa za pomocą funkcji Cosine
     def cosine_similarity(self, v1, v2):
         v1v2 = 0
-        for i in range(100):
+        for i in range(len(v1)):
             v1v2 += v1[i] * v2[i]
         v1norm = 0
-        for i in range(100):
+        for i in range(len(v1)):
             v1norm += v1[i] * v1[i]
         v1norm = math.sqrt(v1norm)
         v2norm = 0
-        for i in range(100):
+        for i in range(len(v1)):
             v2norm += v2[i] * v2[i]
         v2norm = math.sqrt(v2norm)
         return v1v2 / (v1norm * v2norm)
