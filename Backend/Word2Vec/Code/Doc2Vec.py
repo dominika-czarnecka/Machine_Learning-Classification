@@ -18,11 +18,12 @@ class Doc2Vec:
     #Testowanie modelu
     def test(self, fromFile, input, args, name):
         if fromFile:
-            # Trenowanie modelu na dokumentach we wskazanej w input lokalizacji
+            # Testowanie modelu na dokumentach we wskazanej w input lokalizacji
             print("Funkcjonalność nie została jeszcze zaimplementowana")
             raise NotImplementedError
         else:
             MyTests = PrecisionTests(self.model)
+            print("Starting tests...\n")
             wynik1 = MyTests.test1()
             wynik2 = MyTests.test2()
             s = str()

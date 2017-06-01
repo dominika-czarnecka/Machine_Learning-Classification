@@ -27,10 +27,12 @@ class PrecisionTests:
     #TODO zmienić nazwę
     def test1(self):
         """
-        Dp - dokumenty pozytywne
+        Dp - dokumenty sklasyfikowane pozytywnie
         D - wszystkie dokumenty
-        test = |Dp|/|D|, gdzie |Dp| to moc zbioru takich dokumentów, że najbardziej prawdopodobna 
-        kategoria z doc2vec dla danego dokumentu znajduje się wśród zbioru jego kategorii
+        CR - kategorie danego dokumentu z korpusu Reuters
+        
+        test1 = |Dp|/|D|, gdzie |Dp| to moc zbioru takich dokumentów, że najbardziej prawdopodobna 
+        kategoria uzyskana z klasyfikacji(doc2vec) danego dokumentu znajduje się w zbiorze CR
         """
         pozytywne = 0
         wszystkie = 0
@@ -48,9 +50,11 @@ class PrecisionTests:
         """
         Dp - dokumenty pozytywne
         D - wszystkie dokumenty
-        test = |Dp|/|D|, gdzie |Dp| to moc zbioru takich dokumentów, że kategorie tego dokumentu są jednocześnie 
-        najbardziej prawdopodobnymi katagoriami, do których został sklasyfikowany i nie istnieje klasa z poza sbioru 
-        jego klas, która jest bardziej prawdopodobna.
+        CR - kategorie danego dokumentu z korpusu Reuters
+        CC - kategorie, do których został sklasyfikowany dokument
+        test2 = |Dp|/|D|, gdzie |Dp| to moc zbioru takich dokumentów, że kategorie CR tego dokumentu są jednocześnie 
+        najbardziej prawdopodobnymi katagoriami ze zbioru CC i nie istnieje klasa spoza zbioru CR, która jest
+        bardziej prawdopodobna.
         Np. jeżeli mamy dokument z 3 kategoriami, to jeżeli każda z tych trzech znajduje się w zbiorze 3 kategorii z
         klasyfikatora, to zaliczamy jako pozytywny.
         """
@@ -63,8 +67,8 @@ class PrecisionTests:
             add_positive=True
             for cat in doc.categories:
                 if cat not in infered_categories:
-                    #Jeżeli jest choć jedna kategoria wźród kategorii dokumentu, której nie ma
-                    # w zbiorze infered_vectors, to nie można tago zaliczyć jako test pozytywny.
+                    #Jeżeli jest choć jedna kategoria wśród kategorii dokumentu, której nie ma
+                    # w zbiorze infered_categories, to nie można tago zaliczyć jako test pozytywny.
                     add_positive = False
             if add_positive:
                 pozytywne += 1
