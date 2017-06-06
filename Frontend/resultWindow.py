@@ -19,4 +19,3 @@ class resultWindow:
         self.tk.destroy()
 
 
-resultWindow("Result")
