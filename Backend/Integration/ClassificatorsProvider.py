@@ -41,6 +41,9 @@ class ClassificatorsProvider:
                 self.Word2VecModels.append(SVMModel.fromJSON(json_data=i))
 
     def canAdd(self, classificatorType, classificator):
+        if self.exist(classificator.name):
+            return False
+
         if classificatorType == ClassificatorEnum.NeuralNetwork:
             for i in self.NeuralNetworkModels:
                 if classificator == i:
@@ -59,7 +62,34 @@ class ClassificatorsProvider:
         else:
             return False
 
+    def add(self, classificatorType, classificator):
+        if not self.canAdd(classificatorType=classificatorType, classificator=classificator):
+            return False
+        if classificatorType == ClassificatorEnum.NeuralNetwork:
+            self.NeuralNetworkModels.append(classificator)
+            return True
+        elif classificatorType == ClassificatorEnum.SVM:
+            self.SVMModels.append(classificator)
+            return True
+        elif classificatorType == ClassificatorEnum.Word2Vec:
+            self.Word2VecModels.append(classificator)
+            return True
+
+    def exist(self, name):
+        for i in self.SVMModels:
+            if i.name == name:
+                return True
+        for i in self.NeuralNetworkModels:
+            if i.name == name:
+                return True
+        for i in self.Word2VecModels:
+            if i.name == name:
+                return True
+        return False
+
     def find(self, name):
+        if not self.exist(name):
+            return False
         for i in self.SVMModels:
             if i.name == name:
                 return i
@@ -69,27 +99,34 @@ class ClassificatorsProvider:
         for i in self.Word2VecModels:
             if i.name == name:
                 return i
-        return False
 
     def remove(self, classificatorType, classificator):
+        if not self.exist(name=classificator.name):
+            return False
         if classificatorType == ClassificatorEnum.NeuralNetwork:
             self.NeuralNetworkModels.remove(classificator)
+            return True
         elif classificatorType == ClassificatorEnum.SVM:
             self.SVMModels.remove(classificator)
+            return True
         elif classificatorType == ClassificatorEnum.Word2Vec:
             self.Word2VecModels.remove(classificator)
+        return True
 
 # example
-svm = SVMModel.initValues(name="test", path="ad", c=1.0, kernel="linear", degree=3, gamma="auto", coef0=0.0, shrinking=True,
-               probability=False, tol=1e-4, cache_size=200.0, verbose=False, max_iter=-1,
-               decision_function_shape="None", random_state=0)
-print(svm)
+# svm = SVMModel(name="test", path="ad", c=1.0, kernel="linear", degree=3, gamma="auto", coef0=0.0, shrinking=True,
+#                probability=False, tol=1e-4, cache_size=200.0, verbose=False, max_iter=-1,
+#                decision_function_shape="None", random_state=0)
+# print(svm)
 
-cp = ClassificatorsProvider()
-print(cp.SVMModels)
-# cp.remove(classificatorType=ClassificatorEnum.SVM, classificator=svm)
+# cp = ClassificatorsProvider()
 # print(cp.SVMModels)
-# cp.SVMModels.append(svm)
-print(cp.SVMModels)
-del cp
+# print(cp.add(classificatorType=ClassificatorEnum.SVM, classificator=svm))
+# print(cp.add(classificatorType=ClassificatorEnum.SVM, classificator=svm))
+# print(cp.remove(classificatorType=ClassificatorEnum.SVM, classificator=svm))
+# print(cp.remove(classificatorType=ClassificatorEnum.SVM, classificator=svm))
+# print(cp.add(classificatorType=ClassificatorEnum.SVM, classificator=svm))
+# print(cp.find(name=svm.name))
+# print(cp.SVMModels)
+# del cp
 
