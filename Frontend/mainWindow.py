@@ -3,6 +3,7 @@ import Frontend.errorWindow as error
 import Frontend.progressWindow as progress
 import Frontend.resultWindow as result
 import Frontend.mainView as mv
+import Frontend.progressView as pv
 
 class mainWindow:
     def __init__(self):
@@ -13,13 +14,14 @@ class mainWindow:
         mV = mv.mainView(self.tk)
         mV.show()
         # self.initComponents()
-
+        self.pV = pv.progressView(self.tk)
+        # self.pV.show()
         self.tk.mainloop()
 
 if __name__ == '__main__':
     # result.resultWindow("Result\n abc")
     # error.errorWindow("Error !")
-    progress.progressWindow("Progress:","description")
+
     mw = mainWindow()
     # error.errorWindow("Error !")
 

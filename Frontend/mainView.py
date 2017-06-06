@@ -3,6 +3,7 @@ import Frontend.newClassifierView as ncv
 import Frontend.manageClassifiersView as mcv
 import Frontend.documentClassificationView as dcv
 import Frontend.testClassifierView as tcv
+
 from Backend.Integration.ClassifierManager import ClassifierManager
 
 class mainView:
@@ -21,6 +22,13 @@ class mainView:
         manageClassifierButton = Button(self.mainFrame, width="50", height="2", text='Manage classifiers',command=self.onClickManageClassifierButton)
         manageClassifierButton.pack(anchor=CENTER, pady=buttonPadding)
 
+        #widoki
+        self.ncV = ncv.newClassifierView(self.tk, self)
+        self.tcV = tcv.testClassifierView(self.tk, self)
+        self.dcV = dcv.documentClassificationView(self.tk, self)
+        self.mcV = mcv.manageClassifiersView(self.tk, self)
+
+
     def show(self):
         self.mainFrame.pack(expand=True)
 
@@ -29,24 +37,18 @@ class mainView:
 
     def onClickNewClassifierButton(self):
         self.mainFrame.pack_forget()
-        ncV = ncv.newClassifierView(self.tk, self)
-        ncV.show()
+        self.ncV.show()
 
     def onClickTestClassifierButton(self):
         self.hide()
-        tcV = tcv.testClassifierView(self.tk, self)
-        tcV.show()
-        return
+        self.tcV.show()
 
     def onClickClassifyDocumentButton(self):
         self.hide()
-        dcV = dcv.documentClassificationView(self.tk, self)
-        dcV.show()
-        return
+        self.dcV.show()
 
     def onClickManageClassifierButton(self):
         self.hide()
-        mcV = mcv.manageClassifiersView(self.tk, self)
-        mcV.show()
+        self.mcV.show()
 
 

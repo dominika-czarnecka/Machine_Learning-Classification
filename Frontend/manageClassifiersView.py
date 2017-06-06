@@ -10,9 +10,9 @@ class manageClassifiersView:
         self.initComponents()
 
     def initComponents(self):
-        self.mainFrame = Frame(self.tk, padx=5, pady=5)
+        self.mainFrame = Frame(self.tk)
 
-        self.backButton = Button(self.mainFrame, text="Back", command=self.onClickBackButton)
+        self.backButton = Button(self.mainFrame, text="Back",width=5, command=self.onClickBackButton)
         self.backButton.pack(anchor=NW)
 
         self.labelFrame_1 = LabelFrame(self.mainFrame, height=70, width=100, text="Classifiers")
@@ -47,7 +47,7 @@ class manageClassifiersView:
         self.mainFrame.pack_forget()
 
     def show(self):
-        self.mainFrame.pack(fill=X)
+        self.mainFrame.pack(fill=X,padx=5,pady=5)
 
     def onClickBackButton(self):
         self.hide()

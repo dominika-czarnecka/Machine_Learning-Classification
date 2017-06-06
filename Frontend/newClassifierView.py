@@ -4,16 +4,17 @@ class newClassifierView:
     def __init__(self, tk, mv):
         self.mv = mv
         # self.mainFrame = Frame(tk)
-        self.mainFrame = Frame(tk,padx=5,pady=5)
+        self.mainFrame = Frame(tk)
 
         #backButton
         backButton = Button(self.mainFrame, text="Back", width=5, command=self.onClickBackButton)
         backButton.pack(anchor=NW)
 
         self.initComponents()
+        self.hide()
 
     def show(self):
-        self.mainFrame.pack(fill=X)
+        self.mainFrame.pack(fill=X,padx=5,pady=5)
 
     def hide(self):
         self.mainFrame.pack_forget()
@@ -66,8 +67,8 @@ class newClassifierView:
         self.entryDocumentsForTraining.pack(side=LEFT)
         self.labelFrame_3.pack(anchor=W,fill=X)
 
-        self.classifyButton = Button(self.mainFrame,text='Train classifier',command=self.onClickClassify)
-        self.classifyButton.pack(anchor=SE)
+        self.classifyButton = Button(self.mainFrame,text='Train classifier',command=self.onClickClassify, height=2)
+        self.classifyButton.pack(fill=X, pady=5)
 
         #classifiers objects
         self.nn_classifier = NeuralNetworksClassifier(self.classifierOptionsFrame)
@@ -96,18 +97,19 @@ class newClassifierView:
 
     def onClickClassify(self):
         args = {}
-        if self.selectedClassifier.get() == "SVM":
+        if self.selectedClassifier.get() == 1:
             args = self.svm_classifier.getArgs()
-        elif self.selectedClassifier.get() == "Word2vec":
+        elif self.selectedClassifier.get() == 2:
             args = self.w2v_classifier.getArgs()
-        elif self.selectedClassifier.get() == "Neural networks":
+        elif self.selectedClassifier.get() == 3:
             args = self.nn_classifier.getArgs()
 
         fromfile = self.from_file.get()
         input = self.entryDocumentsForTraining.get()
         output = self.classifierNameEntry.get()
+        type = self.selectedClassifier.get()
 
-        self.mv.classifierManager.Train(fromfile, input, args, output)
+        self.mv.classifierManager.Train(fromfile, input, args, output, type) # type 1 - SVM, 2 - W2V, 3 - NN
 
 
 # clsses for display classifiers parameters
