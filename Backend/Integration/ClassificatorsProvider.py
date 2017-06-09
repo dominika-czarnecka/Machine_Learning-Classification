@@ -117,12 +117,15 @@ class ClassificatorsProvider:
 # svm = SVMModel(name="test", path="ad", c=1.0, kernel="linear", degree=3, gamma="auto", coef0=0.0, shrinking=True,
 #                probability=False, tol=1e-4, cache_size=200.0, verbose=False, max_iter=-1,
 #                decision_function_shape="None", random_state=0)
+# svm1 = SVMModel(name="test1", path="ad", c=1.0, kernel="linear", degree=31, gamma="auto", coef0=0.0, shrinking=True,
+#                probability=False, tol=1e-4, cache_size=200.0, verbose=False, max_iter=-1,
+#                decision_function_shape="None", random_state=0)
 # print(svm)
 
 # cp = ClassificatorsProvider()
 # print(cp.SVMModels)
 # print(cp.add(classificatorType=ClassificatorEnum.SVM, classificator=svm))
-# print(cp.add(classificatorType=ClassificatorEnum.SVM, classificator=svm))
+# print(cp.add(classificatorType=ClassificatorEnum.SVM, classificator=svm1))
 # print(cp.remove(classificatorType=ClassificatorEnum.SVM, classificator=svm))
 # print(cp.remove(classificatorType=ClassificatorEnum.SVM, classificator=svm))
 # print(cp.add(classificatorType=ClassificatorEnum.SVM, classificator=svm))

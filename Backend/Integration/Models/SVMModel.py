@@ -20,6 +20,9 @@ class SVMModel(ClassificatorModel):
         self.decision_function_shape = decision_function_shape
         self.random_state = random_state
 
+    def display(self):
+        return "name: " + self.name + "\npath: " + self.path
+
     @classmethod
     def fromJSON(cls, json_data):
         fromJSON = cls(json_data['name'], json_data['path'], json_data['c'],json_data['kernel'], json_data['degree'],
