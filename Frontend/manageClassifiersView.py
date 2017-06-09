@@ -68,14 +68,14 @@ class manageClassifiersView:
         widget = event.widget
         selection = widget.curselection()
         file_name = widget.get(selection[0])
-        c = self.cp.find(file_name)
+        type, c = self.cp.find(file_name)
         self.classifierInformation.insert(INSERT, c.display())
 
     def onClickExecuteButton(self):
         selection = self.selectClassifier.curselection()
         file_name = self.selectClassifier.get(selection[0])
-        c = self.cp.find(file_name)
-        self.cp.remove(classificatorType=ClassificatorEnum.SVM,classificator=c)
+        type, c = self.cp.find(file_name)
+        self.cp.remove(classificatorType=type, classificator=c)
         self.classifierInformation.delete("1.0", END)
         self.selectClassifier.delete(selection)
 

@@ -21,7 +21,21 @@ class SVMModel(ClassificatorModel):
         self.random_state = random_state
 
     def display(self):
-        return "name: " + self.name + "\npath: " + self.path
+        return "name: {}\n" \
+               "path: {}\n" \
+               "c: {}\n" \
+               "kernel: {}\n" \
+               "degree: {}\n" \
+               "gamma: {}\n" \
+               "coef0: {}\n" \
+               "shrinking: {}\n" \
+               "probability: {}\n" \
+               "tol: {}\n" \
+               "cache size: {}\n" \
+               "verbose: {}\n" \
+               "max iter: {}\n" \
+               "decision function shape: {}\n" \
+               "random state: {}\n".format(self.name, self.path, self.c, self.kernel, self.degree,self.gamma, self.coef0, self.shrinking, self.probability, self.tol, self.cache_size, self.verbose, self.max_iter, self.decision_function_shape, self.random_state)
 
     @classmethod
     def fromJSON(cls, json_data):

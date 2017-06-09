@@ -92,13 +92,13 @@ class ClassificatorsProvider:
             return False
         for i in self.SVMModels:
             if i.name == name:
-                return i
+                return ClassificatorEnum.SVM, i
         for i in self.NeuralNetworkModels:
             if i.name == name:
-                return i
+                return ClassificatorEnum.NeuralNetwork, i
         for i in self.Word2VecModels:
             if i.name == name:
-                return i
+                return ClassificatorEnum.Word2Vec, i
 
     def remove(self, classificatorType, classificator):
         if not self.exist(name=classificator.name):

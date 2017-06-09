@@ -11,6 +11,15 @@ class NeuralNetworkModel(ClassificatorModel):
         self.target = target
         self.vocabulary_len = vocabulary_len
 
+    def display(self):
+        return 'name: {}\n' \
+               'path: {}\n' \
+               'gradient: {}\n' \
+               'steps: {}\n' \
+               'target: {}\n' \
+               'vocabulary len: {}\n'.format(self.name, self.path, self.gradient, self.steps, self.target, self.vocabulary_len)
+
+
     @classmethod
     def fromJSON(cls, json_data):
         fromJSON = cls(json_data['name'], json_data['path'], json_data['gradient'],
