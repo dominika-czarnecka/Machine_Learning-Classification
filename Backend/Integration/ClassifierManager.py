@@ -1,3 +1,4 @@
+from Backend.Integration.ClassificatorsProvider import ClassificatorsProvider
 from Backend.SVM.SVM import SVM
 from Backend.NeutralNetwork.NeuralNetwork import NeuralNetwork
 from Backend.Word2Vec.Doc2Vec import Doc2Vec
@@ -11,6 +12,7 @@ from .ClassificatorEnum import ClassificatorEnum
 class ClassifierManager:
     def __init__(self):
         self.clsEnum = ClassificatorEnum
+        self.clsProv = ClassificatorsProvider()
         self.nnClassifier = NeuralNetwork()
         self.svmClassifier = SVM()
         self.w2vClassifier = Doc2Vec()

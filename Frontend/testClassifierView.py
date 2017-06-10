@@ -3,12 +3,15 @@ from tkinter import *
 # import Frontend.progressWindow as progress
 import tkinter.filedialog
 
+from Backend.Integration.ClassificatorEnum import ClassificatorEnum
+
 
 class testClassifierView:
     def __init__(self, tk, mv):
         self.mv = mv
         self.tk = tk
         self.initComponents()
+        self.clEnum = ClassificatorEnum()
 
     def initComponents(self):
         self.mainFrame = Frame(self.tk, padx=2,pady=5)
@@ -58,8 +61,10 @@ class testClassifierView:
         fromfile = False
         input = "input"
         args = self.getArgs()
+        name = ""
+        type = self.clEnum
 
-        # self.mv.classifierManager.Test(fromfile,input,args)
+        self.mv.classifierManager.Test(fromfile,input,args, name, type)
 
     def getArgs(self):
         args = {"classifier":"",
