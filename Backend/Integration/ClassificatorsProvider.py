@@ -7,6 +7,9 @@ from Backend.Integration.Models.Word2VecModel import Word2VecModel
 
 
 class ClassificatorsProvider:
+    package_dir = os.path.dirname(os.path.abspath(__file__))
+    file = os.path.join(package_dir, 'data.json')
+
     def __init__(self):
         self.SVMModels = []
         self.NeuralNetworkModels = []
@@ -21,57 +24,112 @@ class ClassificatorsProvider:
                           sort_keys=True, indent=4)
 
     def toFile(self):
-        with open('data.json', 'w') as outfile:
+        with open(self.file, 'w') as outfile:
             json.dump(self.toJSON(), outfile)
 
     def fromFile(self):
-        if not os.path.isfile('data.json'):
+        if not os.path.isfile(self.file):
             return
-        with open('data.json') as data_file:
+        with open(self.file) as data_file:
             temp = json.load(data_file)
             data = json.loads(temp)
-            self.SVMModels = data['SVMModels']
-            self.NeuralNetworkModels = data['NeuralNetworkModels']
-            self.Word2VecModels = data['Word2VecModels']
+            for i in data['SVMModels']:
+                self.SVMModels.append(SVMModel.fromJSON(json_data=i))
+            for i in data['NeuralNetworkModels']:
+                self.NeuralNetworkModels.append(SVMModel.fromJSON(json_data=i))
+            for i in data['Word2VecModels']:
+                self.Word2VecModels.append(SVMModel.fromJSON(json_data=i))
 
     def canAdd(self, classificatorType, classificator):
+        if self.exist(classificator.name):
+            return False
+
         if classificatorType == ClassificatorEnum.NeuralNetwork:
             for i in self.NeuralNetworkModels:
-                temp = NeuralNetworkModel()
-                temp.fromJSON(i)
-                if classificator == temp:
+                if classificator == i:
                     return False
             return True
         elif classificatorType == ClassificatorEnum.SVM:
             for i in self.SVMModels:
-                temp = SVMModel()
-                temp.fromJSON(i)
-                if classificator == temp:
+                if classificator == i:
                     return False
             return True
         elif classificatorType == ClassificatorEnum.Word2Vec:
             for i in self.Word2VecModels:
-                temp = Word2VecModel()
-                temp.fromJSON(i)
-                if classificator == temp:
+                if classificator == i:
                     return False
             return True
         else:
             return False
 
+    def add(self, classificatorType, classificator):
+        if not self.canAdd(classificatorType=classificatorType, classificator=classificator):
+            return False
+        if classificatorType == ClassificatorEnum.NeuralNetwork:
+            self.NeuralNetworkModels.append(classificator)
+            return True
+        elif classificatorType == ClassificatorEnum.SVM:
+            self.SVMModels.append(classificator)
+            return True
+        elif classificatorType == ClassificatorEnum.Word2Vec:
+            self.Word2VecModels.append(classificator)
+            return True
+
+    def exist(self, name):
+        for i in self.SVMModels:
+            if i.name == name:
+                return True
+        for i in self.NeuralNetworkModels:
+            if i.name == name:
+                return True
+        for i in self.Word2VecModels:
+            if i.name == name:
+                return True
+        return False
+
+    def find(self, name):
+        if not self.exist(name):
+            return False
+        for i in self.SVMModels:
+            if i.name == name:
+                return ClassificatorEnum.SVM, i
+        for i in self.NeuralNetworkModels:
+            if i.name == name:
+                return ClassificatorEnum.NeuralNetwork, i
+        for i in self.Word2VecModels:
+            if i.name == name:
+                return ClassificatorEnum.Word2Vec, i
+
+    def remove(self, classificatorType, classificator):
+        if not self.exist(name=classificator.name):
+            return False
+        if classificatorType == ClassificatorEnum.NeuralNetwork:
+            self.NeuralNetworkModels.remove(classificator)
+            return True
+        elif classificatorType == ClassificatorEnum.SVM:
+            self.SVMModels.remove(classificator)
+            return True
+        elif classificatorType == ClassificatorEnum.Word2Vec:
+            self.Word2VecModels.remove(classificator)
+        return True
+
 # example
-# svm = SVMModel()
-# svm.initValues(name="test", path="ad", c=1.0, kernel="linear", degree=3, gamma="auto", coef0=0.0, shrinking=True,
-#                probability=False, tol=1e-3, cache_size=200.0, verbose=False, max_iter=-1,
+# svm = SVMModel(name="test", path="ad", c=1.0, kernel="linear", degree=3, gamma="auto", coef0=0.0, shrinking=True,
+#                probability=False, tol=1e-4, cache_size=200.0, verbose=False, max_iter=-1,
 #                decision_function_shape="None", random_state=0)
-# svm1 = SVMModel()
-# svm1.initValues(name="test1", path="ad", c=1.0, kernel="linear", degree=3, gamma="auto", coef0=0.0, shrinking=True,
-#                 probability=False, tol=1e-3, cache_size=200.0, verbose=False, max_iter=-1,
-#                 decision_function_shape="None", random_state=0)
-#
-# nn = NeuralNetworkModel()
-# nn.initValues(name="test", path="ad", gradient=1, steps=500, target="tf_idf", vocabulary_len=1500)
+# svm1 = SVMModel(name="test1", path="ad", c=1.0, kernel="linear", degree=31, gamma="auto", coef0=0.0, shrinking=True,
+#                probability=False, tol=1e-4, cache_size=200.0, verbose=False, max_iter=-1,
+#                decision_function_shape="None", random_state=0)
+# print(svm)
+
 # cp = ClassificatorsProvider()
-# if cp.canAdd(ClassificatorEnum.SVM, svm1):
-#     cp.SVMModels.append(svm1)
+# print(cp.SVMModels)
+# print(cp.add(classificatorType=ClassificatorEnum.SVM, classificator=svm))
+# print(cp.add(classificatorType=ClassificatorEnum.SVM, classificator=svm1))
+# print(cp.remove(classificatorType=ClassificatorEnum.SVM, classificator=svm))
+# print(cp.remove(classificatorType=ClassificatorEnum.SVM, classificator=svm))
+# print(cp.add(classificatorType=ClassificatorEnum.SVM, classificator=svm))
+# print(cp.find(name=svm.name))
+# print(cp.SVMModels)
 # del cp
+

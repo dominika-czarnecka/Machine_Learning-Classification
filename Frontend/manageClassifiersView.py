@@ -1,12 +1,16 @@
 from tkinter import *
 import os, os.path
+from Backend.Integration.ClassificatorEnum import ClassificatorEnum
+from Backend.Integration.ClassificatorsProvider import ClassificatorsProvider
+
 
 class manageClassifiersView:
     def __init__(self, tk, mv):
         self.tk = tk
         self.mv = mv
-        self.pathWithClassifiers = "test/"
-        self.listOfFiles = [name for name in os.listdir(self.pathWithClassifiers) if os.path.isfile(os.path.join(self.pathWithClassifiers, name))]
+        self.cp = ClassificatorsProvider()
+        # self.pathWithClassifiers = "test/"
+        self.listOfFiles = self.cp.SVMModels#[name for name in os.listdir(self.pathWithClassifiers) if os.path.isfile(os.path.join(self.pathWithClassifiers, name))]
         self.initComponents()
 
     def initComponents(self):
@@ -52,10 +56,11 @@ class manageClassifiersView:
     def onClickBackButton(self):
         self.hide()
         self.mv.show()
+        del self.cp
 
     def initClassifierList(self):
         for i in self.listOfFiles:
-            file_name = i
+            file_name = i.name
             self.selectClassifier.insert(END, file_name)
 
     def onClickClassifier(self, event):
@@ -63,13 +68,14 @@ class manageClassifiersView:
         widget = event.widget
         selection = widget.curselection()
         file_name = widget.get(selection[0])
-        file = open(self.pathWithClassifiers + file_name, "r")
-        self.classifierInformation.insert(INSERT, file.read())
+        type, c = self.cp.find(file_name)
+        self.classifierInformation.insert(INSERT, c.display())
 
     def onClickExecuteButton(self):
         selection = self.selectClassifier.curselection()
         file_name = self.selectClassifier.get(selection[0])
-        os.remove(self.pathWithClassifiers + file_name)
+        type, c = self.cp.find(file_name)
+        self.cp.remove(classificatorType=type, classificator=c)
         self.classifierInformation.delete("1.0", END)
         self.selectClassifier.delete(selection)
 
