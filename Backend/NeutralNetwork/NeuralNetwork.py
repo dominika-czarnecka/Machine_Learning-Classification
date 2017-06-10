@@ -1,4 +1,4 @@
-import NeuralCorpus
+from Backend.NeutralNetwork import NeuralCorpus
 import numpy as np
 import tensorflow as tf
 import random
