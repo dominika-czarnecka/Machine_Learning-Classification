@@ -26,7 +26,7 @@ class testClassifierView:
         self.selectedClassifier = StringVar(self.tk)
         self.selectedClassifier.set("Choose option")
 
-        self.dropDown = OptionMenu(self.mainFrame, self.selectedClassifier,"SVM", "Word2Vec", "Neuron")
+        self.dropDown = OptionMenu(self.mainFrame, self.selectedClassifier, *self.mv.cp.names())
         self.dropDown.config(width=25,padx=50)
         self.dropDown.pack(pady=10)
 

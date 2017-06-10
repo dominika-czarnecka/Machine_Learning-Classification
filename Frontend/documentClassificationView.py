@@ -19,7 +19,7 @@ class documentClassificationView:
         self.selectedClassifier = StringVar(self.tk)
         self.selectedClassifier.set("Choose Classifier")
 
-        self.dropDown = OptionMenu(self.mainFrame, self.selectedClassifier, "SVM", "Word2Vec", "Neuron")
+        self.dropDown = OptionMenu(self.mainFrame, self.selectedClassifier, *self.mv.cp.names())
         self.dropDown.config(width=15)
         self.dropDown.pack(anchor=W, fill=X)
 

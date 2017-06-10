@@ -8,7 +8,7 @@ from Backend.Integration.Models.Word2VecModel import Word2VecModel
 
 class ClassificatorsProvider:
     package_dir = os.path.dirname(os.path.abspath(__file__))
-    file = os.path.join(package_dir, 'data.json')
+    file = os.path.join(package_dir+"/files/", 'data.json')
 
     def __init__(self):
         self.SVMModels = []
