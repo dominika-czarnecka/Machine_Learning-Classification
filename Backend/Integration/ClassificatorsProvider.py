@@ -129,7 +129,11 @@ class ClassificatorsProvider:
 # print(cp.remove(classificatorType=ClassificatorEnum.SVM, classificator=svm))
 # print(cp.remove(classificatorType=ClassificatorEnum.SVM, classificator=svm))
 # print(cp.add(classificatorType=ClassificatorEnum.SVM, classificator=svm))
-# print(cp.find(name=svm.name))
-# print(cp.SVMModels)
+# type, c = cp.find(name='test')
+# c.path = '112test'
+# del cp
+# cp = ClassificatorsProvider()
+# type, c = cp.find(name='test')
+# print(c.path)
 # del cp
 

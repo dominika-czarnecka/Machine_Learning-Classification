@@ -8,9 +8,8 @@ class manageClassifiersView:
     def __init__(self, tk, mv):
         self.tk = tk
         self.mv = mv
-        self.cp = ClassificatorsProvider()
         # self.pathWithClassifiers = "test/"
-        self.listOfFiles = self.cp.SVMModels#[name for name in os.listdir(self.pathWithClassifiers) if os.path.isfile(os.path.join(self.pathWithClassifiers, name))]
+        self.listOfFiles = self.mv.cp.SVMModels#[name for name in os.listdir(self.pathWithClassifiers) if os.path.isfile(os.path.join(self.pathWithClassifiers, name))]
         self.initComponents()
 
     def initComponents(self):
@@ -56,7 +55,6 @@ class manageClassifiersView:
     def onClickBackButton(self):
         self.hide()
         self.mv.show()
-        del self.cp
 
     def initClassifierList(self):
         for i in self.listOfFiles:
@@ -68,14 +66,14 @@ class manageClassifiersView:
         widget = event.widget
         selection = widget.curselection()
         file_name = widget.get(selection[0])
-        type, c = self.cp.find(file_name)
+        type, c = self.mv.cp.find(file_name)
         self.classifierInformation.insert(INSERT, c.display())
 
     def onClickExecuteButton(self):
         selection = self.selectClassifier.curselection()
         file_name = self.selectClassifier.get(selection[0])
-        type, c = self.cp.find(file_name)
-        self.cp.remove(classificatorType=type, classificator=c)
+        type, c = self.mv.cp.find(file_name)
+        self.mv.cp.remove(classificatorType=type, classificator=c)
         self.classifierInformation.delete("1.0", END)
         self.selectClassifier.delete(selection)
 
