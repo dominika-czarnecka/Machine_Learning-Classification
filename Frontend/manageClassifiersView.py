@@ -9,7 +9,7 @@ class manageClassifiersView:
         self.tk = tk
         self.mv = mv
         # self.pathWithClassifiers = "test/"
-        self.listOfFiles = self.mv.cp.SVMModels#[name for name in os.listdir(self.pathWithClassifiers) if os.path.isfile(os.path.join(self.pathWithClassifiers, name))]
+        self.listOfFiles = self.mv.cp.names()#[name for name in os.listdir(self.pathWithClassifiers) if os.path.isfile(os.path.join(self.pathWithClassifiers, name))]
         self.initComponents()
 
     def initComponents(self):
@@ -58,8 +58,7 @@ class manageClassifiersView:
 
     def initClassifierList(self):
         for i in self.listOfFiles:
-            file_name = i.name
-            self.selectClassifier.insert(END, file_name)
+            self.selectClassifier.insert(END, i)
 
     def onClickClassifier(self, event):
         self.classifierInformation.delete("1.0", END)

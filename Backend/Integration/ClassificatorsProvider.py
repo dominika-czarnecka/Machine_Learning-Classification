@@ -36,14 +36,23 @@ class ClassificatorsProvider:
             for i in data['SVMModels']:
                 self.SVMModels.append(SVMModel.fromJSON(json_data=i))
             for i in data['NeuralNetworkModels']:
-                self.NeuralNetworkModels.append(SVMModel.fromJSON(json_data=i))
+                self.NeuralNetworkModels.append(NeuralNetworkModel.fromJSON(json_data=i))
             for i in data['Word2VecModels']:
-                self.Word2VecModels.append(SVMModel.fromJSON(json_data=i))
+                self.Word2VecModels.append(Word2VecModel.fromJSON(json_data=i))
+
+    def names(self):
+        names = []
+        for i in self.SVMModels:
+            names.append(i.name)
+        for i in self.NeuralNetworkModels:
+            names.append(i.name)
+        for i in self.Word2VecModels:
+            names.append(i.name)
+        return names
 
     def canAdd(self, classificatorType, classificator):
         if self.exist(classificator.name):
             return False
-
         if classificatorType == ClassificatorEnum.NeuralNetwork:
             for i in self.NeuralNetworkModels:
                 if classificator == i:
@@ -136,4 +145,3 @@ class ClassificatorsProvider:
 # type, c = cp.find(name='test')
 # print(c.path)
 # del cp
-
