@@ -8,7 +8,7 @@ import os.path
 import math
 import operator
 import numpy as np
-from Backend.Integration.ClassificatiorInterface import ClassificatorInterface
+from Backend.Integration.Interfaces.ClassificatiorInterface import ClassificatorInterface
 cachedStopWords = stopwords.words("english")
 #from scipy.spatial.distance import cosine
 

@@ -1,4 +1,4 @@
-import info_text
+from Backend.SVM import info_text
 
 class ParametersParser:
     @staticmethod

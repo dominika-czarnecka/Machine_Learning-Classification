@@ -1,10 +1,10 @@
 from sklearn.svm import SVC
 from sklearn.multiclass import OneVsRestClassifier
-from DataTransformer import DataTransformer
-from Corpus import Corpus
-from ResultDataTransformer import ResultDataTransformer
-from ParametersParser import ParametersParser
-from SavedClassifiersManager import SavedClassifiersManager
+from .DataTransformer import DataTransformer
+from .Corpus import Corpus
+from .ResultDataTransformer import ResultDataTransformer
+from .ParametersParser import ParametersParser
+from .SavedClassifiersManager import SavedClassifiersManager
 
 class SVM:
     def __init__(self):
@@ -17,7 +17,7 @@ class SVM:
         clas.fit(v_train_docs, b_train_labels)
         return clas
 
-    def train(fromFile, input, args, name):
+    def train(self, fromFile, input, args, name):
         if fromFile:
             raise NotImplementedError
         else:
@@ -36,7 +36,7 @@ class SVM:
 
         SavedClassifiersManager.add(args, svm)
 
-    def test(fromFile, input, args, name):
+    def test(self, fromFile, input, args, name):
         if fromFile:
             raise NotImplementedError
         else:
