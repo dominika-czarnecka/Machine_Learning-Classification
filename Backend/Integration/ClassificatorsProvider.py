@@ -40,6 +40,16 @@ class ClassificatorsProvider:
             for i in data['Word2VecModels']:
                 self.Word2VecModels.append(SVMModel.fromJSON(json_data=i))
 
+    def names(self):
+        names = []
+        for i in self.SVMModels:
+            names.append(i.name)
+        for i in self.NeuralNetworkModels:
+            names.append(i.name)
+        for i in self.Word2VecModels:
+            names.append(i.name)
+        return names
+
     def canAdd(self, classificatorType, classificator):
         if self.exist(classificator.name):
             return False
