@@ -1,10 +1,14 @@
 from tkinter import *
 
+from Backend.Integration.ClassificatorEnum import ClassificatorEnum
+
+
 class newClassifierView:
     def __init__(self, tk, mv):
         self.mv = mv
         # self.mainFrame = Frame(tk)
         self.mainFrame = Frame(tk,padx=5,pady=5)
+        self.clsEnum = ClassificatorEnum()
 
         #backButton
         backButton = Button(self.mainFrame, text="Back", width=5, command=self.onClickBackButton)
@@ -96,18 +100,21 @@ class newClassifierView:
 
     def onClickClassify(self):
         args = {}
+        type = self.clsEnum
         if self.selectedClassifier.get() == "SVM":
             args = self.svm_classifier.getArgs()
+            type = self.clsEnum.SVM
         elif self.selectedClassifier.get() == "Word2vec":
             args = self.w2v_classifier.getArgs()
+            type = self.clsEnum.Word2Vec
         elif self.selectedClassifier.get() == "Neural networks":
             args = self.nn_classifier.getArgs()
-
+            type = self.clsEnum.NeuralNetwork
         fromfile = self.from_file.get()
         input = self.entryDocumentsForTraining.get()
         output = self.classifierNameEntry.get()
 
-        self.mv.classifierManager.Train(fromfile, input, args, output)
+        self.mv.classifierManager.train(fromfile, input, args, output, type)
 
 
 # clsses for display classifiers parameters
