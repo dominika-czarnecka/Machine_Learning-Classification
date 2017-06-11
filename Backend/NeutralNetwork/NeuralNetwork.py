@@ -110,7 +110,7 @@ class NeuralNetwork:
         return positive_sum / len(yy_)
 
     def Train(self, FromFile, Input, args, output):
-        path = "./models/" + str(output)
+        path = "../../Bin/Classificators" + str(output)
         info_text = "Wrong args: \nFromFile:bool, Input:string, args{gradient: 0-1, steps:int, target:tfidf,entrophy,frequency, vocabulary_len:int}, output:string"
         if len(args) != 4:
             raise Exception(info_text)
@@ -164,11 +164,11 @@ class NeuralNetwork:
             # Zapis klasyfikatora
             if not os.path.exists(path):
                 os.makedirs(path)
-            save_path = saver.save(sess, path + '/model.ckpt')
+            save_path = saver.save(sess, path + '/nnTrainClasificator.ckpt')
             print("Model saved to: %s" % save_path)
 
     def Test(self, FromFile, Input, args, classifier):
-        path = "./models/" + str(classifier)
+        path = "../../Bin/Classificators" + str(classifier)
         info_text = "Wrong args: \nFromFile:bool, Input:string, args{gradient: 0-1, steps:int, target:tfidf,entrophy,frequency, vocabulary_len:int}, classifier:string"
         if len(args) != 4:
             raise Exception(info_text)
@@ -211,7 +211,7 @@ class NeuralNetwork:
             return res
 
     def Single(self,FromFile, Text, args, classifier):
-        path = "./models/" + str(classifier)
+        path = "../../Bin/Classificators" + str(classifier)
         # classifier - sciezka do klasyfikatora
         target = args['target']
         vocabulary_len = args['vocabulary_len']
