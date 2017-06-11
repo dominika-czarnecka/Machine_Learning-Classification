@@ -28,6 +28,7 @@ class newClassifierView:
     def onClickBackButton(self):
         self.hide()
         self.mv.show()
+        self.mv.cp.toFile()
 
     def initComponents(self):
 

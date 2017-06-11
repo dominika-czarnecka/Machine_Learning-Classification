@@ -34,6 +34,7 @@ class documentClassificationView:
     def onClickBack(self):
         self.hide()
         self.mv.show()
+        self.mv.cp.toFile()
 
     def onClickClassify(self):
         text = self.textField_1.get("1.0",END)

@@ -23,9 +23,6 @@ class mainView:
         manageClassifierButton = Button(self.mainFrame, width="50", height="2", text='Manage classifiers',command=self.onClickManageClassifierButton)
         manageClassifierButton.pack(anchor=CENTER, pady=buttonPadding)
 
-    def __del__(self):
-        del self.cp
-
     def show(self):
         self.mainFrame.pack(expand=True)
 

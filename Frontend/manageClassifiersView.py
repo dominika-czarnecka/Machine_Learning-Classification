@@ -55,6 +55,7 @@ class manageClassifiersView:
     def onClickBackButton(self):
         self.hide()
         self.mv.show()
+        self.mv.cp.toFile()
 
     def initClassifierList(self):
         for i in self.listOfFiles:

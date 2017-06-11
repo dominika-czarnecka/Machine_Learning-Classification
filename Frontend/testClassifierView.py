@@ -11,7 +11,7 @@ class testClassifierView:
         self.mv = mv
         self.tk = tk
         self.initComponents()
-        self.clEnum = ClassificatorEnum()
+        self.clEnum = ClassificatorEnum.SVM
 
     def initComponents(self):
         self.mainFrame = Frame(self.tk, padx=2,pady=5)
@@ -56,6 +56,7 @@ class testClassifierView:
     def onClickBack(self):
         self.hide()
         self.mv.show()
+        self.mv.cp.toFile()
 
     def onClickTest(self):
         fromfile = False

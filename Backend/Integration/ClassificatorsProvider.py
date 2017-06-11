@@ -16,8 +16,8 @@ class ClassificatorsProvider:
         self.Word2VecModels = []
         self.fromFile()
 
-    def __del__(self):
-        self.toFile()
+    # def __del__(self):
+        # self.toFile()
 
     def toJSON(self):
         return json.dumps(self, default=lambda o: o.__dict__,
