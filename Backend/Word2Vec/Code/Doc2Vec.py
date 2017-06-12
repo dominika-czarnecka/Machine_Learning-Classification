@@ -22,16 +22,18 @@ class Doc2Vec:
             print("Funkcjonalność nie została jeszcze zaimplementowana")
             raise NotImplementedError
         else:
+            threshold = args["threshold"]
+            categories = args["categories"]
             MyTests = EffectivenessTests(self.model)
             print("Starting tests...\n")
             wynik1 = MyTests.tolerantAccuracyTest()
             print("tolerantTest:" + str(wynik1))
             wynik2 = MyTests.strictAccuracyTest()
             print("strictTest: " + str(wynik2))
-            wynik3 = MyTests.thresholdAccuracyTest(0.7)#TODO: threshold from args???
+            wynik3 = MyTests.thresholdAccuracyTest(threshold)
             print("thresholdTest:" + str(wynik3))
             #wynik4 = MyTests.doPresisionAndRecallTests(reuters.categories)
-            wynik4 = MyTests.doPresisionAndRecallTests(['earn'])
+            wynik4 = MyTests.doPresisionAndRecallTests(categories)
 
             s = str("Wyniki testów:\n" + "tolerantTest:" + str(wynik1) + '\n' + "strictTest: " + str(wynik2) + '\n'
                  + "thresholdTest:" + str(wynik3) + '\n' + wynik4)
