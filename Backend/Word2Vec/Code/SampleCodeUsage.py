@@ -4,9 +4,9 @@ from nltk.corpus import reuters
 #Inicjalizacja modułu
 doc2Vec = Doc2Vec()
 sampleDocument = reuters.raw('test/14828')
-print(sampleDocument)
+#print(sampleDocument)
 #Wytrenowanie nowego modelu na korpusie Reuters
-doc2Vec.train(False, "", {"size": 100, "iter": 55, "min-count": 2, "window": 2},"NewModel")
+doc2Vec.train(False, "", {"size": 100, "iter": 55, "min-count": 6, "window": 1},"NewModelMinCount6")
 
 #Wytrenowanie nowego modelu na wskazanym w lokalizacji korpusie (Jeszcze nie gotowe)
 #doc2Vec.train(True,"/SomeFileDirectory",{"size": 100, "iter": 55, "min-count": 2},"NewModelName")
@@ -16,10 +16,22 @@ doc2Vec.train(False, "", {"size": 100, "iter": 55, "min-count": 2, "window": 2},
 #print(categories)
 
 #Klasyfikacja dokumentu z tekstu
-categories = doc2Vec.single(sampleDocument, {"number-of-categories": 5, "get-similarity": True}, name='')
-print(categories)
-print(doc2Vec.test(fromFile=False, input="", args={}, name=""))
-"""
+#categories = doc2Vec.single(sampleDocument, {"number-of-categories": 5, "get-similarity": True}, name='')
+#print(categories)
+#print(doc2Vec.test(fromFile=False, input="", args={}, name=""))
+
+result = doc2Vec.test(fromFile=False,input='',args=[],name='')
+print(result)
+"""Window 2, Min-Count 2
 Wynik testu 1: 0.5147399801258695
 Wynik testu 2: 0.4660483603842332
+"""
+
+""""" dla {"size": 100, "iter": 55, "min-count": 5, "window": 1}
+Wynik testu 1: 0.7360052997681351
+Wynik testu 2: 0.667770785028155
+"""
+""""{"size": 100, "iter": 55, "min-count": 6, "window": 1}
+Wynik testu 1: 0.7535607817158
+Wynik testu 2: 0.6863199735011594
 """
