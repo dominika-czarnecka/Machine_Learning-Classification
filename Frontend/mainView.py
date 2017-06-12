@@ -3,6 +3,7 @@ import Frontend.newClassifierView as ncv
 import Frontend.manageClassifiersView as mcv
 import Frontend.documentClassificationView as dcv
 import Frontend.testClassifierView as tcv
+from Backend.Integration.ClassificatorsProvider import ClassificatorsProvider
 from Backend.Integration.ClassifierManager import ClassifierManager
 
 class mainView:
@@ -10,6 +11,7 @@ class mainView:
     def __init__(self, tk):
         self.tk = tk
         self.classifierManager = ClassifierManager()
+        self.cp = ClassificatorsProvider()
         self.mainFrame = Frame(tk)
         buttonPadding = 5
         newClassifierButton = Button(self.mainFrame, width="50", height="2",  text='New classifier',command=self.onClickNewClassifierButton)

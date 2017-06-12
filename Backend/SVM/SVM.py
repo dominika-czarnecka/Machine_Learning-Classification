@@ -1,10 +1,10 @@
 from sklearn.svm import SVC
 from sklearn.multiclass import OneVsRestClassifier
-from DataTransformer import DataTransformer
-from Corpus import Corpus
-from ResultDataTransformer import ResultDataTransformer
-from ParametersParser import ParametersParser
-from SavedClassifiersManager import SavedClassifiersManager
+from .DataTransformer import DataTransformer
+from .Corpus import Corpus
+from .ResultDataTransformer import ResultDataTransformer
+from .ParametersParser import ParametersParser
+from .SavedClassifiersManager import SavedClassifiersManager
 
 class SVM:
     def __init__(self):
@@ -34,15 +34,15 @@ class SVM:
                                              args['shrinking'], args['tol'], args['max_iter'],
                                              v_train_docs, b_train_labels)
 
-        SavedClassifiersManager.add(args, svm)
+        SavedClassifiersManager.save(svm, name)
 
-    def test(fromFile, input, args, name):
+    def test(fromFile, input, name):
         if fromFile:
             raise NotImplementedError
         else:
             corpus = Corpus(input)
 
-        svm = SavedClassifiersManager.load(args)
+        svm = SavedClassifiersManager.load(name)
         if svm is None:
             raise FileNotFoundError
 
@@ -52,8 +52,8 @@ class SVM:
 
         return ResultDataTransformer.transform_result_data(b_test_labels=b_test_labels, prediction=prediction)
 
-    def single(text, args, name):
-        svm = SavedClassifiersManager.load(args)
+    def single(text, name):
+        svm = SavedClassifiersManager.load(name)
         if svm is None:
             raise FileNotFoundError
 

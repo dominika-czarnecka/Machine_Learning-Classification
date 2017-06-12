@@ -1,11 +1,18 @@
 from tkinter import *
+import Frontend.errorWindow as error
+import copy
+
+from Backend.Integration.ClassificatorEnum import ClassificatorEnum
+from Backend.Integration.Models.NeuralNetworkModel import NeuralNetworkModel
+from Backend.Integration.Models.SVMModel import SVMModel
+from Backend.Integration.Models.Word2VecModel import Word2VecModel
+
 
 class newClassifierView:
     def __init__(self, tk, mv):
         self.mv = mv
         # self.mainFrame = Frame(tk)
         self.mainFrame = Frame(tk,padx=5,pady=5)
-
         #backButton
         backButton = Button(self.mainFrame, text="Back", width=5, command=self.onClickBackButton)
         backButton.pack(anchor=NW)
@@ -21,6 +28,7 @@ class newClassifierView:
     def onClickBackButton(self):
         self.hide()
         self.mv.show()
+        self.mv.cp.toFile()
 
     def initComponents(self):
 
@@ -96,18 +104,35 @@ class newClassifierView:
 
     def onClickClassify(self):
         args = {}
-        if self.selectedClassifier.get() == "SVM":
+        type = ClassificatorEnum.SVM
+        classificator = None
+        if self.selectedClassifier.get() == 1:
             args = self.svm_classifier.getArgs()
-        elif self.selectedClassifier.get() == "Word2vec":
+            type = ClassificatorEnum.SVM
+        elif self.selectedClassifier.get() == 2:
             args = self.w2v_classifier.getArgs()
-        elif self.selectedClassifier.get() == "Neural networks":
+            type = ClassificatorEnum.Word2Vec
+        elif self.selectedClassifier.get() == 3:
             args = self.nn_classifier.getArgs()
-
+            type = ClassificatorEnum.NeuralNetwork
         fromfile = self.from_file.get()
         input = self.entryDocumentsForTraining.get()
         output = self.classifierNameEntry.get()
+        tempArgs = copy.copy(args)
+        tempArgs['name'] = output
+        tempArgs['path'] = '/bin/class'
 
-        self.mv.classifierManager.Train(fromfile, input, args, output)
+        if type == ClassificatorEnum.SVM:
+            temp = SVMModel.fromJSON(tempArgs)
+        elif type == ClassificatorEnum.Word2Vec:
+            temp = Word2VecModel.fromJSON(tempArgs)
+        elif type == ClassificatorEnum.NeuralNetwork:
+            temp = NeuralNetworkModel.fromJSON(tempArgs)
+
+        if self.mv.cp.add(classificatorType=type,classificator=temp):
+            self.mv.classifierManager.train(fromfile, input, args, output, type)
+        else:
+            error.errorWindow("Error !")
 
 
 # clsses for display classifiers parameters
@@ -156,10 +181,11 @@ class NeuralNetworksClassifier:
         self.parametersFrame.pack_forget()
 
     def getArgs(self):
-        args = {"Count_of_features": self.CountOfFeatures.get(),
-                "Vocabulary": self.varParameter2.get(),
-                "Neural_network_step":self.NeuralNetworkStep.get(),
-                "Train_step":self.TrainStep.get()}
+        args = {"vocabulary_len": self.CountOfFeatures.get(),
+                "target": self.varParameter2.get(),
+                "steps":self.NeuralNetworkStep.get(),
+                "gradient":self.TrainStep.get()}
+                #do porownania z grupa neuralnetwork
         return args
 
 class SVMClassifier:

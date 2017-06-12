@@ -8,7 +8,7 @@ from Backend.Integration.Models.Word2VecModel import Word2VecModel
 
 class ClassificatorsProvider:
     package_dir = os.path.dirname(os.path.abspath(__file__))
-    file = os.path.join(package_dir, 'data.json')
+    file = os.path.join(package_dir+"/files/", 'data.json')
 
     def __init__(self):
         self.SVMModels = []
@@ -16,8 +16,8 @@ class ClassificatorsProvider:
         self.Word2VecModels = []
         self.fromFile()
 
-    def __del__(self):
-        self.toFile()
+    # def __del__(self):
+        # self.toFile()
 
     def toJSON(self):
         return json.dumps(self, default=lambda o: o.__dict__,
@@ -36,14 +36,23 @@ class ClassificatorsProvider:
             for i in data['SVMModels']:
                 self.SVMModels.append(SVMModel.fromJSON(json_data=i))
             for i in data['NeuralNetworkModels']:
-                self.NeuralNetworkModels.append(SVMModel.fromJSON(json_data=i))
+                self.NeuralNetworkModels.append(NeuralNetworkModel.fromJSON(json_data=i))
             for i in data['Word2VecModels']:
-                self.Word2VecModels.append(SVMModel.fromJSON(json_data=i))
+                self.Word2VecModels.append(Word2VecModel.fromJSON(json_data=i))
+
+    def names(self):
+        names = []
+        for i in self.SVMModels:
+            names.append(i.name)
+        for i in self.NeuralNetworkModels:
+            names.append(i.name)
+        for i in self.Word2VecModels:
+            names.append(i.name)
+        return names
 
     def canAdd(self, classificatorType, classificator):
         if self.exist(classificator.name):
             return False
-
         if classificatorType == ClassificatorEnum.NeuralNetwork:
             for i in self.NeuralNetworkModels:
                 if classificator == i:
@@ -129,7 +138,10 @@ class ClassificatorsProvider:
 # print(cp.remove(classificatorType=ClassificatorEnum.SVM, classificator=svm))
 # print(cp.remove(classificatorType=ClassificatorEnum.SVM, classificator=svm))
 # print(cp.add(classificatorType=ClassificatorEnum.SVM, classificator=svm))
-# print(cp.find(name=svm.name))
-# print(cp.SVMModels)
+# type, c = cp.find(name='test')
+# c.path = '112test'
 # del cp
-
+# cp = ClassificatorsProvider()
+# type, c = cp.find(name='test')
+# print(c.path)
+# del cp

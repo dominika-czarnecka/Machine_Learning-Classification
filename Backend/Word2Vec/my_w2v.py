@@ -10,7 +10,7 @@ cachedStopWords = stopwords.words("english")
 
 
 class ReutersW2VModel:
-    def __init__(self, fname = 'w2vModel'):
+    def __init__(self, fname = 'w2vClassificator'):
         self.sentences = []
         if(os.path.isfile(fname)):
             self.model =  gensim.models.Word2Vec.load(fname)
@@ -22,7 +22,7 @@ class ReutersW2VModel:
             #print(self.sentences[5])
             self.model = gensim.models.Word2Vec(self.sentences, min_count=1)
             #print(self.model.wv.vocab)
-            self.model.save(fname)
+            self.model.save("../../Bin/Classificators/" + fname)
 
     def getWordVector(self,word):
         return self.model.wv[word]

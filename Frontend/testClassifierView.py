@@ -3,12 +3,15 @@ from tkinter import *
 # import Frontend.progressWindow as progress
 import tkinter.filedialog
 
+from Backend.Integration.ClassificatorEnum import ClassificatorEnum
+
 
 class testClassifierView:
     def __init__(self, tk, mv):
         self.mv = mv
         self.tk = tk
         self.initComponents()
+        self.clEnum = ClassificatorEnum.SVM
 
     def initComponents(self):
         self.mainFrame = Frame(self.tk, padx=2,pady=5)
@@ -23,7 +26,7 @@ class testClassifierView:
         self.selectedClassifier = StringVar(self.tk)
         self.selectedClassifier.set("Choose option")
 
-        self.dropDown = OptionMenu(self.mainFrame, self.selectedClassifier,"SVM", "Word2Vec", "Neuron")
+        self.dropDown = OptionMenu(self.mainFrame, self.selectedClassifier, *self.mv.cp.names())
         self.dropDown.config(width=25,padx=50)
         self.dropDown.pack(pady=10)
 
@@ -53,13 +56,16 @@ class testClassifierView:
     def onClickBack(self):
         self.hide()
         self.mv.show()
+        self.mv.cp.toFile()
 
     def onClickTest(self):
         fromfile = False
         input = "input"
         args = self.getArgs()
+        name = ""
+        type = self.clEnum
 
-        # self.mv.classifierManager.Test(fromfile,input,args)
+        self.mv.classifierManager.Test(fromfile,input,args, name, type)
 
     def getArgs(self):
         args = {"classifier":"",
