@@ -1,5 +1,5 @@
 from Backend.Word2Vec.Code.Doc2VecModel import Doc2VecModel
-from Backend.Word2Vec.Code.Evaluation import AccuracyTests
+from Backend.Word2Vec.Code.Evaluation import EffectivenessTests
 
 class Doc2Vec:
     def __init__(self):
@@ -22,21 +22,21 @@ class Doc2Vec:
             print("Funkcjonalność nie została jeszcze zaimplementowana")
             raise NotImplementedError
         else:
-            MyTests = AccuracyTests(self.model)
+            MyTests = EffectivenessTests(self.model)
             print("Starting tests...\n")
-            wynik1 = 0#MyTests.tolerantTest()
-            wynik2 = 0#MyTests.strictTest()
-            wynik3 = MyTests.thresholdTest(0.4)
-            s = str()
-            s = ("Wyniki testów:\n" + "tolerantTest:" + str(wynik1) + '\n' + "strictTest: " + str(wynik2) + '\n'
-                 + "thresholdTest:" + str(wynik3))
+            wynik1 = MyTests.tolerantAccuracyTest()
+            print("tolerantTest:" + str(wynik1))
+            wynik2 = MyTests.strictAccuracyTest()
+            print("strictTest: " + str(wynik2))
+            wynik3 = MyTests.thresholdAccuracyTest(0.7)#TODO: threshold from args???
+            print("thresholdTest:" + str(wynik3))
+            #wynik4 = MyTests.doPresisionAndRecallTests(reuters.categories)
+            wynik4 = MyTests.doPresisionAndRecallTests(['earn'])
+
+            s = str("Wyniki testów:\n" + "tolerantTest:" + str(wynik1) + '\n' + "strictTest: " + str(wynik2) + '\n'
+                 + "thresholdTest:" + str(wynik3) + '\n' + wynik4)
             return s
 
-        #Wynik testu 1: 0.5147399801258695
-        #Wynik testu 2: 0.4660483603842332
-
-        #print("Funkcjonalność nie została jeszcze zaimplementowana")
-        #raise NotImplementedError
 
     #Klasyfikacja dokumentu
     def single(self, text, args, name):
