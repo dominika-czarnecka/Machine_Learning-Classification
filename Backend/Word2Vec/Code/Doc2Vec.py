@@ -1,5 +1,5 @@
 from Backend.Word2Vec.Code.Doc2VecModel import Doc2VecModel
-from Backend.Word2Vec.Code.PrecisionTests import PrecisionTests
+from Backend.Word2Vec.Code.Evaluation import AccuracyTests
 
 class Doc2Vec:
     def __init__(self):
@@ -22,12 +22,14 @@ class Doc2Vec:
             print("Funkcjonalność nie została jeszcze zaimplementowana")
             raise NotImplementedError
         else:
-            MyTests = PrecisionTests(self.model)
+            MyTests = AccuracyTests(self.model)
             print("Starting tests...\n")
-            wynik1 = MyTests.test1()
-            wynik2 = MyTests.test2()
+            wynik1 = 0#MyTests.tolerantTest()
+            wynik2 = 0#MyTests.strictTest()
+            wynik3 = MyTests.thresholdTest(0.4)
             s = str()
-            s = "Wynik testu 1: " + str(wynik1) + '\n' + "Wynik testu 2: " + str(wynik2)
+            s = ("Wyniki testów:\n" + "tolerantTest:" + str(wynik1) + '\n' + "strictTest: " + str(wynik2) + '\n'
+                 + "thresholdTest:" + str(wynik3))
             return s
 
         #Wynik testu 1: 0.5147399801258695

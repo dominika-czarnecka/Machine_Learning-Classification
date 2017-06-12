@@ -10,7 +10,7 @@ class Doc:
         self.text = text
         self.categories = categories
 
-class PrecisionTests:
+class AccuracyTests:
     def __init__(self, MyModel):
         self.model = MyModel
         self.test_documents = self.getTestDocuments()
@@ -24,14 +24,13 @@ class PrecisionTests:
                 documents.append(Doc(text,categories, docId))
         return documents
 
-    #TODO zmienić nazwę
-    def test1(self):
+    def tolerantTest(self):
         """
         Dp - dokumenty sklasyfikowane pozytywnie
         D - wszystkie dokumenty
         CR - kategorie danego dokumentu z korpusu Reuters
         
-        test1 = |Dp|/|D|, gdzie |Dp| to moc zbioru takich dokumentów, że najbardziej prawdopodobna 
+        tolerantTest = |Dp|/|D|, gdzie |Dp| to moc zbioru takich dokumentów, że najbardziej prawdopodobna 
         kategoria uzyskana z klasyfikacji(doc2vec) danego dokumentu znajduje się w zbiorze CR
         """
         pozytywne = 0
@@ -45,14 +44,13 @@ class PrecisionTests:
             wszystkie += 1
         return (float(pozytywne)/float(wszystkie))
 
-   #TODO zmienić nazwę
-    def test2(self):
+    def strictTest(self):
         """
         Dp - dokumenty pozytywne
         D - wszystkie dokumenty
         CR - kategorie danego dokumentu z korpusu Reuters
         CC - kategorie, do których został sklasyfikowany dokument
-        test2 = |Dp|/|D|, gdzie |Dp| to moc zbioru takich dokumentów, że kategorie CR tego dokumentu są jednocześnie 
+        strictTest = |Dp|/|D|, gdzie |Dp| to moc zbioru takich dokumentów, że kategorie CR tego dokumentu są jednocześnie 
         najbardziej prawdopodobnymi katagoriami ze zbioru CC i nie istnieje klasa spoza zbioru CR, która jest
         bardziej prawdopodobna.
         Np. jeżeli mamy dokument z 3 kategoriami, to jeżeli każda z tych trzech znajduje się w zbiorze 3 kategorii z
@@ -74,3 +72,23 @@ class PrecisionTests:
                 pozytywne += 1
             wszystkie += 1
         return (float(pozytywne)/float(wszystkie))
+
+    def thresholdTest(self, threshold):
+        """
+        Dp - dokumenty sklasyfikowane pozytywnie
+        D - wszystkie dokumenty
+        t - threshold(próg)
+
+        thresholdTest = |Dp|/|D|, gdzie |Dp| to moc zbioru takich dokumentów, że podobieństwo między danym dokumentem,
+        a kategorią jest większe od t
+        """
+        pozytywne = 0
+        wszystkie = 0
+        for doc in self.test_documents:
+            infered_category = self.model.classify(
+                args={"number-of-categories": 1, "get-similarity": True}, text=doc.text)
+            for cat in infered_category:
+                if cat[1] > threshold:
+                    pozytywne += 1
+            wszystkie += 1
+        return (float(pozytywne) / float(wszystkie))
