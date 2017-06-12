@@ -106,7 +106,7 @@ class EffectivenessTests:
                     #Jeżeli doc został zaklasyfikowany do danej kategorii, a nie powinien być do niej zaklasyfikowany
                     falsePositives += 1
 
-        s = float((float(truePositives) / float(truePositives + falsePositives)) * 100.00)
+        s = str((float(truePositives) / float(truePositives + falsePositives)) * 100.00) + '%'
         return s
 
     def recall(self, categoryName):
@@ -124,7 +124,7 @@ class EffectivenessTests:
                 truePositives += 1
         relevantItems += 1
 
-        s = float((float(truePositives) / float(relevantItems)) * 100.00)
+        s = str((float(truePositives) / float(relevantItems)) * 100.00) + '%'
         return s
 
     def doPresisionAndRecallTests(self, categories):
