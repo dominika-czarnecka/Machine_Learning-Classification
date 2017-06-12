@@ -17,7 +17,7 @@ class SVM:
         clas.fit(v_train_docs, b_train_labels)
         return clas
 
-    def train(self, fromFile, input, args, name):
+    def train(fromFile, input, args, name):
         if fromFile:
             raise NotImplementedError
         else:
@@ -34,15 +34,15 @@ class SVM:
                                              args['shrinking'], args['tol'], args['max_iter'],
                                              v_train_docs, b_train_labels)
 
-        SavedClassifiersManager.add(args, svm)
+        SavedClassifiersManager.save(svm, name)
 
-    def test(self, fromFile, input, args, name):
+    def test(fromFile, input, name):
         if fromFile:
             raise NotImplementedError
         else:
             corpus = Corpus(input)
 
-        svm = SavedClassifiersManager.load(args)
+        svm = SavedClassifiersManager.load(name)
         if svm is None:
             raise FileNotFoundError
 
@@ -52,8 +52,8 @@ class SVM:
 
         return ResultDataTransformer.transform_result_data(b_test_labels=b_test_labels, prediction=prediction)
 
-    def single(text, args, name):
-        svm = SavedClassifiersManager.load(args)
+    def single(text, name):
+        svm = SavedClassifiersManager.load(name)
         if svm is None:
             raise FileNotFoundError
 
