@@ -75,15 +75,3 @@ class PrecisionTests:
             wszystkie += 1
         return (float(pozytywne)/float(wszystkie))
 
-    def test3(self):
-        pozytywne = 0
-        wszystkie = 0
-        for doc in self.test_documents:
-            number_of_categories = len(doc.categories)
-            infered_category = self.model.classify(
-                args={"number-of-categories": number_of_categories, "get-similarity": True}, text=doc.text)
-            for cat in doc.categories:
-                if cat > 0.7:
-                    pozytywne += 1
-            wszystkie += 1
-        return (float(pozytywne) / float(wszystkie))
