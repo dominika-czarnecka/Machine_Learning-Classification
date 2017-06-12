@@ -1,7 +1,7 @@
 from Backend.Integration.ClassificatorsProvider import ClassificatorsProvider
 from Backend.SVM.SVM import SVM
 from Backend.NeutralNetwork.NeuralNetwork import NeuralNetwork
-from Backend.Word2Vec.Doc2Vec import Doc2Vec
+from Backend.Word2Vec.Code.Doc2Vec import Doc2Vec
 from .ClassificatorEnum import ClassificatorEnum
 
 
