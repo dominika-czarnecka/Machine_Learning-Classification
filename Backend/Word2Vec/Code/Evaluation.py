@@ -122,7 +122,7 @@ class EffectivenessTests:
                 #if categoryName in doc.categories: <- zawsze prawdziwe
                 # Jeżeli doc został zaklasyfikowany do danej kategorii i powinien być do niej zaklasyfikowany
                 truePositives += 1
-        relevantItems += 1
+            relevantItems += 1
 
         return float(truePositives) / float(relevantItems)
 
