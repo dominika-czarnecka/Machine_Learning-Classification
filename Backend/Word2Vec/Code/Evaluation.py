@@ -106,8 +106,8 @@ class EffectivenessTests:
                     #Jeżeli doc został zaklasyfikowany do danej kategorii, a nie powinien być do niej zaklasyfikowany
                     falsePositives += 1
 
-        s = str((float(truePositives) / float(truePositives + falsePositives)) * 100.00) + '%'
-        return s
+        return float(truePositives) / float(truePositives + falsePositives)
+
 
     def recall(self, categoryName):
         truePositives = 0
@@ -124,15 +124,16 @@ class EffectivenessTests:
                 truePositives += 1
         relevantItems += 1
 
-        s = str((float(truePositives) / float(relevantItems)) * 100.00) + '%'
-        return s
+        return float(truePositives) / float(relevantItems)
 
-    def doPresisionAndRecallTests(self, categories):
-        s = "\t\t precision:\t\t recall:\n"
+    def doPresisionRecallAndF1Tests(self, categories):
+        s = str()
         for cat in categories:
             precision = self.precision(cat)
             recall = self.recall(cat)
-            s += str(str(cat) + '\t' + '|' + '\t' + precision + "\t\t" + '|' + '\t' + recall + '\n')
+            f1_score = 2*(precision*recall)/(precision+recall)
+            s += str(str(cat) + '\t' + '|' + '\t' + "precision:" + str(precision) +
+                     't' + '|' + '\t' + "recall:" + str(recall) + 't' + '|' + '\t' + "f1 score:" + str(f1_score) + '\n')
         return s
 
     def f1(self, categories):
@@ -140,7 +141,7 @@ class EffectivenessTests:
         for cat in categories:
             precision = self.precision(cat)
             recall = self.recall(cat)
-            s += str(str(cat) + '\t' + "f1 score is: " + 2*(precision*recall)/(precision+recall) + '\n')
+            s += str(str(cat) + '\t' + "f1 score is: " + str(2*(precision*recall)/(precision+recall)) + '\n')
         return s
 
     def getTestDocuments(self):

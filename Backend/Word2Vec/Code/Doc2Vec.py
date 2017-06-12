@@ -36,7 +36,7 @@ class Doc2Vec:
             wynik4 = MyTests.doPresisionAndRecallTests(categories)
 
             s = str("Wyniki testów:\n" + "tolerantTest:" + str(wynik1) + '\n' + "strictTest: " + str(wynik2) + '\n'
-                 + "thresholdTest:" + str(wynik3) + '\n' + wynik4)
+                 + "thresholdTest:" + str(wynik3) + '\n' + '\n' + wynik4)
             return s
 
 
