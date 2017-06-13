@@ -33,7 +33,7 @@ class Doc2Vec:
             wynik3 = MyTests.thresholdAccuracyTest(threshold)
             print("thresholdTest:" + str(wynik3))
             #wynik4 = MyTests.doPresisionAndRecallTests(reuters.categories)
-            wynik4 = MyTests.doPresisionAndRecallTests(categories)
+            wynik4 = MyTests.doPresisionRecallAndF1Tests(categories)
 
             s = str("Wyniki testów:\n" + "tolerantTest:" + str(wynik1) + '\n' + "strictTest: " + str(wynik2) + '\n'
                  + "thresholdTest:" + str(wynik3) + '\n' + '\n' + wynik4)
