@@ -20,7 +20,7 @@ doc2Vec.train(False, "", {"size": 100, "iter": 55, "min-count": 6, "window": 1},
 #categories = doc2Vec.single(sampleDocument, {"number-of-categories": 5, "get-similarity": True}, name='')
 #print(categories)
 #print(doc2Vec.test(fromFile=False, input="", args={}, name=""))
-cat = ['earn', 'acquisitions', 'money-fx', 'grain', 'crude']
+cat = ['earn', 'acq', 'money-fx', 'grain', 'crude']
 #cat = reuters.categories()
 #result = doc2Vec.test(fromFile=False,input='',args={"threshold": 0.7, "categories": cat},name='')
 #print(result)
