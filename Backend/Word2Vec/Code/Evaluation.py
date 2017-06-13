@@ -93,7 +93,7 @@ class EffectivenessTests:
     def precision(self, categoryName):
         truePositives = 0
         falsePositives = 0
-
+        print(categoryName)
         for doc in self.test_documents:
             number_of_categories = len(doc.categories)
             infered_categories = self.model.classify(
@@ -105,8 +105,8 @@ class EffectivenessTests:
                 else:
                     #Jeżeli doc został zaklasyfikowany do danej kategorii, a nie powinien być do niej zaklasyfikowany
                     falsePositives += 1
-
-        return float(truePositives) / float(truePositives + falsePositives)
+        print("precision: tp: " + str(truePositives) + "fp: " + str(falsePositives))
+        return float(truePositives + 1) / float(truePositives + falsePositives + 1)
 
 
     def recall(self, categoryName):
@@ -123,8 +123,8 @@ class EffectivenessTests:
                 # Jeżeli doc został zaklasyfikowany do danej kategorii i powinien być do niej zaklasyfikowany
                 truePositives += 1
             relevantItems += 1
-
-        return float(truePositives) / float(relevantItems)
+        print("recall: tp: " + str(truePositives) + "rI: " + str(relevantItems))
+        return float(truePositives + 1) / float(relevantItems + 1)
 
     def doPresisionRecallAndF1Tests(self, categories):
         s = str()
@@ -133,7 +133,7 @@ class EffectivenessTests:
             recall = self.recall(cat)
             f1_score = 2*(precision*recall)/(precision+recall)
             s += str(str(cat) + '\t' + '|' + '\t' + "precision:" + str(precision) +
-                     't' + '|' + '\t' + "recall:" + str(recall) + 't' + '|' + '\t' + "f1 score:" + str(f1_score) + '\n')
+                     '\t' + '|' + '\t' + "recall:" + str(recall) + '\t' + '|' + '\t' + "f1 score:" + str(f1_score) + '\n')
         return s
 
     def f1(self, categories):

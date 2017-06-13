@@ -1,4 +1,5 @@
 from Backend.Word2Vec.Code.Doc2Vec import Doc2Vec
+from Backend.Word2Vec.Code.Evaluation import EffectivenessTests
 from nltk.corpus import reuters
 
 #Inicjalizacja modułu
@@ -21,8 +22,10 @@ doc2Vec.train(False, "", {"size": 100, "iter": 55, "min-count": 6, "window": 1},
 #print(doc2Vec.test(fromFile=False, input="", args={}, name=""))
 cat = ['earn', 'acquisitions', 'money-fx', 'grain', 'crude']
 #cat = reuters.categories()
-result = doc2Vec.test(fromFile=False,input='',args={"threshold": 0.7, "categories": cat},name='')
-print(result)
+#result = doc2Vec.test(fromFile=False,input='',args={"threshold": 0.7, "categories": cat},name='')
+#print(result)
+t = EffectivenessTests(doc2Vec.model)
+print(t.doPresisionRecallAndF1Tests(cat))
 """Window 2, Min-Count 2
 Wynik testu 1: 0.5147399801258695
 Wynik testu 2: 0.4660483603842332
