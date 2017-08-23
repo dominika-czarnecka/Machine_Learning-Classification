@@ -3,6 +3,7 @@ import Frontend.newClassifierView as ncv
 import Frontend.manageClassifiersView as mcv
 import Frontend.documentClassificationView as dcv
 import Frontend.testClassifierView as tcv
+import Frontend.helpView as hv
 from Backend.Integration.ClassificatorsProvider import ClassificatorsProvider
 from Backend.Integration.ClassifierManager import ClassifierManager
 
@@ -14,14 +15,21 @@ class mainView:
         self.cp = ClassificatorsProvider()
         self.mainFrame = Frame(tk)
         buttonPadding = 5
+
         newClassifierButton = Button(self.mainFrame, width="50", height="2",  text='New classifier',command=self.onClickNewClassifierButton)
         newClassifierButton.pack(anchor=CENTER, pady=buttonPadding)
+
         testClassifierButton = Button(self.mainFrame, width="50", height="2", text='Test classifier',command=self.onClickTestClassifierButton)
         testClassifierButton.pack(anchor=CENTER, pady=buttonPadding)
-        classifyDocumentButton = Button(self.mainFrame, width="50", height="2", text='Classify document',command=self.onClickClassifyDocumentButton)
+
+        classifyDocumentButton = Button(self.mainFrame, width="50", height="2", text='Classify single document:',command=self.onClickClassifyDocumentButton)
         classifyDocumentButton.pack(anchor=CENTER, pady=buttonPadding)
+
         manageClassifierButton = Button(self.mainFrame, width="50", height="2", text='Manage classifiers',command=self.onClickManageClassifierButton)
         manageClassifierButton.pack(anchor=CENTER, pady=buttonPadding)
+
+        helpClassifierButton = Button(self.mainFrame, width="50", height="2", text='Help',command=self.onClickHelpButton)
+        helpClassifierButton.pack(anchor=CENTER, pady=buttonPadding)
 
     def show(self):
         self.mainFrame.pack(expand=True)
@@ -50,5 +58,10 @@ class mainView:
         self.hide()
         mcV = mcv.manageClassifiersView(self.tk, self)
         mcV.show()
+
+    def onClickHelpButton(self):
+        self.hide()
+        hV = hv.helpView(self.tk, self)
+        hV.show()
 
 
