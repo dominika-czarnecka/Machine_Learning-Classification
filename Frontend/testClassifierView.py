@@ -1,7 +1,7 @@
-from tkinter import *
 # import Frontend.errorWindow as error
 # import Frontend.progressWindow as progress
 import tkinter.filedialog
+from tkinter import *
 
 from Backend.Integration.ClassificatorEnum import ClassificatorEnum
 
@@ -14,7 +14,7 @@ class testClassifierView:
         self.clEnum = ClassificatorEnum.SVM
 
     def initComponents(self):
-        self.mainFrame = Frame(self.tk, padx=2,pady=5)
+        self.mainFrame = Frame(self.tk, padx=2, pady=5)
         self.mainFrame.pack()
 
         B = Button(self.mainFrame, text='Back', command=self.onClickBack)
@@ -27,7 +27,7 @@ class testClassifierView:
         self.selectedClassifier.set("Choose option")
 
         self.dropDown = OptionMenu(self.mainFrame, self.selectedClassifier, *self.mv.cp.names())
-        self.dropDown.config(width=25,padx=50)
+        self.dropDown.config(width=25, padx=50)
         self.dropDown.pack(pady=10)
 
         self.lebelTestDocuments = Label(self.mainFrame, text="Documents for testing:")
@@ -37,11 +37,11 @@ class testClassifierView:
         self.selectedDocumentForTest.set("Choose option")
 
         self.dropDown = OptionMenu(self.mainFrame, self.selectedDocumentForTest, "Reuters")
-        self.dropDown.config(width=25,padx=50)
+        self.dropDown.config(width=25, padx=50)
         self.dropDown.pack(pady=20)
 
         self.labelFrame_3 = LabelFrame(self.mainFrame, text="Document for testing:", padx=5, pady=5)
-        self.checkboxDocumentsForTesting = Checkbutton(self.labelFrame_3, text="from file",  command=self.onOpen)
+        self.checkboxDocumentsForTesting = Checkbutton(self.labelFrame_3, text="from file", command=self.onOpen)
         self.checkboxDocumentsForTesting.pack(side=LEFT)
         self.labelFrame_3.pack(anchor=W, fill=X)
 
@@ -50,26 +50,25 @@ class testClassifierView:
         self.txt.pack(anchor=W, fill=X)
         self.labelFrame_3.pack(anchor=W, fill=X)
 
-        self.testButton = Button(self.mainFrame, width=70, height= 2, text='Test',command=self.onClickTest)
+        self.testButton = Button(self.mainFrame, width=70, height=2, text='Test', command=self.onClickTest)
         self.testButton.pack(anchor=SE, pady=20)
 
     def onClickBack(self):
         self.hide()
         self.mv.show()
-        self.mv.cp.toFile()
+        # self.mv.cp.toFile()
 
     def onClickTest(self):
-        fromfile = False
-        input = "input"
-        args = self.getArgs()
-        name = ""
-        type = self.clEnum
+        name = self.selectedClassifier
+        type, c = self.mv.cp.find(self, name)
+        args = self.resolveArgs(type, c)
+        self.mv.classifierManager.test(False, 'reuters', args, name, type)
 
-        self.mv.classifierManager.Test(fromfile,input,args, name, type)
-
-    def getArgs(self):
-        args = {"classifier":"",
-                "...":"..."}
+    def resolveArgs(self, type, classifier):
+        args = {}
+        if type == ClassificatorEnum.NeuralNetwork:
+            args = {"target": classifier.target,
+                    "vocabulary_len": classifier.vocabulary_len}
         return args
 
     def hide(self):
@@ -79,21 +78,10 @@ class testClassifierView:
         self.mainFrame.pack()
 
     def onOpen(self):
-        ftypes = [('Python files', '*.py'), ('All files', '*')]
+        ftypes = [('Binary files', '*.bin'), ('All files', '*')]
         dlg = tkinter.filedialog.Open(self.tk, filetypes=ftypes)
         fl = dlg.show()
 
         if fl != '':
             text = self.readFile(fl)
             self.txt.insert(END, text)
-
-
-
-
-
-
-
-
-
-
-

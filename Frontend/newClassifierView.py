@@ -28,7 +28,7 @@ class newClassifierView:
     def onClickBackButton(self):
         self.hide()
         self.mv.show()
-        self.mv.cp.toFile()
+        # self.mv.cp.toFile()
 
     def initComponents(self):
 
@@ -66,13 +66,13 @@ class newClassifierView:
         self.classifierOptionsFrame.pack(anchor=W,fill=X)
 
         #documents for training
-        self.labelFrame_3 = LabelFrame(self.topFrame,text="Documents for training:",padx=5,pady=5)
-        self.from_file = BooleanVar()
-        self.checkboxDocumentsForTraining = Checkbutton(self.labelFrame_3, offvalue=False, onvalue=True, text="from file", var=self.from_file)
-        self.checkboxDocumentsForTraining.pack(side=LEFT)
-        self.entryDocumentsForTraining = Entry(self.labelFrame_3, width=30)
-        self.entryDocumentsForTraining.pack(side=LEFT)
-        self.labelFrame_3.pack(anchor=W,fill=X)
+        # self.labelFrame_3 = LabelFrame(self.topFrame,text="Documents for training:",padx=5,pady=5)
+        # self.from_file = BooleanVar()
+        # self.checkboxDocumentsForTraining = Checkbutton(self.labelFrame_3, offvalue=False, onvalue=True, text="from file", var=self.from_file)
+        # self.checkboxDocumentsForTraining.pack(side=LEFT)
+        # self.entryDocumentsForTraining = Entry(self.labelFrame_3, width=30)
+        # self.entryDocumentsForTraining.pack(side=LEFT)
+        # self.labelFrame_3.pack(anchor=W,fill=X)
 
         self.classifyButton = Button(self.mainFrame,text='Train classifier',command=self.onClickClassify)
         self.classifyButton.pack(anchor=SE)
@@ -115,8 +115,8 @@ class newClassifierView:
         elif self.selectedClassifier.get() == 3:
             args = self.nn_classifier.getArgs()
             type = ClassificatorEnum.NeuralNetwork
-        fromfile = self.from_file.get()
-        input = self.entryDocumentsForTraining.get()
+        fromfile = False
+        input = 'reuters'
         output = self.classifierNameEntry.get()
         tempArgs = copy.copy(args)
         tempArgs['name'] = output
@@ -203,7 +203,7 @@ class SVMClassifier:
 
         parameter2Frame = Frame(self.parametersFrame)
         self.varKernel = StringVar()
-        self.varKernel.set("rbf")
+        self.varKernel.set("linear")
         self.kernelLabel = Label(parameter2Frame ,text="kernel:")
         self.kernelLabel.pack(side=LEFT)
         self.kernelR1 = Radiobutton(parameter2Frame ,text="rbf", variable=self.varKernel, value="rbf", command=self.parametersForRbf)

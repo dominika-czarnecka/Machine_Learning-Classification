@@ -17,7 +17,7 @@ class SVM:
         clas.fit(v_train_docs, b_train_labels)
         return clas
 
-    def train(fromFile, input, args, name):
+    def train(self, fromFile, input, args, name):
         if fromFile:
             raise NotImplementedError
         else:
@@ -36,7 +36,7 @@ class SVM:
 
         SavedClassifiersManager.save(svm, name)
 
-    def test(fromFile, input, name):
+    def test(self, fromFile, input, name):
         if fromFile:
             raise NotImplementedError
         else:
