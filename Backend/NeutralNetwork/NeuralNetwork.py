@@ -26,6 +26,8 @@ from Backend.NeutralNetwork import NeuralCorpus
 # Zapis parametorw klasyfiaktora do pliku np .json a nie w folderze
 
 # args {gradient:0.5, steps:1500, target:"tfidf:, vocabulary_len:300}
+from Backend.pathProvider import getPathToModels
+
 
 class NeuralNetwork:
     def normalization(self, tab):
@@ -111,7 +113,8 @@ class NeuralNetwork:
         return positive_sum / len(yy_)
 
     def Train(self, FromFile, Input, args, output):
-        path = "../../Bin/Classificators" + str(output)
+        path = getPathToModels(output)
+        # path = "../../Bin/Classificators" + str(output)
         info_text = "Wrong args: \nFromFile:bool, Input:string, args{gradient: 0-1, steps:int, target:tfidf,entrophy,frequency, vocabulary_len:int}, output:string"
         if len(args) != 4:
             raise Exception(info_text)

@@ -2,11 +2,11 @@ from tkinter import *
 import Frontend.errorWindow as error
 import copy
 
+from Backend.pathProvider import *
 from Backend.Integration.ClassificatorEnum import ClassificatorEnum
 from Backend.Integration.Models.NeuralNetworkModel import NeuralNetworkModel
 from Backend.Integration.Models.SVMModel import SVMModel
 from Backend.Integration.Models.Word2VecModel import Word2VecModel
-
 
 class newClassifierView:
     def __init__(self, tk, mv):
@@ -118,7 +118,7 @@ class newClassifierView:
         output = self.classifierNameEntry.get()
         tempArgs = copy.copy(args)
         tempArgs['name'] = output
-        tempArgs['path'] = '/bin/class'
+        tempArgs['path'] = getPathToModels(output)
 
         if type == ClassificatorEnum.SVM:
             temp = SVMModel.fromJSON(tempArgs)
@@ -141,7 +141,7 @@ class NeuralNetworksClassifier:
         self.targetFrame = Frame(self.parametersFrame)
         self.target = StringVar()
         self.target.set("entrophy")
-        self.targetLabel = Label(self.targetFrame, text="Target:")
+        self.targetLabel = Label(self.targetFrame, text="Target: ")
         self.targetLabel.pack(side=LEFT)
         self.entrophy = Radiobutton(self.targetFrame, text="Entrophy", variable=self.target, value="entrophy")
         self.entrophy.pack(side=LEFT)
