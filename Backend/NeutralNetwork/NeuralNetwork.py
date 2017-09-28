@@ -5,6 +5,8 @@ import tensorflow as tf
 
 from Backend.NeutralNetwork import NeuralCorpus
 
+info_text = "Wrong args: \nFromFile:bool, Input:string, args{gradient: 0-1, steps:int, target:tfidf,entrophy,frequency, vocabulary_len:int}, output:string"
+
 
 # NeuralNetworkTraining(FromFile:bool, Input:string, args:{}, output:string)
 # Fromfile==true -> input to nazwa pliku
@@ -111,8 +113,7 @@ class NeuralNetwork:
         return positive_sum / len(yy_)
 
     def Train(self, FromFile, Input, args, output):
-        path = "../../Bin/Classificators" + str(output)
-        info_text = "Wrong args: \nFromFile:bool, Input:string, args{gradient: 0-1, steps:int, target:tfidf,entrophy,frequency, vocabulary_len:int}, output:string"
+        path = "../../Bin/Classificators/" + str(output)
         if len(args) != 4:
             raise Exception(info_text)
 
@@ -132,18 +133,18 @@ class NeuralNetwork:
         train_step = tf.train.GradientDescentOptimizer(gradient).minimize(cross_entropy)
         saver = tf.train.Saver()
 
-        if FromFile == True:
-            # input - nazwa pliku z ktorego wczytujemy
-            print("FromFile == True")
-            # Xp = np.load("1_train_Xs.npy").tolist()  # input
-            # yp = np.load("1_train_ys.npy").tolist()  # input
-        else:
-            # input - nazwa korpusu
-            NeuralCorpus.target = target
-            NeuralCorpus.vocabulary_len = vocabulary_len
-            crp = NeuralCorpus.corpus()
-            (Xp, yp) = crp.get_svm_vectors(Train=1)
-            (XT, yt) = crp.get_svm_vectors(Test=1)
+        # if FromFile == True:
+        #     # input - nazwa pliku z ktorego wczytujemy
+        #     print("FromFile == True")
+        #     # Xp = np.load("1_train_Xs.npy").tolist()  # input
+        #     # yp = np.load("1_train_ys.npy").tolist()  # input
+        # else:
+        #     # input - nazwa korpusu
+        NeuralCorpus.target = target
+        NeuralCorpus.vocabulary_len = vocabulary_len
+        crp = NeuralCorpus.corpus()
+        (Xp, yp) = crp.get_svm_vectors(Train=1)
+        (XT, yt) = crp.get_svm_vectors(Test=1)
 
         with tf.Session() as sess:
             sess.run(tf.global_variables_initializer())
