@@ -18,8 +18,8 @@ class mainView:
         newClassifierButton.pack(anchor=CENTER, pady=buttonPadding)
         testClassifierButton = Button(self.mainFrame, width="50", height="2", text='Test classifier',command=self.onClickTestClassifierButton)
         testClassifierButton.pack(anchor=CENTER, pady=buttonPadding)
-        classifyDocumentButton = Button(self.mainFrame, width="50", height="2", text='Classify document',command=self.onClickClassifyDocumentButton)
-        classifyDocumentButton.pack(anchor=CENTER, pady=buttonPadding)
+        # classifyDocumentButton = Button(self.mainFrame, width="50", height="2", text='Classify document',command=self.onClickClassifyDocumentButton)
+        # classifyDocumentButton.pack(anchor=CENTER, pady=buttonPadding)
         manageClassifierButton = Button(self.mainFrame, width="50", height="2", text='Manage classifiers',command=self.onClickManageClassifierButton)
         manageClassifierButton.pack(anchor=CENTER, pady=buttonPadding)
 
