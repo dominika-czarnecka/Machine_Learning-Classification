@@ -82,7 +82,6 @@ class Doc2VecModel:
                 text = reuters.raw(docId)
                 tags = reuters.categories(docId)
                 #Konwersja dokumentu na tokeny
-                #TODO Dlaczego dołączamy kategorie do dokumentów?
                 documents.append(gensim.models.doc2vec.TaggedDocument(self.preprocessing_function(text), [docId] + tags))
         return documents
 
@@ -130,7 +129,6 @@ class Doc2VecModel:
 
         #Porównywanie dokumentu z kategoriami
         for c in reuters.categories():
-            #TODO Czym są wektory kategorii?
             cvec = self.model.docvecs[c]
             categories[c] = self.cosine_similarity(average_infered_vector, cvec)
 

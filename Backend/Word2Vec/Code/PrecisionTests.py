@@ -74,3 +74,4 @@ class PrecisionTests:
                 pozytywne += 1
             wszystkie += 1
         return (float(pozytywne)/float(wszystkie))
+

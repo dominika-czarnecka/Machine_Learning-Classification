@@ -1,7 +1,7 @@
-from tkinter import *
-import Frontend.errorWindow as error
 import copy
+from tkinter import *
 
+import Frontend.errorWindow as error
 from Backend.pathProvider import *
 from Backend.Integration.ClassificatorEnum import ClassificatorEnum
 from Backend.Integration.Models.NeuralNetworkModel import NeuralNetworkModel
@@ -63,7 +63,7 @@ class newClassifierView:
         self.classifierOptionsFrame = LabelFrame(self.topFrame, text="Classifier options:")
         self.classifierOptionsFrame.pack(anchor=W, fill=X)
 
-        #documents for training
+        # documents for training
         # self.labelFrame_3 = LabelFrame(self.topFrame,text="Documents for training:",padx=5,pady=5)
         # self.from_file = BooleanVar()
         # self.checkboxDocumentsForTraining = Checkbutton(self.labelFrame_3, offvalue=False, onvalue=True, text="from file", var=self.from_file)
@@ -130,7 +130,7 @@ class newClassifierView:
         if self.mv.cp.add(classificatorType=type, classificator=temp):
             self.mv.classifierManager.train(fromfile, input, args, output, type)
         else:
-            error.errorWindow("Error !")
+            error.errorWindow("Couldn't create classificator!")
 
 
 # clsses for display classifiers parameters
@@ -156,7 +156,8 @@ class NeuralNetworksClassifier:
         self.gradientLabel.pack(side=LEFT)
         self.defaultGradient = StringVar()
         self.defaultGradient.set(0.5)
-        self.gradient = Spinbox(self.gradientFrame, width=5, from_=0, to=1, increment=0.01, format="%.2f", textvariable=self.defaultGradient)
+        self.gradient = Spinbox(self.gradientFrame, width=5, from_=0, to=1, increment=0.01, format="%.2f",
+                                textvariable=self.defaultGradient)
         self.gradient.pack(side=LEFT)
         self.gradientRangeLabel = Label(self.gradientFrame, text="Range (0-1)")
         self.gradientRangeLabel.pack(side=LEFT)
@@ -169,7 +170,7 @@ class NeuralNetworksClassifier:
         self.defaultsteps.set(1500)
         self.steps = Spinbox(self.stepsFrame, width=5, from_=1, to=10000, textvariable=self.defaultsteps)
         self.steps.pack(side=LEFT)
-        self.stepsRangeLabel = Label(self.stepsFrame, text="Range (0-10000)")
+        self.stepsRangeLabel = Label(self.stepsFrame, text="Range (1-10000)")
         self.stepsRangeLabel.pack(side=LEFT)
         self.stepsFrame.pack(anchor=W)
 
@@ -178,9 +179,10 @@ class NeuralNetworksClassifier:
         self.vocabularyLengthLabel.pack(side=LEFT)
         self.defaultVocabularyLength = StringVar()
         self.defaultVocabularyLength.set(300)
-        self.vocabularyLength = Spinbox(self.vocabularyLengthFrame, width=5, from_=1, to=5000, textvariable=self.defaultVocabularyLength)
+        self.vocabularyLength = Spinbox(self.vocabularyLengthFrame, width=5, from_=1, to=5000,
+                                        textvariable=self.defaultVocabularyLength)
         self.vocabularyLength.pack(side=LEFT)
-        self.vocabularyLengthRangeLabel = Label(self.vocabularyLengthFrame, text="Range (0-5000)")
+        self.vocabularyLengthRangeLabel = Label(self.vocabularyLengthFrame, text="Range (1-5000)")
         self.vocabularyLengthRangeLabel.pack(side=LEFT)
         self.vocabularyLengthFrame.pack(anchor=W)
 
@@ -202,106 +204,119 @@ class SVMClassifier:
     def __init__(self, frame):
         self.parametersFrame = Frame(frame)
 
-        parameter1Frame = Frame(self.parametersFrame)
-        self.cLabel = Label(parameter1Frame, text="C: ")
+        variableCFrame = Frame(self.parametersFrame)
+        self.cLabel = Label(variableCFrame, text="C: ")
         self.cLabel.pack(side=LEFT)
         varC = DoubleVar()
-        varC.set(1.0)
-        self.c = Spinbox(parameter1Frame, width=5, from_=0, to=5000, increment=0.1, format="%.1f", textvariable=varC)
+        varC.set(1000.0)
+        self.c = Spinbox(variableCFrame, width=5, from_=0, to=5000, increment=0.1, format="%.1f", textvariable=varC)
         self.c.pack(side=LEFT)
-        parameter1Frame.pack(anchor=W)
+        variableCFrame.pack(anchor=W)
 
-        parameter2Frame = Frame(self.parametersFrame)
+        kernelFrame = Frame(self.parametersFrame)
         self.varKernel = StringVar()
         self.varKernel.set("linear")
-        self.kernelLabel = Label(parameter2Frame, text="kernel:")
+        self.kernelLabel = Label(kernelFrame, text="kernel:")
         self.kernelLabel.pack(side=LEFT)
-        self.kernelR1 = Radiobutton(parameter2Frame, text="rbf", variable=self.varKernel, value="rbf",
+        self.kernelR1 = Radiobutton(kernelFrame, text="rbf", variable=self.varKernel, value="rbf",
                                     command=self.parametersForRbf)
         self.kernelR1.pack(side=LEFT)
-        self.kernelR2 = Radiobutton(parameter2Frame, text="sigmoid", variable=self.varKernel, value="sigmoid",
+        self.kernelR2 = Radiobutton(kernelFrame, text="sigmoid", variable=self.varKernel, value="sigmoid",
                                     command=self.parametersForSigmoid)
         self.kernelR2.pack(side=LEFT)
-        self.kernelR3 = Radiobutton(parameter2Frame, text="linear", variable=self.varKernel, value="linear",
+        self.kernelR3 = Radiobutton(kernelFrame, text="linear", variable=self.varKernel, value="linear",
                                     command=self.parametersForLinear)
         self.kernelR3.pack(side=LEFT)
-        self.kernelR3 = Radiobutton(parameter2Frame, text="poly", variable=self.varKernel, value="poly",
+        self.kernelR3 = Radiobutton(kernelFrame, text="poly", variable=self.varKernel, value="poly",
                                     command=self.parametersForPoly)
         self.kernelR3.pack(side=LEFT)
-        parameter2Frame.pack(anchor=W)
+        kernelFrame.pack(anchor=W)
 
-        self.parameter3Frame = Frame(self.parametersFrame)
-        self.degreeLabel = Label(self.parameter3Frame, text="degree: ")
+        self.degreeFrame = Frame(self.parametersFrame)
+        self.degreeLabel = Label(self.degreeFrame, text="degree: ")
         self.degreeLabel.pack(side=LEFT)
-        self.degree = Spinbox(self.parameter3Frame, width=5, from_=0, to=5000)
+        degreeVar = IntVar()
+        degreeVar.set(1)
+        self.degree = Spinbox(self.degreeFrame, width=5, from_=0, to=5000, textvariable=degreeVar)
         self.degree.pack(side=LEFT)
-        # parameter3Frame.pack(anchor=W)
+        self.degreeRangeLabel = Label(self.degreeFrame, text="Range (0-5000)")
+        self.degreeRangeLabel.pack(side=LEFT)
 
-        self.parameter4Frame = Frame(self.parametersFrame)
-        self.gammaLabel = Label(self.parameter4Frame, text="gamma: ")
+        self.gammaFrame = Frame(self.parametersFrame)
+        self.gammaLabel = Label(self.gammaFrame, text="gamma: ")
         self.gammaLabel.pack(side=LEFT)
         self.varGamma = StringVar()
-        self.gamma = Spinbox(self.parameter4Frame, width=5, from_=0, to=5000, increment=0.1, format="%.1f",
+        self.varGamma.set(1)
+        self.gamma = Spinbox(self.gammaFrame, width=5, from_=0, to=5000, increment=0.1, format="%.1f",
                              textvariable=self.varGamma)
-        # self.gamma.pack(side=LEFT)
         self.varGamma.set("true")
-        self.gammaAuto = Checkbutton(self.parameter4Frame, text="auto", variable=self.varGamma, onvalue="true",
+        self.gammaAuto = Checkbutton(self.gammaFrame, text="auto", variable=self.varGamma, onvalue="true",
                                      offvalue="false", command=self.onCheckGammaAuto)
         self.gammaAuto.pack(side=LEFT)
-        self.parameter4Frame.pack(anchor=W)
+        self.gammaFrame.pack(anchor=W)
+        self.gammaRangeLabel = Label(self.gammaFrame, text="Range (0.0-5000.0)")
+        self.gammaRangeLabel.pack(side=LEFT)
 
-        self.parameter5Frame = Frame(self.parametersFrame)
-        self.coef0Label = Label(self.parameter5Frame, text="coef0: ")
+        self.coef0Frame = Frame(self.parametersFrame)
+        self.coef0Label = Label(self.coef0Frame, text="coef0: ")
         self.coef0Label.pack(side=LEFT)
-        self.coef0 = Spinbox(self.parameter5Frame, width=5, from_=0.0, to=5000.0, increment=0.1, format="%.1f")
+        coef0Var = DoubleVar()
+        coef0Var.set(1.0)
+        self.coef0 = Spinbox(self.coef0Frame, width=5, from_=0.0, to=5000.0, increment=0.1, format="%.1f",
+                             textvariable=coef0Var)
         self.coef0.pack(side=LEFT)
-        # parameter5Frame.pack(anchor=W)
+        self.coef0RangeLabel = Label(self.coef0Frame, text="Range (0.0-5000.0)")
+        self.coef0RangeLabel.pack(side=LEFT)
 
-        parameter6Frame = Frame(self.parametersFrame)
-        self.shrinkingLabel = Label(parameter6Frame, text="shrinking: ")
+        self.shrinkingFrame = Frame(self.parametersFrame)
+        self.shrinkingLabel = Label(self.shrinkingFrame, text="shrinking: ")
         self.shrinkingLabel.pack(side=LEFT)
-        self.shrinking = Spinbox(parameter6Frame, width=5, values=("true", "false"))
+        self.shrinking = Spinbox(self.shrinkingFrame, width=5, values=("true", "false"))
         self.shrinking.pack(side=LEFT)
-        parameter6Frame.pack(anchor=W)
+        self.shrinkingFrame.pack(anchor=W)
 
-        parameter7Frame = Frame(self.parametersFrame)
-        self.tolLabel = Label(parameter7Frame, text="tol: ")
+        tolFrame = Frame(self.parametersFrame)
+        self.tolLabel = Label(tolFrame, text="tol: ")
         self.tolLabel.pack(side=LEFT)
         varTol = DoubleVar()
-        varTol.set(1.0)
-        self.tol = Spinbox(parameter7Frame, width=5, increment=0.1, format="%.1f", textvariable=varTol)
+        varTol.set(0.0001)
+        self.tol = Spinbox(tolFrame, width=5, increment=0.1, format="%.1f", textvariable=varTol)
         self.tol.pack(side=LEFT)
-        parameter7Frame.pack(anchor=W)
+        tolFrame.pack(anchor=W)
 
-        parameter8Frame = Frame(self.parametersFrame)
-        self.max_iterLabel = Label(parameter8Frame, text="max_iter: ")
+        maxIterFrame = Frame(self.parametersFrame)
+        self.max_iterLabel = Label(maxIterFrame, text="max_iter: ")
         self.max_iterLabel.pack(side=LEFT)
-        self.max_iter = Spinbox(parameter8Frame, width=5, from_=-1, to=5000)
+        maxIterVar = IntVar()
+        maxIterVar.set(-1)
+        self.max_iter = Spinbox(maxIterFrame, width=5, from_=-1, to=5000, textvariable=maxIterVar)
         self.max_iter.pack(side=LEFT)
-        parameter8Frame.pack(anchor=W)
+        maxIterFrame.pack(anchor=W)
+        self.maxIterRangeLabel = Label(maxIterFrame, text="Range (-1 - 5000)")
+        self.maxIterRangeLabel.pack(side=LEFT)
 
     def hideKernelParameters(self):
-        self.parameter3Frame.pack_forget()
-        self.parameter4Frame.pack_forget()
-        self.parameter5Frame.pack_forget()
+        self.degreeFrame.pack_forget()
+        self.gammaFrame.pack_forget()
+        self.coef0Frame.pack_forget()
 
     def parametersForRbf(self):
         self.hideKernelParameters()
-        self.parameter4Frame.pack(anchor=W)
+        self.gammaFrame.pack(anchor=W)
 
     def parametersForSigmoid(self):
         self.hideKernelParameters()
-        self.parameter4Frame.pack(anchor=W)
-        self.parameter5Frame.pack(anchor=W)
+        self.gammaFrame.pack(anchor=W)
+        self.coef0Frame.pack(anchor=W)
 
     def parametersForLinear(self):
         self.hideKernelParameters()
 
     def parametersForPoly(self):
         self.hideKernelParameters()
-        self.parameter3Frame.pack(anchor=W)
-        self.parameter4Frame.pack(anchor=W)
-        self.parameter5Frame.pack(anchor=W)
+        self.degreeFrame.pack(anchor=W)
+        self.gammaFrame.pack(anchor=W)
+        self.coef0Frame.pack(anchor=W)
 
     def showParameters(self):
         self.hideParameters()
@@ -317,9 +332,10 @@ class SVMClassifier:
             self.varGamma.set(0.0)
             self.gamma.pack(side=LEFT)
 
-    def getArgs(self):  # do poprawy
+    def getArgs(self):
         args = {"C": self.c.get(),
                 "kernel": self.varKernel.get(),
+                "degree": self.degree.get(),
                 "gamma": self.gamma.get(),
                 "shrinking": self.shrinking.get(),
                 "tol": self.tol.get(),
