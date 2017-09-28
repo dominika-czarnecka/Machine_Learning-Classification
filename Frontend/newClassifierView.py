@@ -89,11 +89,9 @@ class newClassifierView:
             self.nn_classifier.hideParameters()
 
         if self.selectedClassifier.get() is 2:
-            self.classifierOptionsFrame.pack_forget()
-            # self.w2v_classifier.showParameters()
+            self.w2v_classifier.showParameters()
         else:
-            self.classifierOptionsFrame.pack(anchor=W, fill=X)
-            # self.w2v_classifier.hideParameters()
+            self.w2v_classifier.hideParameters()
 
         if self.selectedClassifier.get() is 1:
             self.svm_classifier.showParameters()
@@ -345,10 +343,44 @@ class SVMClassifier:
 
 
 class Word2VecClassifier:
-    def __init__(self, frame):
+    def __init__(self,frame):
         self.parametersFrame = Frame(frame)
-        l = Label(self.parametersFrame, text="")
-        l.pack()
+
+        parameter1Frame = Frame(self.parametersFrame)
+        sizeLabel = Label(parameter1Frame,text="size: ")
+        sizeLabel.pack(side=LEFT)
+        self.varSize = StringVar()
+        size = Spinbox(parameter1Frame,width=5,from_=0,to=5000, textvariable=self.varSize)
+        self.varSize.set(100)
+        size.pack(side=LEFT)
+        parameter1Frame.pack(anchor=W)
+
+        parameter2Frame = Frame(self.parametersFrame)
+        iterLabel = Label(parameter2Frame,text="iter: ")
+        iterLabel.pack(side=LEFT)
+        self.varIter = StringVar()
+        iter = Spinbox(parameter2Frame,width=5,from_=0,to=5000, textvariable=self.varIter)
+        self.varIter.set(55)
+        iter.pack(side=LEFT)
+        parameter2Frame.pack(anchor=W)
+
+        parameter3Frame = Frame(self.parametersFrame)
+        min_countLabel = Label(parameter3Frame,text="min-count: ")
+        min_countLabel.pack(side=LEFT)
+        self.varMin_count = StringVar()
+        min_count = Spinbox(parameter3Frame,width=5,from_=0,to=5000, textvariable=self.varMin_count)
+        self.varMin_count.set(6)
+        min_count.pack(side=LEFT)
+        parameter3Frame.pack(anchor=W)
+
+        parameter4Frame = Frame(self.parametersFrame)
+        windowLabel = Label(parameter4Frame,text="window: ")
+        windowLabel.pack(side=LEFT)
+        self.varWindow = StringVar()
+        window = Spinbox(parameter4Frame,width=5, from_=0,to=5000, textvariable=self.varWindow)
+        self.varWindow.set(1)
+        window.pack(side=LEFT)
+        parameter4Frame.pack(anchor=W)
 
     def showParameters(self):
         self.parametersFrame.pack(anchor=W)
@@ -357,4 +389,9 @@ class Word2VecClassifier:
         self.parametersFrame.pack_forget()
 
     def getArgs(self):
-        return {}
+        args = {"size": self.varSize.get(),
+                "iter": self.varIter.get(),
+                "min-count":self.varMin_count.get(),
+                "window":self.varWindow.get()}
+        return args
+
