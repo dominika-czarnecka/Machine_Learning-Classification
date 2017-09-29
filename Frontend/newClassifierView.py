@@ -2,11 +2,11 @@ import copy
 from tkinter import *
 
 import Frontend.errorWindow as error
-from Backend.pathProvider import *
 from Backend.Integration.ClassificatorEnum import ClassificatorEnum
 from Backend.Integration.Models.NeuralNetworkModel import NeuralNetworkModel
 from Backend.Integration.Models.SVMModel import SVMModel
 from Backend.Integration.Models.Word2VecModel import Word2VecModel
+from Backend.pathProvider import *
 from Frontend.ClassifierParametersView.NeuralNetworkClassifier import NeuralNetworksClassifier
 from Frontend.ClassifierParametersView.SVMClassifier import SVMClassifier
 from Frontend.ClassifierParametersView.Word2VecClassifier import Word2VecClassifier
@@ -103,9 +103,12 @@ class newClassifierView:
             self.svm_classifier.hideParameters()
 
     def onClickClassify(self):
-        args = {}
-        type = ClassificatorEnum.SVM
-        classificator = None
+        output = self.classifierNameEntry.get()
+
+        if len(output) == 0:
+            error.errorWindow("Classificator should have name!")
+            return
+
         if self.selectedClassifier.get() == 1:
             args = self.svm_classifier.getArgs()
             type = ClassificatorEnum.SVM
@@ -115,6 +118,7 @@ class newClassifierView:
         elif self.selectedClassifier.get() == 3:
             args = self.nn_classifier.getArgs()
             type = ClassificatorEnum.NeuralNetwork
+
         fromfile = False
         input = 'reuters'
         output = self.classifierNameEntry.get()

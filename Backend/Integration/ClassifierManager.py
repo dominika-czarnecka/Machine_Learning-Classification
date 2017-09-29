@@ -28,8 +28,8 @@ class ClassifierManager:
 
     def test(self, fromfile, input, args, name, type):
         if type == self.clsEnum.NeuralNetwork:
-            self.nnClassifier.Test(fromfile, input, args, name)
+            return self.nnClassifier.Test(fromfile, input, args, name)
         elif type == self.clsEnum.Word2Vec:
-            self.w2vClassifier.test(fromfile, input, args, name)
+            return self.w2vClassifier.test(fromfile, input, args, name)
         elif type == self.clsEnum.SVM:
-            self.svmClassifier.test(fromfile, input, name)
+            return self.svmClassifier.test(fromfile, input, name)
