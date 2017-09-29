@@ -1,6 +1,5 @@
 import json
 import os
-
 from Backend.Integration.ClassificatorEnum import ClassificatorEnum
 from Backend.Integration.Models.NeuralNetworkModel import NeuralNetworkModel
 from Backend.Integration.Models.SVMModel import SVMModel
@@ -9,7 +8,7 @@ from Backend.Integration.Models.Word2VecModel import Word2VecModel
 
 class ClassificatorsProvider:
     package_dir = os.path.dirname(os.path.abspath(__file__))
-    file = os.path.join(package_dir + "/Files/", 'data.json')
+    file = os.path.join(package_dir+"/Files/", 'data.json')
 
     def __init__(self):
         self.SVMModels = []
@@ -17,8 +16,6 @@ class ClassificatorsProvider:
         self.Word2VecModels = []
         self.fromFile()
 
-        # def __del__(self):
-        # self.toFile()
 
     def toJSON(self):
         return json.dumps(self, default=lambda o: o.__dict__,
