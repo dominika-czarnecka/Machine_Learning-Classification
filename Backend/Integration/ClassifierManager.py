@@ -1,6 +1,6 @@
 from Backend.Integration.ClassificatorsProvider import ClassificatorsProvider
-from Backend.SVM.SVM import SVM
 from Backend.NeutralNetwork.NeuralNetwork import NeuralNetwork
+from Backend.SVM.SVM import SVM
 from Backend.Word2Vec.Code.Doc2Vec import Doc2Vec
 from .ClassificatorEnum import ClassificatorEnum
 
@@ -28,8 +28,8 @@ class ClassifierManager:
 
     def test(self, fromfile, input, args, name, type):
         if type == self.clsEnum.NeuralNetwork:
-            self.nnClassifier.Test(fromfile, input, args, name)
+            return self.nnClassifier.Test(fromfile, input, args, name)
         elif type == self.clsEnum.Word2Vec:
-            self.w2vClassifier.test(fromfile, input, args, name)
+            return self.w2vClassifier.test(fromfile, input, args, name)
         elif type == self.clsEnum.SVM:
-            self.svmClassifier.test(fromfile, input, args, name)
+            return self.svmClassifier.test(fromfile, input, name)

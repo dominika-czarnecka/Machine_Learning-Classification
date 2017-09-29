@@ -22,6 +22,5 @@ class NeuralNetworkModel(ClassificatorModel):
 
     @classmethod
     def fromJSON(cls, json_data):
-        fromJSON = cls(json_data['name'], json_data['path'], json_data['gradient'],
-                                      json_data['steps'], json_data['target'], json_data['vocabulary_len'])
+        fromJSON = cls(json_data['name'], json_data['path'], json_data['gradient'], json_data['steps'], json_data['target'], json_data['vocabulary_len'])
         return fromJSON

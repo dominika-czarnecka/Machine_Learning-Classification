@@ -1,9 +1,11 @@
-from Backend.NeutralNetwork import NeuralCorpus
-import numpy as np
-import tensorflow as tf
-import random
 import os
+import random
 
+import tensorflow as tf
+
+from Backend.NeutralNetwork import NeuralCorpus
+
+info_text = "Wrong args: \nFromFile:bool, Input:string, args{gradient: 0-1, steps:int, target:tfidf,entrophy,frequency, vocabulary_len:int}, output:string"
 
 # NeuralNetworkTraining(FromFile:bool, Input:string, args:{}, output:string)
 # Fromfile==true -> input to nazwa pliku
@@ -25,6 +27,8 @@ import os
 # Zapis parametorw klasyfiaktora do pliku np .json a nie w folderze
 
 # args {gradient:0.5, steps:1500, target:"tfidf:, vocabulary_len:300}
+from Backend.pathProvider import getPathToModels
+
 
 class NeuralNetwork:
     def normalization(self, tab):
@@ -110,7 +114,8 @@ class NeuralNetwork:
         return positive_sum / len(yy_)
 
     def Train(self, FromFile, Input, args, output):
-        path = "../../Bin/Classificators" + str(output)
+        path = getPathToModels(output)
+        # path = "../../Bin/Classificators" + str(output)
         info_text = "Wrong args: \nFromFile:bool, Input:string, args{gradient: 0-1, steps:int, target:tfidf,entrophy,frequency, vocabulary_len:int}, output:string"
         if len(args) != 4:
             raise Exception(info_text)
@@ -131,18 +136,18 @@ class NeuralNetwork:
         train_step = tf.train.GradientDescentOptimizer(gradient).minimize(cross_entropy)
         saver = tf.train.Saver()
 
-        if FromFile == True:
-            # input - nazwa pliku z ktorego wczytujemy
-            print("FromFile == True")
-            # Xp = np.load("1_train_Xs.npy").tolist()  # input
-            # yp = np.load("1_train_ys.npy").tolist()  # input
-        else:
-            # input - nazwa korpusu
-            NeuralCorpus.target = target
-            NeuralCorpus.vocabulary_len = vocabulary_len
-            crp = NeuralCorpus.corpus()
-            (Xp, yp) = crp.get_svm_vectors(Train=1)
-            (XT, yt) = crp.get_svm_vectors(Test=1)
+        # if FromFile == True:
+        #     # input - nazwa pliku z ktorego wczytujemy
+        #     print("FromFile == True")
+        #     # Xp = np.load("1_train_Xs.npy").tolist()  # input
+        #     # yp = np.load("1_train_ys.npy").tolist()  # input
+        # else:
+        #     # input - nazwa korpusu
+        NeuralCorpus.target = target
+        NeuralCorpus.vocabulary_len = vocabulary_len
+        crp = NeuralCorpus.corpus()
+        (Xp, yp) = crp.get_svm_vectors(Train=1)
+        (XT, yt) = crp.get_svm_vectors(Test=1)
 
         with tf.Session() as sess:
             sess.run(tf.global_variables_initializer())
@@ -154,7 +159,7 @@ class NeuralNetwork:
                     batch_x.append(Xp[ranInt])
                     batch_y.append(yp[ranInt])
                 if i % 100 == 0:
-                    print("#{} / {}".format(i,steps))
+                    print("#{} / {}".format(i, steps))
 
                 sess.run(train_step, feed_dict={x: batch_x, y_: batch_y})
             print("Train Done")
@@ -168,9 +173,9 @@ class NeuralNetwork:
             print("Model saved to: %s" % save_path)
 
     def Test(self, FromFile, Input, args, classifier):
-        path = "../../Bin/Classificators" + str(classifier)
+        path = getPathToModels(classifier)
         info_text = "Wrong args: \nFromFile:bool, Input:string, args{gradient: 0-1, steps:int, target:tfidf,entrophy,frequency, vocabulary_len:int}, classifier:string"
-        if len(args) != 4:
+        if len(args) != 2:
             raise Exception(info_text)
 
         # classifier - sciezka do klasyfikatora
@@ -191,11 +196,11 @@ class NeuralNetwork:
             # XT = np.load("1_test_Xs.npy").tolist()  # input
             # yt = np.load("1_test_ys.npy").tolist()  # input
         else:
-          #input - nazwa korpusu ktory wczytujemy
-          NeuralCorpus.target = target
-          NeuralCorpus.vocabulary_len = vocabulary_len
-          crp = NeuralCorpus.corpus()
-          (XT, yt) = crp.get_svm_vectors(Test=1)
+            # input - nazwa korpusu ktory wczytujemy
+            NeuralCorpus.target = target
+            NeuralCorpus.vocabulary_len = vocabulary_len
+            crp = NeuralCorpus.corpus()
+            (XT, yt) = crp.get_svm_vectors(Test=1)
 
         with tf.Session() as sess:
             sess.run(tf.global_variables_initializer())
@@ -210,8 +215,8 @@ class NeuralNetwork:
             print(res)
             return res
 
-    def Single(self,FromFile, Text, args, classifier):
-        path = "../../Bin/Classificators" + str(classifier)
+    def Single(self, FromFile, Text, args, classifier):
+        path = getPathToModels(classifier)
         # classifier - sciezka do klasyfikatora
         target = args['target']
         vocabulary_len = args['vocabulary_len']
@@ -220,7 +225,6 @@ class NeuralNetwork:
         W = tf.Variable(tf.zeros([vocabulary_len, 90]), name='W')
         b = tf.Variable(tf.zeros([90]), name='b')
         y = tf.matmul(x, W) + b
-
 
         saver = tf.train.Saver()
 
@@ -234,7 +238,7 @@ class NeuralNetwork:
             NeuralCorpus.target = target
             NeuralCorpus.vocabulary_len = vocabulary_len
             crp = NeuralCorpus.corpus()
-            doc = NeuralCorpus.document(Text,0,0)
+            doc = NeuralCorpus.document(Text, 0, 0)
             doc.get_unique_words()
             XT = []
             XT.append(doc.get_vector("frequency", crp.inverse_vocabulary, crp.vocabulary_entrophy))
@@ -251,14 +255,12 @@ class NeuralNetwork:
             res = self.normalization(yy[0])
             cat = []
             categories = NeuralCorpus.reuters.categories()
-            #print(res)
+            # print(res)
             for i in range(90):
                 if res[i] == 1:
                     cat.append(categories[i])
-            #print(cat)
+            # print(cat)
             return cat
-
-
 
 # args = {"gradient": 1, "steps": 5000, "target": "tfidf", "vocabulary_len": 1500}
 #
