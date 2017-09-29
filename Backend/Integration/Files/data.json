@@ -1,1 +1,1 @@
-"{\n    \"NeuralNetworkModels\": [\n        {\n            \"gradient\": 0.5,\n            \"name\": \"NN_FREQ_DEFAULT\",\n            \"path\": \"/home/pz/PycharmProjects/Machine_Learning-Classification/Backend/models/NN_FREQ_DEFAULT\",\n            \"steps\": 1500,\n            \"target\": \"frequency\",\n            \"vocabulary_len\": 300\n        }\n    ],\n    \"SVMModels\": [],\n    \"Word2VecModels\": []\n}"
+"{\n    \"NeuralNetworkModels\": [],\n    \"SVMModels\": [],\n    \"Word2VecModels\": []\n}"
