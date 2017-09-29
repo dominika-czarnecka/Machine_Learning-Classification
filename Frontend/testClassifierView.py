@@ -56,7 +56,7 @@ class testClassifierView:
     def onClickBack(self):
         self.hide()
         self.mv.show()
-        # self.mv.cp.toFile()
+        self.mv.cp.toFile()
 
     def onClickTest(self):
         name = self.selectedClassifier
