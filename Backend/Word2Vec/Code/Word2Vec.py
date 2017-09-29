@@ -6,6 +6,8 @@ from nltk import word_tokenize
 from nltk.stem.porter import PorterStemmer
 import os.path
 
+from Backend.pathProvider import getPathToModels
+
 cachedStopWords = stopwords.words("english")
 
 
@@ -22,7 +24,8 @@ class ReutersW2VModel:
             #print(self.sentences[5])
             self.model = gensim.models.Word2Vec(self.sentences, min_count=1)
             #print(self.model.wv.vocab)
-            self.model.save("../../Bin/Classificators/" + fname)
+            path = getPathToModels(fname)
+            self.model.save(path)
 
     def getWordVector(self,word):
         return self.model.wv[word]

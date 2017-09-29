@@ -1,3 +1,5 @@
+from nltk.corpus import reuters
+
 import Frontend.errorWindow as error
 import tkinter.filedialog
 from tkinter import *
@@ -32,7 +34,7 @@ class testClassifierView:
         names = self.mv.cp.names()
         if len(names) == 0:
             self.onClickBack()
-            error.errorWindow("Please create at least one classifier!")
+            error("Please create at least one classifier!")
 
         self.dropDownNames = OptionMenu(self.mainFrame, self.selectedClassifier, *names)
         self.dropDownNames.config(width=25, padx=50)
@@ -81,7 +83,18 @@ class testClassifierView:
         args = {}
         if type == ClassificatorEnum.NeuralNetwork:
             args = {"target": classifier.target,
-                    "vocabulary_len": classifier.vocabulary_len}
+                 "vocabulary_len": classifier.vocabulary_len}
+        elif type == ClassificatorEnum.Word2Vec:
+            args = {
+                "categories": reuters.categories,
+                "threshold": 1,
+                "name": classifier.name,
+                "path": classifier.path,
+                "size": classifier.size,
+                "iter": classifier.iter,
+                "min_count": classifier.min_count,
+                "window": classifier.window
+            }
         return args
 
     def hide(self):
