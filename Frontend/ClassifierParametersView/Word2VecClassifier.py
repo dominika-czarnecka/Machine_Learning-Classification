@@ -33,7 +33,7 @@ class Word2VecClassifier:
         iterFrame.pack(anchor=W)
 
         min_countFrame = Frame(self.parametersFrame)
-        min_countLabel = Label(min_countFrame,text="Min-count: ")
+        min_countLabel = Label(min_countFrame,text="Min count: ")
         min_countLabel.pack(side=LEFT)
         self.varMin_count = StringVar()
         min_count = Spinbox(min_countFrame,width=5,from_=0,to=5000, textvariable=self.varMin_count)
@@ -63,7 +63,7 @@ class Word2VecClassifier:
     def getArgs(self):
         args = {"size": int(self.varSize.get()),
                 "iter": int(self.varIter.get()),
-                "min-count": int(self.varMin_count.get()),
+                "min_count": int(self.varMin_count.get()),
                 "window": int(self.varWindow.get())}
         return args
 

@@ -1,5 +1,4 @@
-# import Frontend.errorWindow as error
-# import Frontend.progressWindow as progress
+import Frontend.errorWindow as error
 import tkinter.filedialog
 from tkinter import *
 
@@ -23,12 +22,17 @@ class testClassifierView:
         self.lebelClassifier = Label(self.mainFrame, text="Choose Classifier Options:")
         self.lebelClassifier.pack(anchor=CENTER, pady=10)
 
-        self.selectedClassifier = StringVar(self.tk)
+        self.selectedClassifier = StringVar()
         self.selectedClassifier.set("Choose option")
 
-        self.dropDown = OptionMenu(self.mainFrame, self.selectedClassifier, *self.mv.cp.names())
-        self.dropDown.config(width=25, padx=50)
-        self.dropDown.pack(pady=10)
+        names = self.mv.cp.names()
+        if len(names) == 0:
+            self.onClickBack()
+            error.errorWindow("Please create at least one classifier!")
+
+        self.dropDownNames = OptionMenu(self.mainFrame, self.selectedClassifier, *names)
+        self.dropDownNames.config(width=25, padx=50)
+        self.dropDownNames.pack(pady=10)
 
         self.lebelTestDocuments = Label(self.mainFrame, text="Documents for testing:")
         self.lebelTestDocuments.pack(anchor=CENTER)
@@ -57,6 +61,7 @@ class testClassifierView:
         self.hide()
         self.mv.show()
         self.mv.cp.toFile()
+
 
     def onClickTest(self):
         name = self.selectedClassifier

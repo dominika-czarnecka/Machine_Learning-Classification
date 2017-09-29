@@ -47,7 +47,7 @@ class Doc2VecModel:
             #Wielkość okna
             window = args["window"]
             #Minimalna ilość wystąpień słowa, aby było brane pod uwagę
-            min_count = args['min-count']
+            min_count = args['min_count']
             #Liczba iteracji treningowych modelu
             iter = args['iter']
 

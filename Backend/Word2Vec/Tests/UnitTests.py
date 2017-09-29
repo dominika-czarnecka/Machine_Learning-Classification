@@ -6,13 +6,13 @@ from unittest import TestCase
 class Doc2VecTests(TestCase):
     def Doc2Vec_Single_Returned3CategoriesWithoutSimilarities(self):
         doc = Doc2Vec()
-        doc.train(False, "", {"size": 100, "iter": 55, "min-count": 2}, "NewModel2")
+        doc.train(False, "", {"size": 100, "iter": 55, "min_count": 2}, "NewModel2")
         categories = doc.single("", {"number-of-categories": 3, "get-similarity": True}, 'test/14828')
         self.assertEqual(len(categories), 3)
 
     def Doc2Vec_Single_ReturnedNot3CategoriesWithoutSimilarities(self):
         doc = Doc2Vec()
-        doc.train(False, "", {"size": 100, "iter": 55, "min-count": 2}, "NewModel2")
+        doc.train(False, "", {"size": 100, "iter": 55, "min_count": 2}, "NewModel2")
         categories = doc.single("", {"number-of-categories": 3, "get-similarity": True}, 'test/14828')
         self.assertFalse(len(categories).__eq__(2))
 

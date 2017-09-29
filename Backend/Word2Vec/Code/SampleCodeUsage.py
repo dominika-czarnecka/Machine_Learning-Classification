@@ -7,7 +7,7 @@ doc2Vec = Doc2Vec()
 sampleDocument = reuters.raw('test/14828')
 #print(sampleDocument)
 #Wytrenowanie nowego modelu na korpusie Reuters
-doc2Vec.train(False, "", {"size": 100, "iter": 55, "min-count": 6, "window": 1},"NewModelMinCount6")
+doc2Vec.train(False, "", {"size": 100, "iter": 55, "min_count": 6, "window": 1},"NewModelMinCount6")
 
 #Wytrenowanie nowego modelu na wskazanym w lokalizacji korpusie (Jeszcze nie gotowe)
 #doc2Vec.train(True,"/SomeFileDirectory",{"size": 100, "iter": 55, "min-count": 2},"NewModelName")
