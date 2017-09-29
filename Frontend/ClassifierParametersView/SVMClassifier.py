@@ -77,7 +77,7 @@ class SVMClassifier:
         self.shrinkingFrame = Frame(self.parametersFrame)
         self.shrinkingLabel = Label(self.shrinkingFrame, text="shrinking: ")
         self.shrinkingLabel.pack(side=LEFT)
-        self.shrinking = Spinbox(self.shrinkingFrame, width=5, values=("true", "false"))
+        self.shrinking = Spinbox(self.shrinkingFrame, width=5, values=(True, False))
         self.shrinking.pack(side=LEFT)
         self.shrinkingFrame.pack(anchor=W)
 
@@ -139,13 +139,15 @@ class SVMClassifier:
             self.gamma.pack(side=LEFT)
 
     def getArgs(self):
-        args = {"C": self.c.get(),
+        shrinking = False
+        if self.shrinking.get() == 'True':
+            shrinking = True
+        args = {"c": self.c.get(),
                 "kernel": self.varKernel.get(),
                 "degree": self.degree.get(),
                 "gamma": self.gamma.get(),
-                "shrinking": self.shrinking.get(),
+                "shrinking": shrinking,
                 "tol": self.tol.get(),
                 "max_iter": self.max_iter.get(),
-                "coef0":self.coef0.get(),
-                "degree": self.degree.get()}
+                "coef0":self.coef0.get()}
         return args

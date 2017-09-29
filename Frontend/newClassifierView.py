@@ -123,10 +123,6 @@ class newClassifierView:
         input = 'reuters'
         output = self.classifierNameEntry.get()
 
-        if len(output) == 0:
-            error.errorWindow("Please enter classificator name !")
-            return
-
         tempArgs = copy.copy(args)
         tempArgs['name'] = output
         tempArgs['path'] = getPathToModels(output)

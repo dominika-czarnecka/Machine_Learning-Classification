@@ -29,14 +29,13 @@ class Doc2Vec:
             wynik1 = MyTests.tolerantAccuracyTest()
             print("tolerantTest:" + str(wynik1))
             wynik2 = MyTests.strictAccuracyTest()
-            print("strictTest: " + str(wynik2))
-            wynik3 = MyTests.thresholdAccuracyTest(threshold)
-            print("thresholdTest:" + str(wynik3))
+            # print("strictTest: " + str(wynik2))
+            # wynik3 = MyTests.thresholdAccuracyTest(threshold)
+            # print("thresholdTest:" + str(wynik3))
             #wynik4 = MyTests.doPresisionAndRecallTests(reuters.categories)
-            wynik4 = MyTests.doPresisionRecallAndF1Tests(categories)
+            # wynik4 = MyTests.doPresisionRecallAndF1Tests(categories)
 
-            s = str("Wyniki testów:\n" + "tolerantTest:" + str(wynik1) + '\n' + "strictTest: " + str(wynik2) + '\n'
-                 + "thresholdTest:" + str(wynik3) + '\n' + '\n' + wynik4)
+            s = str("Wyniki testów:\n" + "tolerantTest:" + str(wynik1) + '\n' + "strictTest: " + str(wynik2))# + '\n' + "thresholdTest:" + str(wynik3) + '\n' + '\n' + wynik4)
             return s
 
 

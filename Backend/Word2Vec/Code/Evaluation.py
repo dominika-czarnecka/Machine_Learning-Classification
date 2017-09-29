@@ -1,17 +1,10 @@
 from nltk.corpus import reuters
 
-
-
-
 class Doc:
     def __init__(self, text, categories, docid):
         self.docid = docid
         self.text = text
         self.categories = categories
-
-
-
-
 
 class EffectivenessTests:
     def __init__(self, MyModel):

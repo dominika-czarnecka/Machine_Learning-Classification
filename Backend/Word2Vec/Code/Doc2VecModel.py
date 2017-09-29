@@ -7,6 +7,9 @@ import math
 import operator
 import re
 import numpy as np
+
+from Backend.pathProvider import getPathToModels
+
 cachedStopWords = stopwords.words("english")
 
 def tokenize(text):
@@ -56,7 +59,8 @@ class Doc2VecModel:
             self.model = gensim.models.Doc2Vec(self.documents, size=size, window=window, min_count=min_count, iter=iter)
 
             #Zapisanie modelu do pliku o podanej nazwie
-            self.model.save(modelFileName)
+            path = getPathToModels(modelFileName)
+            self.model.save(path)
 
     #Ocena podobieństwa za pomocą funkcji Cosine
     def cosine_similarity(self, v1, v2):
