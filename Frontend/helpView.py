@@ -1,9 +1,4 @@
 from tkinter import *
-# import Frontend.errorWindow as error
-# import Frontend.progressWindow as progress
-import tkinter.filedialog
-
-from Backend.Integration.ClassificatorEnum import ClassificatorEnum
 
 
 class helpView:
@@ -19,60 +14,45 @@ class helpView:
         self.backButton = Button(self.mainFrame, text='Back', command=self.onClickBack)
         self.backButton.pack(anchor=NW)
 
-        self.labelFrame_1 = LabelFrame(self.mainFrame,text="New classifier:",width=200)
-        self.labelFrame_1.pack()
-        text = Text(self.labelFrame_1,height=8)
-        text.insert(INSERT, "New classifier description here...")
+        self.newClassifierFrame = LabelFrame(self.mainFrame, text="New classifier:", width=200)
+        self.newClassifierFrame.pack()
+        text = Text(self.newClassifierFrame, height=8)
+        text.insert(INSERT,
+                    "From \"New classifier\" window you can train new classifiers "
+                    "using given methods: SVM, Neural Networks and word2vec. "
+                    "Each method is filled with default parameters. It is required "
+                    "to insert a unique name for each classifier you want to train."
+                    "Each method uses default training corpus, Reuters.")
         text.config(state=DISABLED)
         text.pack()
-        self.labelFrame_2 = LabelFrame(self.mainFrame,text="Test classifier:",width=200)
-        self.labelFrame_2.pack()
-        text = Text(self.labelFrame_2,height=8)
-        text.insert(INSERT, "Test classifier description here...")
+        self.testClassifierFrame = LabelFrame(self.mainFrame, text="Test classifier:", width=200)
+        self.testClassifierFrame.pack()
+        text = Text(self.testClassifierFrame, height=8)
+        text.insert(INSERT, "From \"Test classifier\" window you can use trained classifiers to test them on "
+                            "Reuters test corpus.")
         text.config(state=DISABLED)
         text.pack()
-        self.labelFrame_3 = LabelFrame(self.mainFrame,text="Classify single document",width=200)
-        self.labelFrame_3.pack()
-        text = Text(self.labelFrame_3,height=8)
-        text.insert(INSERT, "Classify single document description here...")
+        self.classifySingleFrame = LabelFrame(self.mainFrame, text="Classify single document", width=200)
+        self.classifySingleFrame.pack()
+        text = Text(self.classifySingleFrame, height=8)
+        text.insert(INSERT, "Using previously trained classifiers you can classify single document pasting its "
+                            "text into text field. ")
         text.config(state=DISABLED)
         text.pack()
-        self.labelFrame_4 = LabelFrame(self.mainFrame,text="Manage classifiers:",width=200)
-        self.labelFrame_4.pack()
-        text = Text(self.labelFrame_4,height=8)
-        text.insert(INSERT, "Manage classifiers description here...")
+        self.manageClassifiersFrame = LabelFrame(self.mainFrame, text="Manage classifiers:", width=200)
+        self.manageClassifiersFrame.pack()
+        text = Text(self.manageClassifiersFrame, height=8)
+        text.insert(INSERT, "You can manage your classifiers here. Delete them or preview its parameters.")
         text.config(state=DISABLED)
         text.pack()
-
-
 
     def onClickBack(self):
         self.hide()
         self.mv.show()
         self.mv.cp.toFile()
 
-
-
-    def getArgs(self):
-        args = {"classifier":"",
-                "...":"..."}
-        return args
-
     def hide(self):
         self.mainFrame.pack_forget()
 
     def show(self):
         self.mainFrame.pack()
-
-
-
-
-
-
-
-
-
-
-
-
-

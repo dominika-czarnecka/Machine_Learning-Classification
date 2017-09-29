@@ -4,6 +4,10 @@ import tkinter.filedialog
 from tkinter import *
 
 from Backend.Integration.ClassificatorEnum import ClassificatorEnum
+from Frontend.errorWindow import errorWindow as error
+from Frontend.notificationWindow import notificationWindow as notification
+
+errorMessage = "Something went wrong."
 
 
 class testClassifierView:
@@ -34,21 +38,21 @@ class testClassifierView:
         self.lebelTestDocuments.pack(anchor=CENTER)
 
         self.selectedDocumentForTest = StringVar(self.tk)
-        self.selectedDocumentForTest.set("Choose option")
+        self.selectedDocumentForTest.set("Reuters")
 
         self.dropDown = OptionMenu(self.mainFrame, self.selectedDocumentForTest, "Reuters")
         self.dropDown.config(width=25, padx=50)
         self.dropDown.pack(pady=20)
 
-        self.labelFrame_3 = LabelFrame(self.mainFrame, text="Document for testing:", padx=5, pady=5)
-        self.checkboxDocumentsForTesting = Checkbutton(self.labelFrame_3, text="from file", command=self.onOpen)
-        self.checkboxDocumentsForTesting.pack(side=LEFT)
-        self.labelFrame_3.pack(anchor=W, fill=X)
-
-        self.labelFrame_3 = LabelFrame(self.mainFrame)
-        self.txt = Text(self.labelFrame_3, width=70, height=10)
-        self.txt.pack(anchor=W, fill=X)
-        self.labelFrame_3.pack(anchor=W, fill=X)
+        # self.labelFrame_3 = LabelFrame(self.mainFrame, text="Document for testing:", padx=5, pady=5)
+        # self.checkboxDocumentsForTesting = Checkbutton(self.labelFrame_3, text="from file", command=self.onOpen)
+        # self.checkboxDocumentsForTesting.pack(side=LEFT)
+        # self.labelFrame_3.pack(anchor=W, fill=X)
+        #
+        # self.labelFrame_3 = LabelFrame(self.mainFrame)
+        # self.txt = Text(self.labelFrame_3, width=70, height=10)
+        # self.txt.pack(anchor=W, fill=X)
+        # self.labelFrame_3.pack(anchor=W, fill=X)
 
         self.testButton = Button(self.mainFrame, width=70, height=2, text='Test', command=self.onClickTest)
         self.testButton.pack(anchor=SE, pady=20)
@@ -59,10 +63,14 @@ class testClassifierView:
         self.mv.cp.toFile()
 
     def onClickTest(self):
-        name = self.selectedClassifier
-        type, c = self.mv.cp.find(self, name)
+        name = self.selectedClassifier.get()
+        type, c = self.mv.cp.find(name)
         args = self.resolveArgs(type, c)
-        self.mv.classifierManager.test(False, 'reuters', args, name, type)
+        result = self.mv.classifierManager.test(False, 'reuters', args, name, type)
+        if len(result) != 0:
+            notification("Result: \n", result)
+        else:
+            error(errorMessage)
 
     def resolveArgs(self, type, classifier):
         args = {}
@@ -77,11 +85,11 @@ class testClassifierView:
     def show(self):
         self.mainFrame.pack()
 
-    def onOpen(self):
-        ftypes = [('Binary files', '*.bin'), ('All files', '*')]
-        dlg = tkinter.filedialog.Open(self.tk, filetypes=ftypes)
-        fl = dlg.show()
-
-        if fl != '':
-            text = self.readFile(fl)
-            self.txt.insert(END, text)
+    # def onOpen(self):
+    #     ftypes = [('Binary files', '*.bin'), ('All files', '*')]
+    #     dlg = tkinter.filedialog.Open(self.tk, filetypes=ftypes)
+    #     fl = dlg.show()
+    #
+    #     if fl != '':
+    #         text = self.readFile(fl)
+    #         self.txt.insert(END, text)

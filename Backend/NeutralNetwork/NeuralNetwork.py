@@ -7,7 +7,6 @@ from Backend.NeutralNetwork import NeuralCorpus
 
 info_text = "Wrong args: \nFromFile:bool, Input:string, args{gradient: 0-1, steps:int, target:tfidf,entrophy,frequency, vocabulary_len:int}, output:string"
 
-
 # NeuralNetworkTraining(FromFile:bool, Input:string, args:{}, output:string)
 # Fromfile==true -> input to nazwa pliku
 # Fromfile == false -> input nazwa korpusu
@@ -174,9 +173,9 @@ class NeuralNetwork:
             print("Model saved to: %s" % save_path)
 
     def Test(self, FromFile, Input, args, classifier):
-        path = "../../Bin/Classificators" + str(classifier)
+        path = getPathToModels(classifier)
         info_text = "Wrong args: \nFromFile:bool, Input:string, args{gradient: 0-1, steps:int, target:tfidf,entrophy,frequency, vocabulary_len:int}, classifier:string"
-        if len(args) != 4:
+        if len(args) != 2:
             raise Exception(info_text)
 
         # classifier - sciezka do klasyfikatora
@@ -217,7 +216,7 @@ class NeuralNetwork:
             return res
 
     def Single(self, FromFile, Text, args, classifier):
-        path = "../../Bin/Classificators" + str(classifier)
+        path = getPathToModels(classifier)
         # classifier - sciezka do klasyfikatora
         target = args['target']
         vocabulary_len = args['vocabulary_len']
