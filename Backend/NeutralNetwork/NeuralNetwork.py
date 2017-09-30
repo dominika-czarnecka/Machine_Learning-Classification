@@ -170,6 +170,7 @@ class NeuralNetwork:
             if not os.path.exists(path):
                 os.makedirs(path)
             save_path = saver.save(sess, path + '/nnTrainClasificator.ckpt')
+            saver.export_meta_graph(filename= path + '/nnTrainClasificator.meta')
             print("Model saved to: %s" % save_path)
 
     def Test(self, FromFile, Input, args, classifier):
@@ -181,7 +182,7 @@ class NeuralNetwork:
         # classifier - sciezka do klasyfikatora
         target = args['target']
         vocabulary_len = args['vocabulary_len']
-        # tf.reset_default_graph()
+        tf.reset_default_graph()
         x = tf.placeholder(tf.float32, [None, vocabulary_len])
         W = tf.Variable(tf.zeros([vocabulary_len, 90]), name='W')
         b = tf.Variable(tf.zeros([90]), name='b')
@@ -204,11 +205,8 @@ class NeuralNetwork:
 
         with tf.Session() as sess:
             sess.run(tf.global_variables_initializer())
-            ckpt = tf.train.get_checkpoint_state(path)
-            if ckpt and ckpt.model_checkpoint_path:
-                saver.restore(sess, ckpt.model_checkpoint_path)
-            else:
-                print("Klasyfikator nie istnieje")
+            new_graph = tf.train.import_meta_graph(path + '/nnTrainClasificator.meta')
+            new_graph.restore(sess, path + '/nnTrainClasificator.ckpt')
 
             yy, yy2 = sess.run([y, y_], feed_dict={x: XT, y_: yt})
             res = self.correctPrediction_partial(yy, yy2)
@@ -220,7 +218,7 @@ class NeuralNetwork:
         # classifier - sciezka do klasyfikatora
         target = args['target']
         vocabulary_len = args['vocabulary_len']
-        # tf.reset_default_graph()
+        tf.reset_default_graph()
         x = tf.placeholder(tf.float32, [None, vocabulary_len])
         W = tf.Variable(tf.zeros([vocabulary_len, 90]), name='W')
         b = tf.Variable(tf.zeros([90]), name='b')
@@ -245,11 +243,8 @@ class NeuralNetwork:
 
         with tf.Session() as sess:
             sess.run(tf.global_variables_initializer())
-            ckpt = tf.train.get_checkpoint_state(path)
-            if ckpt and ckpt.model_checkpoint_path:
-                saver.restore(sess, ckpt.model_checkpoint_path)
-            else:
-                print("Klasyfikator nie istnieje")
+            new_graph = tf.train.import_meta_graph(path + '/nnTrainClasificator.meta')
+            new_graph.restore(sess, path + '/nnTrainClasificator.ckpt')
 
             yy = sess.run(y, feed_dict={x: XT})
             res = self.normalization(yy[0])
