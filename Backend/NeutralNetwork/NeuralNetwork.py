@@ -211,7 +211,7 @@ class NeuralNetwork:
             yy, yy2 = sess.run([y, y_], feed_dict={x: XT, y_: yt})
             res = self.correctPrediction_partial(yy, yy2)
             print(res)
-            return str(res * 100)
+            return str(res * 100) + "%"
 
     def Single(self, FromFile, Text, args, classifier):
         path = getPathToModels(classifier)
